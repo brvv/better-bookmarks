@@ -5,7 +5,7 @@
   "manifest_version": 2,
   "homepage_url": "https://github.com",
   "background": {
-    "scripts": ["./popup/background.js"]
+    "page": "./background/background.html"
   },
   "browser_action": {
     "default_popup": "./popup/popup.html",
