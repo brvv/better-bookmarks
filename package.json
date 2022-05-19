@@ -10,6 +10,7 @@
     "@types/node": "^16.11.36",
     "@types/react": "^18.0.9",
     "@types/react-dom": "^18.0.4",
+    "npm-watch": "^0.11.0",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-scripts": "5.0.1",
@@ -17,6 +18,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "watch": "npm-watch",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -27,6 +29,14 @@
       "react-app",
       "react-app/jest"
     ]
+  },
+  "watch": {
+    "build": {
+      "patterns": [
+        "src"
+      ],
+      "extensions": "js,jsx"
+    }
   },
   "browserslist": {
     "production": [
