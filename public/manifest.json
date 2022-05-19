@@ -15,7 +15,7 @@
       "96": "./icon.png"
     }
   },
-  "permissions": ["bookmarks"],
+  "permissions": ["bookmarks", "storage"],
   "icons": {
     "48": "./icon.png",
     "96": "./icon.png"
