@@ -1,0 +1,11 @@
+.bookmark-container {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  max-width: 45rem;
+  padding: 1rem;
+}
+
+.bookmark-container > * + * {
+  margin-top: 1rem;
+}

@@ -6,6 +6,7 @@
   border-radius: 4px;
   box-shadow: 0 0 5px rgba(193, 192, 192, 0.89);
   justify-content: center;
+  cursor: pointer;
 }
 
 .toolbar-card:hover,

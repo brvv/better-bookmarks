@@ -1,0 +1,29 @@
+.bookmark {
+  display: flex;
+  text-decoration: none;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding: 0.5rem;
+  background-color: rgba(128, 128, 128, 0.167);
+  box-shadow: 0 0 1px 0px gray;
+  color: black;
+  min-width: fit-content;
+}
+
+.bookmark > .url {
+  color: rgb(127, 127, 127);
+  font-style: italic;
+}
+
+.bookmark:hover,
+.bookmark:focus {
+  background-color: rgb(198, 198, 198);
+}
+
+.bookmark:hover > .url {
+  color: white;
+}
+
+.bookmark:active {
+  background-color: rgb(173, 173, 173);
+}
