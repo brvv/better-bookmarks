@@ -1,0 +1,23 @@
+.group-card {
+  display: flex;
+  border: 2px solid rgba(128, 128, 128, 0.39);
+  padding: 2rem 3rem;
+  border-radius: 4px;
+  box-shadow: 0 0 5px rgba(193, 192, 192, 0.89);
+  justify-content: center;
+}
+
+.group-card:hover,
+.group-card:focus {
+  background-color: rgba(128, 128, 128, 0.162);
+}
+
+.group-card:active {
+  background-color: rgba(128, 128, 128, 0.39);
+}
+
+@media only screen and (max-width: 600px) {
+  .group-card {
+    padding: 5vw 7.5vw;
+  }
+}

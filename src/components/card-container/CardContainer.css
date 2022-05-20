@@ -1,0 +1,35 @@
+.card-container {
+  margin: 0 auto;
+  display: grid;
+  padding: 1rem;
+  border: 1px solid gray;
+  max-width: 45rem;
+}
+
+.card-container {
+  grid-template-columns: repeat(3, minmax(5rem, 1fr));
+  grid-gap: 1.5rem 2rem;
+}
+
+.card-container > * {
+  width: 100%;
+  justify-self: center;
+}
+
+@media only screen and (max-width: 600px) {
+  .card-container {
+    gap: 5vw 7vw;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .card-container {
+    grid-template-columns: repeat(2, minmax(5rem, 1fr));
+  }
+}
+
+@media only screen and (max-width: 300px) {
+  .card-container {
+    grid-template-columns: repeat(1, minmax(5rem, 1fr));
+  }
+}

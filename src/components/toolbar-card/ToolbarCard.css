@@ -1,0 +1,18 @@
+.toolbar-card {
+  display: flex;
+  grid-column: 1/-1;
+  border: 2px solid rgba(128, 128, 128, 0.39);
+  padding: 0.5rem 0;
+  border-radius: 4px;
+  box-shadow: 0 0 5px rgba(193, 192, 192, 0.89);
+  justify-content: center;
+}
+
+.toolbar-card:hover,
+.toolbar-card:focus {
+  background-color: rgba(128, 128, 128, 0.162);
+}
+
+.toolbar-card:active {
+  background-color: rgba(128, 128, 128, 0.39);
+}
