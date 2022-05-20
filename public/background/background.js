@@ -17,4 +17,25 @@ const handleInstalled = (details) => {
   });
 };
 
+browser.bookmarks.getTree().then((tree) => {
+  console.log(tree[0]);
+});
+
+const handleCreateBookmark = async (id, bookmarkInfo) => {
+  if (bookmarkInfo.type === "folder") {
+    return;
+  }
+
+  const uncategorizedId = await getUncategorizedId();
+  console.log("Here!");
+  console.log(`To: ${uncategorizedId}  Target: ${bookmarkInfo.id}`);
+
+  browser.bookmarks
+    .move(bookmarkInfo.id, { parentId: uncategorizedId })
+    .then((res) => {
+      console.log(res);
+    });
+};
+
+browser.bookmarks.onCreated.addListener(handleCreateBookmark);
 browser.runtime.onInstalled.addListener(handleInstalled);
