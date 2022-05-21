@@ -1,10 +1,13 @@
 .group-card {
   display: flex;
+  text-decoration: none;
+  color: black;
   border: 2px solid rgba(128, 128, 128, 0.39);
   padding: 2rem 3rem;
   border-radius: 4px;
   box-shadow: 0 0 5px rgba(193, 192, 192, 0.89);
   justify-content: center;
+  align-items: center;
   cursor: pointer;
 }
 

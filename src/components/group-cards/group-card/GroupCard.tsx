@@ -9,8 +9,8 @@ type Props = {
 
 export const GroupCard: React.FC<Props> = ({ name, id = "" }: Props) => {
   return (
-    <Link to={"/folder/" + id}>
-      <div className="group-card">{name}</div>
+    <Link to={"/folder/" + id} className="group-card">
+      {name}
     </Link>
   );
 };
