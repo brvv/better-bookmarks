@@ -1,21 +1,38 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./BookmarkContainer.css";
 import { Bookmark } from "../bookmark/Bookmark";
+import { getBookmarksFromParent } from "../../../api";
 
 type Props = {
   parentId: string;
 };
 
 export const BookmarkContainer: React.FC<Props> = ({ parentId }) => {
+  const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
+  const [bookmarksFinishedLoading, setBookmarksFinishedLoading] =
+    useState(false);
+
+  //Bookmarks
+  useEffect(() => {
+    getBookmarksFromParent(parentId).then((bookmarks) => {
+      setBookmarks(bookmarks);
+      setBookmarksFinishedLoading(true);
+      console.log(bookmarks);
+    });
+  }, [parentId]);
+
   return (
     <div className="bookmark-container">
-      {parentId}
-      <Bookmark
-        title="bookmark1"
-        url="https://ants.example.com/advice.aspx#arm"
-      />
-      <Bookmark title="bookmark2" url="https://beds.example.net/bed.php" />
-      <Bookmark title="bookmark3" url="http://example.com/afternoon.aspx" />
+      {bookmarksFinishedLoading ? (
+        bookmarks.map((bookmark) => (
+          <Bookmark
+            title={bookmark.title}
+            url={bookmark.url ? bookmark.url : ""}
+          />
+        ))
+      ) : (
+        <p>Loading!</p>
+      )}
     </div>
   );
 };

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "./Resets.css";
 import "./App.css";
-import { CardContainer } from "./components";
-import { getRootId } from "./api";
+import { BookmarkContainer, CardContainer } from "./components";
+import { getRootId, getUncategorizedId } from "./api";
 
 function App() {
   const [rootId, setRootId] = useState("");
-  //const [uncategorizedId, setUncategorizedId] = useState("");
+  const [uncategorizedId, setUncategorizedId] = useState("");
 
   //Root ID
   useEffect(() => {
@@ -15,8 +15,20 @@ function App() {
     });
   }, []);
 
+  //Uncategorized ID
+  useEffect(() => {
+    getUncategorizedId().then((id) => {
+      setUncategorizedId(id);
+    });
+  }, []);
+
   return (
     <div className="App">
+      {uncategorizedId ? (
+        <BookmarkContainer parentId={uncategorizedId} />
+      ) : (
+        <p>Loading!</p>
+      )}
       {rootId ? <CardContainer parentId={rootId} /> : <p>Loading!</p>}
     </div>
   );
