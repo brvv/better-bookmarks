@@ -27,7 +27,9 @@ export const CardContainer: React.FC<Props> = ({ parentId }) => {
       <ToolbarCard name="toolbar" />
 
       {foldersFinishedLoading ? (
-        folders.map((folder) => <GroupCard name={folder.title} />)
+        folders.map((folder) => (
+          <GroupCard name={folder.title} id={folder.id} />
+        ))
       ) : (
         <p>Loading!</p>
       )}
