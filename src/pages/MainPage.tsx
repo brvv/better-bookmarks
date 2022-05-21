@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { BookmarkContainer, CardContainer } from "../components";
+import {
+  BookmarkContainer,
+  CardContainer,
+  BookmarkEditor,
+} from "../components";
 import { getRootId } from "../api";
 import { useParams } from "react-router-dom";
 
@@ -21,6 +25,7 @@ export const MainPage: React.FC = () => {
     <div className="App">
       {rootId ? <BookmarkContainer parentId={rootId} /> : <p>Loading!</p>}
       {rootId ? <CardContainer parentId={rootId} /> : <p>Loading!</p>}
+      <BookmarkEditor />
     </div>
   );
 };
