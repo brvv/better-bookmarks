@@ -8,7 +8,7 @@ type Props = {
 
 export const Bookmark: React.FC<Props> = ({ title, url }) => {
   return (
-    <a href="google.com" className="bookmark">
+    <a href={url} className="bookmark" target="_blank" rel="noreferrer">
       <p className="title">{title}</p>
       <p className="url">{url}</p>
     </a>
