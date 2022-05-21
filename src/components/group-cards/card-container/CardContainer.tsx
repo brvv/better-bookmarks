@@ -5,22 +5,28 @@ import { GroupCard } from "../group-card/GroupCard";
 import { ToolbarCard } from "../toolbar-card/ToolbarCard";
 import { getFoldersFromParent } from "../../../api";
 
-export const CardContainer: React.FC = () => {
-  const [folders, setFolders] = useState<BookmarkFolder[]>([]);
-  const [finishedLoading, setFinishedLoading] = useState(false);
+type Props = {
+  parentId: string;
+};
 
+export const CardContainer: React.FC<Props> = ({ parentId }) => {
+  const [folders, setFolders] = useState<BookmarkFolder[]>([]);
+  const [foldersFinishedLoading, setFoldersFinishedLoading] = useState(false);
+
+  //Folders
   useEffect(() => {
-    getFoldersFromParent("HhBOW9coNYRD").then((folders) => {
+    getFoldersFromParent(parentId).then((folders) => {
       setFolders(folders);
-      setFinishedLoading(true);
+      setFoldersFinishedLoading(true);
       console.log(folders);
     });
-  }, []);
+  }, [parentId]);
+
   return (
     <div className="card-container">
       <ToolbarCard name="toolbar" />
 
-      {finishedLoading ? (
+      {foldersFinishedLoading ? (
         folders.map((folder) => <GroupCard name={folder.title} />)
       ) : (
         <p>Loading!</p>

@@ -1,2 +1,3 @@
 //functions
-export { getFoldersFromParent } from "./bookmarks";
+export { getFoldersFromParent, getBookmarksFromParent } from "./bookmarks";
+export { getUncategorizedId, getRootId } from "./storage";

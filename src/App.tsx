@@ -1,13 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./Resets.css";
 import "./App.css";
-import { BookmarkContainer, CardContainer } from "./components";
+import { CardContainer } from "./components";
+import { getRootId } from "./api";
 
 function App() {
+  const [rootId, setRootId] = useState("");
+  //const [uncategorizedId, setUncategorizedId] = useState("");
+
+  //Root ID
+  useEffect(() => {
+    getRootId().then((id) => {
+      setRootId(id);
+    });
+  }, []);
+
   return (
     <div className="App">
-      <BookmarkContainer parentId="" />
-      <CardContainer />
+      {rootId ? <CardContainer parentId={rootId} /> : <p>Loading!</p>}
     </div>
   );
 }
