@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import "./CardContainer.css";
 import { GroupCard } from "../group-card/GroupCard";
 import { ToolbarCard } from "../toolbar-card/ToolbarCard";
-import { getFoldersFromParent } from "../../../api";
+import { getFoldersFromParent, TOOLBAR_ID } from "../../../api";
 
 type Props = {
   parentId: string;
@@ -24,7 +24,7 @@ export const CardContainer: React.FC<Props> = ({ parentId }) => {
 
   return (
     <div className="card-container">
-      <ToolbarCard name="toolbar" />
+      {parentId !== TOOLBAR_ID && <ToolbarCard name="toolbar" />}
 
       {foldersFinishedLoading ? (
         folders.map((folder) => (

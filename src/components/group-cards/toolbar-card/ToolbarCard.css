@@ -1,5 +1,7 @@
 .toolbar-card {
   display: flex;
+  text-decoration: none;
+  color: black;
   grid-column: 1/-1;
   border: 2px solid rgba(128, 128, 128, 0.39);
   padding: 0.5rem 0;
