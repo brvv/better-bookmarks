@@ -29,7 +29,14 @@ export const Bookmark: React.FC<Props> = ({ title, url, id }) => {
         </div>
       </a>
 
-      {isEditorOpen && <BookmarkEditor title={title} url={url} id={id} />}
+      {isEditorOpen && (
+        <BookmarkEditor
+          title={title}
+          url={url}
+          id={id}
+          setIsModalOpen={setIsEditorOpen}
+        />
+      )}
     </div>
   );
 };
