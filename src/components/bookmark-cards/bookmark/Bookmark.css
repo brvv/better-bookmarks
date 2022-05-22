@@ -2,17 +2,12 @@
   display: flex;
   text-decoration: none;
   justify-content: space-between;
-  flex-wrap: wrap;
   padding: 0.5rem;
+  gap: 0.25rem;
   background-color: rgba(128, 128, 128, 0.167);
   box-shadow: 0 0 1px 0px gray;
   color: black;
   min-width: fit-content;
-}
-
-.bookmark > .url {
-  color: rgb(127, 127, 127);
-  font-style: italic;
 }
 
 .bookmark:hover,
@@ -26,4 +21,23 @@
 
 .bookmark:active {
   background-color: rgb(173, 173, 173);
+}
+
+.info-container > .url {
+  color: rgb(127, 127, 127);
+  font-style: italic;
+}
+
+.bookmark > .button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bookmark > .button-container > .settings-button {
+  width: 1.5rem;
+  height: 1.5rem;
+  border: none;
+  border-radius: 50%;
+  border: 1px solid rgb(91, 91, 91);
 }

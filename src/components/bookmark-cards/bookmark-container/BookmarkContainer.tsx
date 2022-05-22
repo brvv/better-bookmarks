@@ -28,6 +28,7 @@ export const BookmarkContainer: React.FC<Props> = ({ parentId }) => {
           <Bookmark
             title={bookmark.title}
             url={bookmark.url ? bookmark.url : ""}
+            id={bookmark.id}
           />
         ))
       ) : (
