@@ -7,7 +7,13 @@ export const BookmarkEditor: React.FC = () => {
     <div>
       <div className="modal-background"></div>
       <div className="modal-content">
-        <p>This modal is about editing the background</p>
+        <p>Edit title:</p>
+        <input></input>
+        <p>edit link</p>
+        <input></input>
+        <button>submit</button>
+        <button>cancel</button>
+        <button>delete</button>
       </div>
     </div>,
     document.getElementById("portal") as HTMLElement
