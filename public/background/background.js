@@ -6,14 +6,13 @@ const handleInstalled = (details) => {
 
   setupExtension().then((node) => {
     console.log("setup complete!");
-  });
+    getRootId().then((id) => {
+      console.log(id);
+    });
 
-  getRootId().then((id) => {
-    console.log(id);
-  });
-
-  getUncategorizedId().then((id) => {
-    console.log(id);
+    getUncategorizedId().then((id) => {
+      console.log(id);
+    });
   });
 };
 
