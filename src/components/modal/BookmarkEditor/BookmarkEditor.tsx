@@ -5,13 +5,15 @@ import "./BookmarkEditor.css";
 type Props = {
   bookmark: Bookmark;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  change?: (bookmark: Bookmark) => void;
+  handleChange?: (bookmark: Bookmark) => void;
+  handleRemove?: (bookmark: Bookmark) => void;
 };
 
 export const BookmarkEditor: React.FC<Props> = ({
   bookmark,
   setIsModalOpen,
-  change,
+  handleChange,
+  handleRemove,
 }) => {
   const [titleInput, setTitleInput] = useState(bookmark.title);
   const [urlInput, setUrlInput] = useState(bookmark.url ? bookmark.url : "");
@@ -40,13 +42,13 @@ export const BookmarkEditor: React.FC<Props> = ({
         <div className="button-container">
           <button
             onClick={() => {
-              if (change && urlInput && titleInput) {
+              if (handleChange && urlInput && titleInput) {
                 const newBookmark: Bookmark = {
                   id: bookmark.id,
                   title: titleInput,
                   url: urlInput,
                 };
-                change(newBookmark);
+                handleChange(newBookmark);
                 setIsModalOpen(false);
               }
             }}
@@ -60,7 +62,16 @@ export const BookmarkEditor: React.FC<Props> = ({
           >
             cancel
           </button>
-          <button>delete</button>
+          <button
+            onClick={() => {
+              if (handleRemove) {
+                handleRemove(bookmark);
+                setIsModalOpen(false);
+              }
+            }}
+          >
+            delete
+          </button>
         </div>
       </div>
     </div>,

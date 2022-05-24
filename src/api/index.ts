@@ -3,6 +3,7 @@ export {
   getFoldersFromParent,
   getBookmarksFromParent,
   updateBookmark,
+  removeBookmark,
 } from "./bookmarks";
 export { getUncategorizedId, getRootId } from "./storage";
 export {

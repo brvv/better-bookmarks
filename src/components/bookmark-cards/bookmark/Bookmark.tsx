@@ -4,10 +4,15 @@ import "./Bookmark.css";
 
 type Props = {
   bookmark: Bookmark;
-  change?: (bookmark: Bookmark) => void;
+  handleChange?: (bookmark: Bookmark) => void;
+  handleRemove?: (bookmark: Bookmark) => void;
 };
 
-export const Bookmark: React.FC<Props> = ({ bookmark, change }) => {
+export const Bookmark: React.FC<Props> = ({
+  bookmark,
+  handleChange,
+  handleRemove,
+}) => {
   const [isEditorOpen, setIsEditorOpen] = useState(false);
 
   return (
@@ -37,7 +42,8 @@ export const Bookmark: React.FC<Props> = ({ bookmark, change }) => {
         <BookmarkEditor
           bookmark={bookmark}
           setIsModalOpen={setIsEditorOpen}
-          change={change}
+          handleChange={handleChange}
+          handleRemove={handleRemove}
         />
       )}
     </div>

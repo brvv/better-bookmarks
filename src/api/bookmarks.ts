@@ -89,3 +89,8 @@ export const updateBookmark = async (bookmark: Bookmark): Promise<Bookmark> => {
   });
   return parseBookmarkNode(updatedBookmark);
 };
+
+export const removeBookmark = async (bookmark: Bookmark): Promise<void> => {
+  await browser.bookmarks.remove(bookmark.id);
+  return;
+};

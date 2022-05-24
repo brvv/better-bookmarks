@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import "./BookmarkContainer.css";
 import { Bookmark } from "../bookmark/Bookmark";
-import { getBookmarksFromParent, updateBookmark } from "../../../api";
+import {
+  getBookmarksFromParent,
+  updateBookmark,
+  removeBookmark,
+} from "../../../api";
 
 type Props = {
   parentId: string;
@@ -21,7 +25,7 @@ export const BookmarkContainer: React.FC<Props> = ({ parentId }) => {
     });
   }, [parentId]);
 
-  const changeBookmarkInfo = async (newBookmark: Bookmark) => {
+  const handleChangeBookmark = async (newBookmark: Bookmark) => {
     const updatedBookmark = await updateBookmark(newBookmark);
     const bookmarkIndex = bookmarks.findIndex(
       (bookmark) => bookmark.id === newBookmark.id
@@ -31,11 +35,25 @@ export const BookmarkContainer: React.FC<Props> = ({ parentId }) => {
     setBookmarks(newBookmarks);
   };
 
+  const handleRemoveBookmark = async (target: Bookmark) => {
+    const newBookmarks = [...bookmarks];
+    const bookmarkIndex = bookmarks.findIndex(
+      (bookmark) => bookmark.id === target.id
+    );
+    newBookmarks.splice(bookmarkIndex, 1);
+    await removeBookmark(target);
+    setBookmarks(newBookmarks);
+  };
+
   return (
     <div className="bookmark-container">
       {bookmarksFinishedLoading ? (
         bookmarks.map((bookmark) => (
-          <Bookmark bookmark={bookmark} change={changeBookmarkInfo} />
+          <Bookmark
+            bookmark={bookmark}
+            handleChange={handleChangeBookmark}
+            handleRemove={handleRemoveBookmark}
+          />
         ))
       ) : (
         <p>Loading!</p>
