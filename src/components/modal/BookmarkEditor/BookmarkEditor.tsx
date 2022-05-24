@@ -1,20 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import "./BookmarkEditor.css";
 
 type Props = {
-  title?: string;
-  url?: string;
-  id?: string;
+  bookmark: Bookmark;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  change?: (bookmark: Bookmark) => void;
 };
 
 export const BookmarkEditor: React.FC<Props> = ({
-  title,
-  url,
-  id,
+  bookmark,
   setIsModalOpen,
+  change,
 }) => {
+  const [titleInput, setTitleInput] = useState(bookmark.title);
+  const [urlInput, setUrlInput] = useState(bookmark.url ? bookmark.url : "");
+
   return ReactDOM.createPortal(
     <div>
       <div
@@ -24,12 +25,34 @@ export const BookmarkEditor: React.FC<Props> = ({
         }}
       ></div>
       <div className="modal-content">
-        <p>Edit Title: Bookmark id: {id}</p>
-        <input className="edit-title" value={title}></input>
+        <p>Edit Title: Bookmark id: {bookmark.id}</p>
+        <input
+          className="edit-title"
+          value={titleInput}
+          onInput={(e) => setTitleInput((e.target as HTMLInputElement).value)}
+        ></input>
         <p>Edit Link:</p>
-        <input className="edit-url" value={url}></input>
+        <input
+          className="edit-url"
+          value={urlInput}
+          onInput={(e) => setUrlInput((e.target as HTMLInputElement).value)}
+        ></input>
         <div className="button-container">
-          <button>submit</button>
+          <button
+            onClick={() => {
+              if (change && urlInput && titleInput) {
+                const newBookmark: Bookmark = {
+                  id: bookmark.id,
+                  title: titleInput,
+                  url: urlInput,
+                };
+                change(newBookmark);
+                setIsModalOpen(false);
+              }
+            }}
+          >
+            change
+          </button>
           <button
             onClick={() => {
               setIsModalOpen(false);

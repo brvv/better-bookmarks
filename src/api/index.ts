@@ -1,5 +1,9 @@
 //functions
-export { getFoldersFromParent, getBookmarksFromParent } from "./bookmarks";
+export {
+  getFoldersFromParent,
+  getBookmarksFromParent,
+  updateBookmark,
+} from "./bookmarks";
 export { getUncategorizedId, getRootId } from "./storage";
 export {
   TOOLBAR_ID,

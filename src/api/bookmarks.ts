@@ -80,3 +80,12 @@ export const getBookmarksFromParent = async (
   });
   return bookmarks;
 };
+
+export const updateBookmark = async (bookmark: Bookmark): Promise<Bookmark> => {
+  const newUrl = bookmark.url ? bookmark.url : "";
+  const updatedBookmark = await browser.bookmarks.update(bookmark.id, {
+    title: bookmark.title,
+    url: newUrl,
+  });
+  return parseBookmarkNode(updatedBookmark);
+};

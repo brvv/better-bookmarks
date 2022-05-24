@@ -3,20 +3,24 @@ import { BookmarkEditor } from "../../modal/BookmarkEditor/BookmarkEditor";
 import "./Bookmark.css";
 
 type Props = {
-  title: string;
-  url: string;
-  id: string;
+  bookmark: Bookmark;
+  change?: (bookmark: Bookmark) => void;
 };
 
-export const Bookmark: React.FC<Props> = ({ title, url, id }) => {
+export const Bookmark: React.FC<Props> = ({ bookmark, change }) => {
   const [isEditorOpen, setIsEditorOpen] = useState(false);
 
   return (
     <div>
-      <a href={url} className="bookmark" target="_blank" rel="noreferrer">
+      <a
+        href={bookmark.url ? bookmark.url : ""}
+        className="bookmark"
+        target="_blank"
+        rel="noreferrer"
+      >
         <div className="info-container">
-          <p className="title">{title}</p>
-          <p className="url">{url}</p>
+          <p className="title">{bookmark.title}</p>
+          <p className="url">{bookmark.url ? bookmark.url : ""}</p>
         </div>
         <div className="button-container">
           <button
@@ -31,10 +35,9 @@ export const Bookmark: React.FC<Props> = ({ title, url, id }) => {
 
       {isEditorOpen && (
         <BookmarkEditor
-          title={title}
-          url={url}
-          id={id}
+          bookmark={bookmark}
           setIsModalOpen={setIsEditorOpen}
+          change={change}
         />
       )}
     </div>
