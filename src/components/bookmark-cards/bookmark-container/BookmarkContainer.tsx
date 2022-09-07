@@ -25,7 +25,7 @@ export const BookmarkContainer: React.FC<Props> = ({ parentId }) => {
     });
   }, [parentId]);
 
-  const handleChangeBookmark = async (newBookmark: Bookmark) => {
+  const handleEditBookmark = async (newBookmark: Bookmark) => {
     const updatedBookmark = await updateBookmark(newBookmark);
     const bookmarkIndex = bookmarks.findIndex(
       (bookmark) => bookmark.id === newBookmark.id
@@ -35,7 +35,7 @@ export const BookmarkContainer: React.FC<Props> = ({ parentId }) => {
     setBookmarks(newBookmarks);
   };
 
-  const handleRemoveBookmark = async (target: Bookmark) => {
+  const handleDeleteBookmark = async (target: Bookmark) => {
     const newBookmarks = [...bookmarks];
     const bookmarkIndex = bookmarks.findIndex(
       (bookmark) => bookmark.id === target.id
@@ -51,8 +51,8 @@ export const BookmarkContainer: React.FC<Props> = ({ parentId }) => {
         bookmarks.map((bookmark) => (
           <Bookmark
             bookmark={bookmark}
-            handleChange={handleChangeBookmark}
-            handleRemove={handleRemoveBookmark}
+            handleEdit={handleEditBookmark}
+            handleDelete={handleDeleteBookmark}
           />
         ))
       ) : (

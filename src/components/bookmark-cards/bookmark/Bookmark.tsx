@@ -4,14 +4,14 @@ import "./Bookmark.css";
 
 type Props = {
   bookmark: Bookmark;
-  handleChange: (bookmark: Bookmark) => void;
-  handleRemove: (bookmark: Bookmark) => void;
+  handleEdit: (bookmark: Bookmark) => void;
+  handleDelete: (bookmark: Bookmark) => void;
 };
 
 export const Bookmark: React.FC<Props> = ({
   bookmark,
-  handleChange,
-  handleRemove,
+  handleEdit,
+  handleDelete,
 }) => {
 
   return (
@@ -31,8 +31,8 @@ export const Bookmark: React.FC<Props> = ({
 
         <CollapsableOptionsMenu
           bookmark={bookmark}
-          handleEditClick={handleChange}
-          handleDeleteClick={handleRemove}
+          handleEdit={handleEdit}
+          handleDelete={handleDelete}
         />
     </div>
   );

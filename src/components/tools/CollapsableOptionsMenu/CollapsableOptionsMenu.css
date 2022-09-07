@@ -10,7 +10,7 @@
     overflow: hidden;
     position: absolute;
     top: 50%;
-    right: 1rem;
+    right: min(1rem, 10%);
     transform: translate(0, -50%);
 
     justify-content: space-between;
