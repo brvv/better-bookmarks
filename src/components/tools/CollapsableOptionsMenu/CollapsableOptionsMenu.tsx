@@ -18,7 +18,9 @@ export const CollapsableOptionsMenu: React.FC<Props> = ({
         <div className="collapsable-options-menu">
             {
                 handleMoveUp &&
-                <button className="invisible"><img src={require("../../../assets/arrow-up-icon.png")} alt="Move up" /></button>
+                <button className="invisible" onClick={() => {
+                    handleMoveUp(bookmark)
+                }}><img src={require("../../../assets/arrow-up-icon.png")} alt="Move up" /></button>
                 
             }
             

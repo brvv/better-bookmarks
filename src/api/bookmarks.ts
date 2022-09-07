@@ -1,4 +1,5 @@
 import { getUncategorizedId, getRootId } from "./storage";
+import { TOOLBAR_ID } from "./constants";
 
 const parseFolderNode = (
   node: browser.bookmarks.BookmarkTreeNode
@@ -92,5 +93,42 @@ export const updateBookmark = async (bookmark: Bookmark): Promise<Bookmark> => {
 
 export const removeBookmark = async (bookmark: Bookmark): Promise<void> => {
   await browser.bookmarks.remove(bookmark.id);
+  return;
+};
+
+const getParentOfParentId = async (bookmark: Bookmark): Promise<string | undefined> => {
+  if (! bookmark.parentId) {
+    return;
+  }
+
+  const parentNode = await browser.bookmarks.get(bookmark.parentId);
+  const parent = await parseFolderNode(parentNode[0]);
+  if (!parent.parentId) {
+    return;
+  }
+  const parentOfParent = parent.parentId;
+  return parentOfParent;
+
+}
+
+export const moveUpBookmark = async (bookmark: Bookmark): Promise<void> => {
+  if (! bookmark.parentId) {
+    return;
+  }
+
+  const targetId = await getParentOfParentId(bookmark);
+
+  if (targetId) {
+    const rootId = await getRootId();
+    const uncategorizedId = await getUncategorizedId();
+
+    if (targetId === rootId || bookmark.parentId == rootId || bookmark.parentId === TOOLBAR_ID) {
+      await browser.bookmarks.move(bookmark.id, {parentId : uncategorizedId})
+    }
+    else {
+      await browser.bookmarks.move(bookmark.id, {parentId : targetId})
+    }
+  }
+
   return;
 };

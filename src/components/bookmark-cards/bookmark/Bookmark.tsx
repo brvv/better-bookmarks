@@ -6,12 +6,14 @@ type Props = {
   bookmark: Bookmark;
   handleEdit: (bookmark: Bookmark) => void;
   handleDelete: (bookmark: Bookmark) => void;
+  handleMoveUpBookmark?: (bookmark: Bookmark) => void;
 };
 
 export const Bookmark: React.FC<Props> = ({
   bookmark,
   handleEdit,
   handleDelete,
+  handleMoveUpBookmark,
 }) => {
 
   return (
@@ -33,6 +35,7 @@ export const Bookmark: React.FC<Props> = ({
           bookmark={bookmark}
           handleEdit={handleEdit}
           handleDelete={handleDelete}
+          handleMoveUp={handleMoveUpBookmark}
         />
     </div>
   );
