@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import { BookmarkEditor } from "../../modal/BookmarkEditor/BookmarkEditor";
+import React from "react";
+import { CollapsableOptionsMenu } from "../../tools/CollapsableOptionsMenu/CollapsableOptionsMenu";
 import "./Bookmark.css";
 
 type Props = {
   bookmark: Bookmark;
-  handleChange?: (bookmark: Bookmark) => void;
-  handleRemove?: (bookmark: Bookmark) => void;
+  handleChange: (bookmark: Bookmark) => void;
+  handleRemove: (bookmark: Bookmark) => void;
 };
 
 export const Bookmark: React.FC<Props> = ({
@@ -13,10 +13,9 @@ export const Bookmark: React.FC<Props> = ({
   handleChange,
   handleRemove,
 }) => {
-  const [isEditorOpen, setIsEditorOpen] = useState(false);
 
   return (
-    <div>
+    <div className="bookmark-parent">
       <a
         href={bookmark.url ? bookmark.url : ""}
         className="bookmark"
@@ -27,25 +26,14 @@ export const Bookmark: React.FC<Props> = ({
           <p className="title">{bookmark.title}</p>
           <p className="url">{bookmark.url ? bookmark.url : ""}</p>
         </div>
-        <div className="button-container">
-          <button
-            className="settings-button"
-            onClick={(e) => {
-              e.preventDefault();
-              setIsEditorOpen(true);
-            }}
-          ></button>
-        </div>
+
       </a>
 
-      {isEditorOpen && (
-        <BookmarkEditor
+        <CollapsableOptionsMenu
           bookmark={bookmark}
-          setIsModalOpen={setIsEditorOpen}
-          handleChange={handleChange}
-          handleRemove={handleRemove}
+          handleEditClick={handleChange}
+          handleDeleteClick={handleRemove}
         />
-      )}
     </div>
   );
 };

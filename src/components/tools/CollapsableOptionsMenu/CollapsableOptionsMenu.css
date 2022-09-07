@@ -1,0 +1,41 @@
+* > .collapsable-options-menu {
+    display: none;
+}
+
+*:hover > .collapsable-options-menu {
+    display: flex;
+}
+
+.collapsable-options-menu {
+    overflow: hidden;
+    position: absolute;
+    top: 50%;
+    right: 1rem;
+    transform: translate(0, -50%);
+
+    justify-content: space-between;
+    align-items: center;
+    
+    border-radius: 3px;
+    border: 1px solid rgb(178, 178, 178);
+
+}
+
+.collapsable-options-menu > * {
+    width: 1.7rem;
+    height: 1.7rem;
+    border: none;
+    
+}
+
+.collapsable-options-menu > button > img {
+    opacity: 0.5;
+}
+
+.collapsable-options-menu > .invisible {
+    display: none;
+}
+
+.collapsable-options-menu:hover > .invisible {
+    display: block;
+}
