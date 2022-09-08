@@ -3,14 +3,14 @@ import "./CollapsableOptionsMenu.css"
 
 type Props = {
     bookmark: Bookmark;
-    handleEdit: (bookmark: Bookmark) => void;
+    handleToggleEditor: () => void;
     handleDelete: (bookmark: Bookmark) => void;
     handleMoveUp?: (bookmark: Bookmark) => void;
   };
 
 export const CollapsableOptionsMenu: React.FC<Props> = ({
     bookmark,
-    handleEdit,
+    handleToggleEditor,
     handleDelete,
     handleMoveUp
 }) => {
@@ -33,7 +33,7 @@ export const CollapsableOptionsMenu: React.FC<Props> = ({
 
             <button className="edit-button visible"
             onClick={() => {
-                handleEdit(bookmark)
+                handleToggleEditor()
             }}><img src={require("../../../assets/pencil-edit-icon.png")} alt="Move up" />
             </button>
 

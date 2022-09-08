@@ -29,7 +29,11 @@
   background-color: rgb(173, 173, 173);
 }
 
-.info-container > .url {
+.info-container {
+  width: 100%;
+}
+
+.info-container > .url, .input-url {
   color: rgb(127, 127, 127);
   font-style: italic;
 }
@@ -40,4 +44,9 @@
   border: none;
   border-radius: 50%;
   border: 1px solid rgb(91, 91, 91);
+}
+
+.input-title, .input-url {
+  width: 100%;
+  padding: 0 0;
 }
