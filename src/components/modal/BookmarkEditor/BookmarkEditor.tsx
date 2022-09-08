@@ -27,7 +27,7 @@ export const BookmarkEditor: React.FC<Props> = ({
         }}
       ></div>
       <div className="modal-content">
-        <p>Edit Title: Bookmark id: {bookmark.id}</p>
+        <p>Edit Title: </p>
         <input
           className="edit-title"
           value={titleInput}

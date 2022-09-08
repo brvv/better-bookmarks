@@ -5,6 +5,8 @@ import {
   getBookmarksFromParent,
   updateBookmark,
   removeBookmark,
+  moveUpBookmark,
+  getRootId,
 } from "../../../api";
 
 type Props = {
@@ -15,6 +17,14 @@ export const BookmarkContainer: React.FC<Props> = ({ parentId }) => {
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
   const [bookmarksFinishedLoading, setBookmarksFinishedLoading] =
     useState(false);
+  const [isInRootFolder, setIsInRootFolder] = useState(false)
+
+  //Check if we are in the root folder of the program
+  useEffect(() => {
+    getRootId().then((id) => {
+      setIsInRootFolder(parentId === id);
+    })
+  })
 
   //Bookmarks
   useEffect(() => {
@@ -23,9 +33,10 @@ export const BookmarkContainer: React.FC<Props> = ({ parentId }) => {
       setBookmarksFinishedLoading(true);
       console.log(bookmarks);
     });
+    
   }, [parentId]);
 
-  const handleChangeBookmark = async (newBookmark: Bookmark) => {
+  const handleEditBookmark = async (newBookmark: Bookmark) => {
     const updatedBookmark = await updateBookmark(newBookmark);
     const bookmarkIndex = bookmarks.findIndex(
       (bookmark) => bookmark.id === newBookmark.id
@@ -35,7 +46,7 @@ export const BookmarkContainer: React.FC<Props> = ({ parentId }) => {
     setBookmarks(newBookmarks);
   };
 
-  const handleRemoveBookmark = async (target: Bookmark) => {
+  const handleDeleteBookmark = async (target: Bookmark) => {
     const newBookmarks = [...bookmarks];
     const bookmarkIndex = bookmarks.findIndex(
       (bookmark) => bookmark.id === target.id
@@ -45,14 +56,28 @@ export const BookmarkContainer: React.FC<Props> = ({ parentId }) => {
     setBookmarks(newBookmarks);
   };
 
+  const handleMoveUpBookmark = async (target: Bookmark) => {
+    const rootId = await getRootId();
+    const newBookmarks = [...bookmarks];
+    const bookmarkIndex = bookmarks.findIndex(
+      (bookmark) => bookmark.id === target.id
+    );
+    newBookmarks.splice(bookmarkIndex, 1);
+    if (target.parentId && target.parentId != rootId) {
+      await moveUpBookmark(target);
+    }
+    setBookmarks(newBookmarks);
+  }
+
   return (
     <div className="bookmark-container">
       {bookmarksFinishedLoading ? (
         bookmarks.map((bookmark) => (
           <Bookmark
             bookmark={bookmark}
-            handleChange={handleChangeBookmark}
-            handleRemove={handleRemoveBookmark}
+            handleEdit={handleEditBookmark}
+            handleDelete={handleDeleteBookmark}
+            handleMoveUpBookmark={isInRootFolder ? undefined : handleMoveUpBookmark}
           />
         ))
       ) : (

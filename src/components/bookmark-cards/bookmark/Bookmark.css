@@ -1,5 +1,11 @@
+.bookmark-parent {
+  position: relative;
+}
+
 .bookmark {
+  flex-shrink: 0;
   display: flex;
+
   text-decoration: none;
   justify-content: space-between;
   padding: 0.5rem;
@@ -23,15 +29,13 @@
   background-color: rgb(173, 173, 173);
 }
 
-.info-container > .url {
-  color: rgb(127, 127, 127);
-  font-style: italic;
+.info-container {
+  width: 100%;
 }
 
-.bookmark > .button-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.info-container > .url, .input-url {
+  color: rgb(127, 127, 127);
+  font-style: italic;
 }
 
 .bookmark > .button-container > .settings-button {
@@ -40,4 +44,9 @@
   border: none;
   border-radius: 50%;
   border: 1px solid rgb(91, 91, 91);
+}
+
+.input-title, .input-url {
+  width: 100%;
+  padding: 0 0;
 }

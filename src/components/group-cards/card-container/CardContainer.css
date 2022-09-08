@@ -15,6 +15,10 @@
   justify-self: center;
 }
 
+.card-container > :only-child{
+  grid-column: 1/-1;
+}
+
 @media only screen and (max-width: 600px) {
   .card-container {
     gap: 5vw 7vw;
