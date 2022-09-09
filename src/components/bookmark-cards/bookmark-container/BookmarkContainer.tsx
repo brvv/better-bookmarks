@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import "./BookmarkContainer.css";
 import { Bookmark } from "../bookmark/Bookmark";
+import { NewBookmarkButton} from "../new-bookmark-button/NewBookmarkButton"
 import {
   getBookmarksFromParent,
   updateBookmark,
   removeBookmark,
   moveUpBookmark,
   getRootId,
+  createNewBookmark,
 } from "../../../api";
 
 type Props = {
@@ -24,7 +26,7 @@ export const BookmarkContainer: React.FC<Props> = ({ parentId }) => {
     getRootId().then((id) => {
       setIsInRootFolder(parentId === id);
     })
-  })
+  }, [])
 
   //Bookmarks
   useEffect(() => {
@@ -69,20 +71,26 @@ export const BookmarkContainer: React.FC<Props> = ({ parentId }) => {
     setBookmarks(newBookmarks);
   }
 
+  const handleCreateBookmark = async (newBookmark : NewBookmark) => {
+    const result = await createNewBookmark(newBookmark);
+    setBookmarks([...bookmarks, result]);
+  }
+
   return (
     <div className="bookmark-container">
       {bookmarksFinishedLoading ? (
-        bookmarks.map((bookmark) => (
+        (bookmarks.map((bookmark) => (
           <Bookmark
             bookmark={bookmark}
             handleEdit={handleEditBookmark}
             handleDelete={handleDeleteBookmark}
             handleMoveUpBookmark={isInRootFolder ? undefined : handleMoveUpBookmark}
           />
-        ))
+        )))
       ) : (
         <p>Loading!</p>
       )}
+      <NewBookmarkButton parentId= {parentId} handleCreateNewBookmark={handleCreateBookmark} />
     </div>
   );
 };

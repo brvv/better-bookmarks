@@ -14,3 +14,9 @@ type Bookmark = {
   parentId?: string;
   title: string;
 };
+
+type NewBookmark = {
+  parentId: string;
+  title?: string;
+  url: string;
+}
