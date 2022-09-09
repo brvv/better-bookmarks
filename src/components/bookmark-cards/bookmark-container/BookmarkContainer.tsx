@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import "./BookmarkContainer.css";
 import { Bookmark } from "../bookmark/Bookmark";
+import { NewBookmarkButton} from "../new-bookmark-button/NewBookmarkButton"
 import {
   getBookmarksFromParent,
   updateBookmark,
   removeBookmark,
   moveUpBookmark,
   getRootId,
+  createNewBookmark,
 } from "../../../api";
 
 type Props = {
@@ -17,21 +19,20 @@ export const BookmarkContainer: React.FC<Props> = ({ parentId }) => {
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
   const [bookmarksFinishedLoading, setBookmarksFinishedLoading] =
     useState(false);
-  const [isInRootFolder, setIsInRootFolder] = useState(false)
+  const [isInRootFolder, setIsInRootFolder] = useState(false);
 
   //Check if we are in the root folder of the program
   useEffect(() => {
     getRootId().then((id) => {
       setIsInRootFolder(parentId === id);
     })
-  })
+  }, [])
 
   //Bookmarks
   useEffect(() => {
     getBookmarksFromParent(parentId).then((bookmarks) => {
       setBookmarks(bookmarks);
       setBookmarksFinishedLoading(true);
-      console.log(bookmarks);
     });
     
   }, [parentId]);
@@ -47,12 +48,13 @@ export const BookmarkContainer: React.FC<Props> = ({ parentId }) => {
   };
 
   const handleDeleteBookmark = async (target: Bookmark) => {
+    await removeBookmark(target);
     const newBookmarks = [...bookmarks];
-    const bookmarkIndex = bookmarks.findIndex(
+    const bookmarkIndex = newBookmarks.findIndex(
       (bookmark) => bookmark.id === target.id
     );
     newBookmarks.splice(bookmarkIndex, 1);
-    await removeBookmark(target);
+    console.log(newBookmarks);
     setBookmarks(newBookmarks);
   };
 
@@ -69,20 +71,27 @@ export const BookmarkContainer: React.FC<Props> = ({ parentId }) => {
     setBookmarks(newBookmarks);
   }
 
+  const handleCreateBookmark = async (newBookmark : NewBookmark) => {
+    const result = await createNewBookmark(newBookmark);
+    setBookmarks([...bookmarks, result]);
+  }
+
   return (
     <div className="bookmark-container">
       {bookmarksFinishedLoading ? (
-        bookmarks.map((bookmark) => (
+        (bookmarks.map((bookmark) => (
           <Bookmark
+            key={bookmark.id}
             bookmark={bookmark}
             handleEdit={handleEditBookmark}
             handleDelete={handleDeleteBookmark}
             handleMoveUpBookmark={isInRootFolder ? undefined : handleMoveUpBookmark}
           />
-        ))
+        )))
       ) : (
         <p>Loading!</p>
       )}
+      <NewBookmarkButton parentId= {parentId} handleCreateNewBookmark={handleCreateBookmark} />
     </div>
   );
 };
