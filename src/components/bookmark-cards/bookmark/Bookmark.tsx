@@ -9,20 +9,6 @@ type Props = {
   handleMoveUpBookmark?: (bookmark: Bookmark) => void;
 };
 
-const useHandleClickOutside = (targetRef : React.RefObject<HTMLDivElement>, eventHandler: ()=>void) => {
-  useEffect(() => {
-    const handleClickOutside = (event : MouseEvent) => {
-      if (targetRef.current && !targetRef.current.contains(event.target as Node)) {
-        eventHandler();
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [targetRef]);
-}
-
 
 export const Bookmark: React.FC<Props> = ({
   bookmark,
@@ -51,16 +37,22 @@ export const Bookmark: React.FC<Props> = ({
     }
   },[isEditingActive])
 
+  const handleClickOutside = (click : MouseEvent) => {
+    if (bookmarkContainerRef && bookmarkContainerRef.current && ! bookmarkContainerRef.current.contains(click.target as Node)) {
+      setIsEditingActive(false)
+    }
+  }
+
+  useEffect(() => {
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    }
+  }, [])
+
   const handleToggleEditor = async () => {
     setIsEditingActive(!isEditingActive);
   }
-
-  const handleClickOutside2 = async () => {
-    console.log("Editing state on click:" + bookmark.title + isEditingActive);
-
-  }
-
-  useHandleClickOutside(bookmarkContainerRef, handleClickOutside2);
   
   
 
