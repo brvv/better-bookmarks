@@ -19,7 +19,7 @@ export const BookmarkContainer: React.FC<Props> = ({ parentId }) => {
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
   const [bookmarksFinishedLoading, setBookmarksFinishedLoading] =
     useState(false);
-  const [isInRootFolder, setIsInRootFolder] = useState(false)
+  const [isInRootFolder, setIsInRootFolder] = useState(false);
 
   //Check if we are in the root folder of the program
   useEffect(() => {
@@ -33,7 +33,6 @@ export const BookmarkContainer: React.FC<Props> = ({ parentId }) => {
     getBookmarksFromParent(parentId).then((bookmarks) => {
       setBookmarks(bookmarks);
       setBookmarksFinishedLoading(true);
-      console.log(bookmarks);
     });
     
   }, [parentId]);
@@ -49,12 +48,13 @@ export const BookmarkContainer: React.FC<Props> = ({ parentId }) => {
   };
 
   const handleDeleteBookmark = async (target: Bookmark) => {
+    await removeBookmark(target);
     const newBookmarks = [...bookmarks];
-    const bookmarkIndex = bookmarks.findIndex(
+    const bookmarkIndex = newBookmarks.findIndex(
       (bookmark) => bookmark.id === target.id
     );
     newBookmarks.splice(bookmarkIndex, 1);
-    await removeBookmark(target);
+    console.log(newBookmarks);
     setBookmarks(newBookmarks);
   };
 
@@ -81,6 +81,7 @@ export const BookmarkContainer: React.FC<Props> = ({ parentId }) => {
       {bookmarksFinishedLoading ? (
         (bookmarks.map((bookmark) => (
           <Bookmark
+            key={bookmark.id}
             bookmark={bookmark}
             handleEdit={handleEditBookmark}
             handleDelete={handleDeleteBookmark}
