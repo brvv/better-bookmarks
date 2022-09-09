@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 
 type Props = {
   parentId : string;
@@ -14,10 +14,23 @@ export const NewBookmarkButton: React.FC<Props> = ({
   handleCreateNewBookmark,
 }) => {
 
-
+  const newButtonContainerRef = useRef<HTMLDivElement>(null);
   const [isEditingActive, setIsEditingActive] = useState(false);
   const [title, setTitle] = useState(defaultTitleValue);
   const [url, setUrl] = useState(defaultUrlValue);
+
+  const handleClickOutside = (click : MouseEvent) => {
+    if (newButtonContainerRef && newButtonContainerRef.current && ! newButtonContainerRef.current.contains(click.target as Node)) {
+      setIsEditingActive(false)
+    }
+  }
+
+  useEffect(() => {
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    }
+  }, [])
 
   useEffect(() => {
     if (! isEditingActive) {
@@ -35,14 +48,14 @@ export const NewBookmarkButton: React.FC<Props> = ({
 
   },[isEditingActive]);
 
-  const toggleEditor = async () => {
-    setIsEditingActive(() => !isEditingActive);
+  const enableEditor = async () => {
+    setIsEditingActive(() => true);
   }
 
   
 
   return (
-    <div className="bookmark-parent" onClick={toggleEditor}>
+    <div className="bookmark-parent" onClick={enableEditor} ref={newButtonContainerRef}>
       {! isEditingActive ?       
         <div className="bookmark" >
             <div className="info-container">
