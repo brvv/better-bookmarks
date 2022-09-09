@@ -14,6 +14,8 @@
   box-shadow: 0 0 1px 0px gray;
   color: black;
   min-width: fit-content;
+  text-align: left;
+  width: 100%;
 }
 
 .bookmark:hover,

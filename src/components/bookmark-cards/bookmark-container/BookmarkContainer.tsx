@@ -11,7 +11,7 @@ import {
   createNewBookmark,
   changeBookmarkIndex,
 } from "../../../api";
-import { closestCenter, DndContext, PointerSensor, useSensor, DragEndEvent } from '@dnd-kit/core';
+import { closestCenter, DndContext, MouseSensor, useSensor, DragEndEvent } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
 
 type Props = {
@@ -24,7 +24,11 @@ export const BookmarkContainer: React.FC<Props> = ({ parentId }) => {
     useState(false);
   const [isInRootFolder, setIsInRootFolder] = useState(false);
 
-  const sensors = [useSensor(PointerSensor)];
+  const sensors = [useSensor(MouseSensor, {
+    activationConstraint : {
+      distance : 10
+    },
+  })];
 
   //Check if we are in the root folder of the program
   useEffect(() => {

@@ -75,20 +75,19 @@ export const Bookmark: React.FC<Props> = ({
   
 
   return (
-    <div className="bookmark-parent" ref={setNodeRef} {...attributes} {...listeners} style={style}>
+    <div className="bookmark-parent" ref={setNodeRef} {...{...attributes, ...{role:"button"}}} {...listeners} style={style}>
       <div ref={bookmarkContainerRef}>
         {! isEditingActive ?       
-        <a
+        <button
           className="bookmark"
-          target="_blank"
-          rel="noreferrer"
+          onClick={(e) => {if (isDragging) {e.preventDefault()} else {window.open(url, "_blank")}}}
         >
           <div className="info-container">
             <p className="title">{title}</p>
             <p className="url">{url}</p>
           </div>
 
-        </a> : 
+        </button> : 
         
         <div className="bookmark">
           <div className="info-container">
