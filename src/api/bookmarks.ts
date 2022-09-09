@@ -138,3 +138,12 @@ export const createNewBookmark = async (newBookmark : NewBookmark) : Promise<Boo
   const resultingBookmark = parseBookmarkNode(newBookmarkNode);
   return resultingBookmark;
 }
+
+export const changeBookmarkIndex = async (bookmark : Bookmark, newIndex : number) : Promise<void> => {
+  if (! bookmark.parentId) {
+    return;
+  }
+
+  await browser.bookmarks.move(bookmark.id, {index : newIndex});
+
+}

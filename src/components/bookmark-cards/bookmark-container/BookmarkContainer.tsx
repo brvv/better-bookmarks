@@ -9,10 +9,10 @@ import {
   moveUpBookmark,
   getRootId,
   createNewBookmark,
+  changeBookmarkIndex,
 } from "../../../api";
 import { closestCenter, DndContext, PointerSensor, useSensor, DragEndEvent } from '@dnd-kit/core';
-import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
-
+import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
 
 type Props = {
   parentId: string;
@@ -90,10 +90,11 @@ export const BookmarkContainer: React.FC<Props> = ({ parentId }) => {
       let newBookmarks = [...bookmarks];
       const oldIndex = newBookmarks.findIndex(bookmark => bookmark.id === active.id);
       const newIndex = newBookmarks.findIndex(bookmark => bookmark.id === over.id);
-      [newBookmarks[oldIndex], newBookmarks[newIndex]] = [newBookmarks[newIndex], newBookmarks[oldIndex]]
       
-      //const reorderedBookmarks = arrayMove(newBookmarks, oldIndex, newIndex);
-      setBookmarks([...newBookmarks]);
+      changeBookmarkIndex(bookmarks[oldIndex], newIndex);
+      const reorderedBookmarks = arrayMove(newBookmarks, oldIndex, newIndex);
+      setBookmarks(reorderedBookmarks);
+      
     }
   }
 
