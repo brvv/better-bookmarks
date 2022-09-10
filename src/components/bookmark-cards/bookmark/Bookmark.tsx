@@ -9,6 +9,8 @@ type Props = {
   handleEdit: (bookmark: Bookmark) => void;
   handleDelete: (bookmark: Bookmark) => void;
   handleMoveUpBookmark?: (bookmark: Bookmark) => void;
+  dragTransform ? : {x : number, y : number};
+  isBookmarkOverFolder ? : boolean;
 };
 
 
@@ -17,6 +19,8 @@ export const Bookmark: React.FC<Props> = ({
   handleEdit,
   handleDelete,
   handleMoveUpBookmark,
+  dragTransform,
+  isBookmarkOverFolder,
 }) => {
 
   //const bookmarkContainerRef = useRef<HTMLDivElement>(null);
@@ -25,6 +29,7 @@ export const Bookmark: React.FC<Props> = ({
   const [title, setTitle] = useState(bookmark.title);
   const [url, setUrl] = useState(bookmark.url ? bookmark.url : "");
   const bookmarkContainerRef = useRef<HTMLDivElement>(null);
+
 
   const {
     setNodeRef,
@@ -37,8 +42,13 @@ export const Bookmark: React.FC<Props> = ({
 
   const style = {
       transition,
-      transform: CSS.Transform.toString(transform),
+      transform: isDragging && dragTransform ? CSS.Transform.toString({x : dragTransform.x , y : dragTransform.y, scaleX : 1, scaleY : 1 }) : CSS.Transform.toString(transform),
       opacity: isDragging ? 0.5 : 1,
+  }
+
+  const scaleDownStyle = {
+    transition : "transform 200ms ease-in-out", 
+    transform : CSS.Transform.toString({x : 0 , y : 0, scaleX : isBookmarkOverFolder && isDragging ? 0.8: 1, scaleY : isBookmarkOverFolder && isDragging ? 0.8: 1 }),
   }
 
   useEffect(() => {
@@ -53,6 +63,7 @@ export const Bookmark: React.FC<Props> = ({
       }
       handleEdit(newBookmark);
     }
+    console.log(bookmarkContainerRef);
   },[isEditingActive])
 
   const handleClickOutside = (click : MouseEvent) => {
@@ -76,14 +87,14 @@ export const Bookmark: React.FC<Props> = ({
 
   return (
     <div className="bookmark-parent" ref={setNodeRef} {...attributes} {...listeners} style={style}>
-      <div ref={bookmarkContainerRef}>
+      <div ref={bookmarkContainerRef} style={scaleDownStyle}>
         {! isEditingActive ?       
         <button
           className="bookmark"
           onClick={() => {window.open(url, "_blank")}}
         >
           <div className="info-container">
-            <p className="title">{title}</p>
+            <p className="title">{title + " " + bookmark.id}</p>
             <p className="url">{url}</p>
           </div>
 

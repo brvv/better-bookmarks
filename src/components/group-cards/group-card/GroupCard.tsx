@@ -5,7 +5,7 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
 type Props = {
-  folder : BookmarkFolder
+  folder : BookmarkFolder;
 };
 
 export const GroupCard: React.FC<Props> = ({folder}) => {
@@ -18,6 +18,7 @@ export const GroupCard: React.FC<Props> = ({folder}) => {
     isDragging,
     } = useSortable({ id: folder.id })
 
+
     const style = {
       transition,
       transform: CSS.Transform.toString(transform),
@@ -28,7 +29,7 @@ export const GroupCard: React.FC<Props> = ({folder}) => {
   return (
     <div  ref={setNodeRef} {...attributes} {...listeners} style={style}>
       <button className="group-card" onClick={() => {window.open("#/folder/" + folder.id, "_self")}}>
-        {folder.title}
+        {folder.title + " " + folder.id}
       </button>
 
     </div>

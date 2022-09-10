@@ -3,32 +3,24 @@ import "./BookmarkContainer.css";
 import { Bookmark } from "../bookmark/Bookmark";
 import { NewBookmarkButton} from "../new-bookmark-button/NewBookmarkButton"
 import {
-  getBookmarksFromParent,
   updateBookmark,
   removeBookmark,
   moveUpBookmark,
   getRootId,
-  createNewBookmark,
-  changeBookmarkIndex,
+  createNewBookmark
 } from "../../../api";
-import { closestCenter, DndContext, MouseSensor, useSensor, DragEndEvent } from '@dnd-kit/core';
-import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
+import { SortableContext, rectSortingStrategy } from '@dnd-kit/sortable';
 
 type Props = {
   parentId: string;
+  bookmarks : Bookmark[];
+  setBookmarks : React.Dispatch<React.SetStateAction<Bookmark[]>>;
+  getMouseOffset : {x : number, y : number};
+  isBookmarkOverFolder ? : boolean;
 };
 
-export const BookmarkContainer: React.FC<Props> = ({ parentId }) => {
-  const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
-  const [bookmarksFinishedLoading, setBookmarksFinishedLoading] =
-    useState(false);
+export const BookmarkContainer: React.FC<Props> = ({ parentId, bookmarks, setBookmarks, getMouseOffset, isBookmarkOverFolder }) => {
   const [isInRootFolder, setIsInRootFolder] = useState(false);
-
-  const sensors = [useSensor(MouseSensor, {
-    activationConstraint : {
-      distance : 10
-    },
-  })];
 
   //Check if we are in the root folder of the program
   useEffect(() => {
@@ -36,17 +28,6 @@ export const BookmarkContainer: React.FC<Props> = ({ parentId }) => {
       setIsInRootFolder(parentId === id);
     })
   }, [])
-
-  //Bookmarks
-  useEffect(() => {
-    getBookmarksFromParent(parentId).then((bookmarks) => {
-      setBookmarks(bookmarks);
-      setBookmarksFinishedLoading(true);
-    });
-    
-  }, [parentId]);
-
-  useEffect(() => {console.log("trying to change boomarks", bookmarks)}, [bookmarks])
 
   const handleEditBookmark = async (newBookmark: Bookmark) => {
     const updatedBookmark = await updateBookmark(newBookmark);
@@ -65,7 +46,6 @@ export const BookmarkContainer: React.FC<Props> = ({ parentId }) => {
       (bookmark) => bookmark.id === target.id
     );
     newBookmarks.splice(bookmarkIndex, 1);
-    console.log(newBookmarks);
     setBookmarks(newBookmarks);
   };
 
@@ -86,28 +66,9 @@ export const BookmarkContainer: React.FC<Props> = ({ parentId }) => {
     const result = await createNewBookmark(newBookmark);
     setBookmarks([...bookmarks, result]);}
 
-
-  const handleDragEnd = async ({active, over} : DragEndEvent) => {
-    if (! over) {return}
-
-    if (active.id !== over.id) {
-      let newBookmarks = [...bookmarks];
-      const oldIndex = newBookmarks.findIndex(bookmark => bookmark.id === active.id);
-      const newIndex = newBookmarks.findIndex(bookmark => bookmark.id === over.id);
-      
-      changeBookmarkIndex(bookmarks[oldIndex], newIndex);
-      const reorderedBookmarks = arrayMove(newBookmarks, oldIndex, newIndex);
-      setBookmarks(reorderedBookmarks);
-      
-    }
-  }
-
   return (
-    <div className="bookmark-container" onClick={() => console.log(bookmarks)} >
-      {bookmarksFinishedLoading ? (
-        
-        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>        
-          <SortableContext items={bookmarks.map(bookmark => bookmark.id)} strategy={verticalListSortingStrategy}>
+    <div className="bookmark-container" onClick={() => console.log(bookmarks)} >  
+          <SortableContext items={bookmarks.map(bookmark => bookmark.id)} strategy={rectSortingStrategy}>
             {
               bookmarks.map((bookmark) => (
                 <Bookmark
@@ -116,15 +77,12 @@ export const BookmarkContainer: React.FC<Props> = ({ parentId }) => {
                   handleEdit={handleEditBookmark}
                   handleDelete={handleDeleteBookmark}
                   handleMoveUpBookmark={isInRootFolder ? undefined : handleMoveUpBookmark}
+                  dragTransform={getMouseOffset}
+                  isBookmarkOverFolder={isBookmarkOverFolder}
                 />
               ))
             }
           </SortableContext>
-        </DndContext>
-
-      ) : (
-        <p>Loading!</p>
-      )}
       <NewBookmarkButton parentId= {parentId} handleCreateNewBookmark={handleCreateBookmark} />
     </div>
   );
