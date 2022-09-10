@@ -27,7 +27,7 @@ export const BookmarkContainer: React.FC<Props> = ({ parentId, bookmarks, setBoo
     getRootId().then((id) => {
       setIsInRootFolder(parentId === id);
     })
-  }, [])
+  }, [parentId])
 
   const handleEditBookmark = async (newBookmark: Bookmark) => {
     const updatedBookmark = await updateBookmark(newBookmark);
