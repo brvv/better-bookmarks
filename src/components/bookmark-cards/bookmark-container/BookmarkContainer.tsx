@@ -44,7 +44,6 @@ export const BookmarkContainer: React.FC<Props> = ({ parentId, bookmarks, setBoo
       (bookmark) => bookmark.id === target.id
     );
     newBookmarks.splice(bookmarkIndex, 1);
-    console.log(newBookmarks);
     setBookmarks(newBookmarks);
   };
 

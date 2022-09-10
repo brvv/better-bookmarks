@@ -153,3 +153,17 @@ export const changeFolderIndex = async (folder : BookmarkFolder, newIndex : numb
   if (folder.parentId === rootId) {newIndex +=1;}
   await changeBookmarkIndex({title : folder.title, parentId : folder.parentId, id : folder.id}, newIndex);
 }
+
+export const moveBookmark = async (bookmark : Bookmark, targetId : string) => {
+  const rootId = await getRootId();
+  const uncategorizedId = await getUncategorizedId();
+
+  if (targetId === rootId || bookmark.parentId == rootId || bookmark.parentId === TOOLBAR_ID) {
+    await browser.bookmarks.move(bookmark.id, {parentId : uncategorizedId})
+  }
+  else {
+    await browser.bookmarks.move(bookmark.id, {parentId : targetId})
+  }
+  return;
+  
+}

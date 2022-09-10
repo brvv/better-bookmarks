@@ -11,8 +11,7 @@ type Props = {
   setFolders: React.Dispatch<React.SetStateAction<BookmarkFolder[]>>;
 };
 
-export const CardContainer: React.FC<Props> = ({ parentId, folders, setFolders }) => {
-  console.log(setFolders);
+export const CardContainer: React.FC<Props> = ({ parentId, folders }) => {
 /*   const handleDragEnd = async ({active, over} : DragEndEvent) => {
     if (! over) {return}
 

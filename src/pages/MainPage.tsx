@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { BookmarkContainer, CardContainer } from "../components";
-import { getRootId, getBookmarksFromParent, getFoldersFromParent } from "../api";
+import { getRootId, getBookmarksFromParent, getFoldersFromParent, changeBookmarkIndex, changeFolderIndex, moveBookmark } from "../api";
 import { useParams } from "react-router-dom";
-import { closestCenter, DndContext, MouseSensor, useSensor/* , DragEndEvent */ } from '@dnd-kit/core';
+import { pointerWithin, DndContext, MouseSensor, useSensor, DragEndEvent } from '@dnd-kit/core';
+import { arrayMove } from '@dnd-kit/sortable';
 
 export const MainPage: React.FC = () => {
   const params = useParams();
@@ -50,11 +51,14 @@ export const MainPage: React.FC = () => {
     });
   }, [rootId]);
 
+  const getIdCategory = (id : string) : "Bookmark" | "Folder" | void => {
+    if (bookmarks.findIndex((bookmark) => bookmark.id === id) !== -1) {return "Bookmark"}
+    else if (folders.findIndex((folder) => folder.id === id)  !== -1) {return "Folder"}
+    return;
+  }
 
-
-
-  /*   const handleDragEnd = async ({active, over} : DragEndEvent) => {
-    if (! over) {return}
+  const handleBookmarkOnBookmarkCollision = async ({active, over} : DragEndEvent) => {
+    if (! over) {return;}
 
     if (active.id !== over.id) {
       let newBookmarks = [...bookmarks];
@@ -64,13 +68,56 @@ export const MainPage: React.FC = () => {
       changeBookmarkIndex(bookmarks[oldIndex], newIndex);
       const reorderedBookmarks = arrayMove(newBookmarks, oldIndex, newIndex);
       setBookmarks(reorderedBookmarks);
+    }
+  }
+
+  const handleFolderOnFolderCollision = async ({active, over} : DragEndEvent) => {
+    if (! over) {return;}
+
+    if (active.id !== over.id) {
+      let newFolders = [...folders];
+      const oldIndex = newFolders.findIndex(folder => folder.id === active.id);
+      const newIndex = newFolders.findIndex(folder => folder.id === over.id);
+      
+      changeFolderIndex(folders[oldIndex], newIndex);
+      const reorderedFolders = arrayMove(newFolders, oldIndex, newIndex);
+      setFolders(reorderedFolders);
       
     }
-  } */
+  }
+
+  const handleBookmarkOnFolderCollision = async ({active, over} : DragEndEvent) => {
+    if (! over) {return;}
+
+    if (active.id !== over.id) {
+      let newBookmarks = [...bookmarks];
+      const bookmarkIndex = newBookmarks.findIndex(bookmark => bookmark.id === active.id);
+      await moveBookmark(newBookmarks[bookmarkIndex], over.id as string);
+      newBookmarks.splice(bookmarkIndex, 1);
+
+      setBookmarks(newBookmarks);
+    }
+  }
+
+  const handleDragEnd = async ({active, over} : DragEndEvent) => {
+    if (!active || !over) {return;}
+
+    const activeCategory = getIdCategory(active.id as string);
+    const overCategory = getIdCategory(over.id as string);
+
+    if (activeCategory == "Bookmark" && overCategory === "Bookmark") {
+      handleBookmarkOnBookmarkCollision({active, over} as DragEndEvent);
+    } else if (activeCategory == "Folder" && overCategory === "Folder") {
+      handleFolderOnFolderCollision({active, over} as DragEndEvent);
+    } else if (activeCategory == "Bookmark" && overCategory === "Folder") {
+      handleBookmarkOnFolderCollision({active, over} as DragEndEvent);
+    }
+
+  }
 
   return (
     <div className="App">
-      <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e) => {console.log("drag ended", e)}}>   
+      <DndContext sensors={sensors} collisionDetection={pointerWithin} onDragEnd={handleDragEnd}>   
         {rootId && bookmarksFinishedLoading ? <BookmarkContainer parentId={rootId} bookmarks={bookmarks} setBookmarks={setBookmarks} /> : <p>Loading!</p>}
         {rootId && foldersFinishedLoading ? <CardContainer parentId={rootId} folders={folders} setFolders={setFolders} /> : <p>Loading!</p>}
       </DndContext>
