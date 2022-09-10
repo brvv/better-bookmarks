@@ -9,15 +9,17 @@ import {
   getRootId,
   createNewBookmark
 } from "../../../api";
-import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { SortableContext, rectSortingStrategy } from '@dnd-kit/sortable';
 
 type Props = {
   parentId: string;
   bookmarks : Bookmark[];
   setBookmarks : React.Dispatch<React.SetStateAction<Bookmark[]>>;
+  getMouseOffset : {x : number, y : number};
+  isBookmarkOverFolder ? : boolean;
 };
 
-export const BookmarkContainer: React.FC<Props> = ({ parentId, bookmarks, setBookmarks }) => {
+export const BookmarkContainer: React.FC<Props> = ({ parentId, bookmarks, setBookmarks, getMouseOffset, isBookmarkOverFolder }) => {
   const [isInRootFolder, setIsInRootFolder] = useState(false);
 
   //Check if we are in the root folder of the program
@@ -66,7 +68,7 @@ export const BookmarkContainer: React.FC<Props> = ({ parentId, bookmarks, setBoo
 
   return (
     <div className="bookmark-container" onClick={() => console.log(bookmarks)} >  
-          <SortableContext items={bookmarks.map(bookmark => bookmark.id)} strategy={verticalListSortingStrategy}>
+          <SortableContext items={bookmarks.map(bookmark => bookmark.id)} strategy={rectSortingStrategy}>
             {
               bookmarks.map((bookmark) => (
                 <Bookmark
@@ -75,6 +77,8 @@ export const BookmarkContainer: React.FC<Props> = ({ parentId, bookmarks, setBoo
                   handleEdit={handleEditBookmark}
                   handleDelete={handleDeleteBookmark}
                   handleMoveUpBookmark={isInRootFolder ? undefined : handleMoveUpBookmark}
+                  dragTransform={getMouseOffset}
+                  isBookmarkOverFolder={isBookmarkOverFolder}
                 />
               ))
             }

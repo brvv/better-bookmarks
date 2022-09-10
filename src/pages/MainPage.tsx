@@ -2,12 +2,19 @@ import React, { useEffect, useState } from "react";
 import { BookmarkContainer, CardContainer } from "../components";
 import { getRootId, getBookmarksFromParent, getFoldersFromParent, changeBookmarkIndex, changeFolderIndex, moveBookmark } from "../api";
 import { useParams } from "react-router-dom";
-import { pointerWithin, DndContext, MouseSensor, useSensor, DragEndEvent } from '@dnd-kit/core';
+import { closestCenter, pointerWithin, Collision, DndContext, MouseSensor, useSensor, DragEndEvent, DragOverEvent, DragStartEvent } from '@dnd-kit/core';
 import { arrayMove } from '@dnd-kit/sortable';
 
 export const MainPage: React.FC = () => {
   const params = useParams();
   const [rootId, setRootId] = useState("");
+  const [isBookmarkOverFolder, setIsBookmarkOverFolder] = useState(false);
+
+  const [coord, setCoord] = useState({ x: 0, y: 0 });
+  const [dragStartCoord, setDragStartCoord] = useState({ x: 0, y: 0 });
+  const handleMouseMove = (e : any) => {
+    setCoord({ x: e.pageX, y: e.pageY });
+  };
 
   const sensors = [useSensor(MouseSensor, {
     activationConstraint : {
@@ -92,15 +99,17 @@ export const MainPage: React.FC = () => {
     if (active.id !== over.id) {
       let newBookmarks = [...bookmarks];
       const bookmarkIndex = newBookmarks.findIndex(bookmark => bookmark.id === active.id);
-      await moveBookmark(newBookmarks[bookmarkIndex], over.id as string);
+      const targetBookmark = newBookmarks[bookmarkIndex];
+      moveBookmark(targetBookmark, over.id as string);
       newBookmarks.splice(bookmarkIndex, 1);
-
       setBookmarks(newBookmarks);
+      
     }
   }
 
   const handleDragEnd = async ({active, over} : DragEndEvent) => {
     if (!active || !over) {return;}
+    console.log("drag ended: ", active, over);
 
     const activeCategory = getIdCategory(active.id as string);
     const overCategory = getIdCategory(over.id as string);
@@ -112,13 +121,57 @@ export const MainPage: React.FC = () => {
     } else if (activeCategory == "Bookmark" && overCategory === "Folder") {
       handleBookmarkOnFolderCollision({active, over} as DragEndEvent);
     }
+    setIsBookmarkOverFolder(false);
+  }
 
+  const customCollisionDetectionAlgorithm = (args : any) : Collision[] => {
+    // First, let's see if there are any collisions with the pointer
+    const activeCategory = getIdCategory(args.active.id as string);
+    const pointerCollisions = pointerWithin(args);
+    
+    // Collision detection algorithms return an array of collisions
+    if (pointerCollisions.length > 0) {
+      if (!(activeCategory === "Folder" && getIdCategory(pointerCollisions[0].id as string) === "Bookmark")) {
+        return pointerCollisions;
+      }
+    }
+    
+    const centerCollisions = closestCenter(args);
+    const trueCollisions:Collision[] = [];
+
+    for(const element of centerCollisions) {
+      if (getIdCategory(element.id as string) === activeCategory) {
+        trueCollisions.push(element);
+      }
+    }
+
+    return trueCollisions;
+
+  };
+
+  const handleDragOver = async (event : DragOverEvent) => {
+    if (! event.over) { return;}
+
+    const activeCategory = getIdCategory(event.active.id as string);
+    const overCategory = getIdCategory(event.over.id as string);
+
+    if (activeCategory === "Bookmark" && overCategory === "Folder") {
+      setIsBookmarkOverFolder(true);
+    } else {
+      setIsBookmarkOverFolder(false);
+    }
+  }
+
+  const handleDragStart = async (event ?: DragStartEvent) => {
+    if (event) {
+      setDragStartCoord(coord);
+    }
   }
 
   return (
-    <div className="App">
-      <DndContext sensors={sensors} collisionDetection={pointerWithin} onDragEnd={handleDragEnd}>   
-        {rootId && bookmarksFinishedLoading ? <BookmarkContainer parentId={rootId} bookmarks={bookmarks} setBookmarks={setBookmarks} /> : <p>Loading!</p>}
+    <div className="App" onMouseMove={handleMouseMove}>
+      <DndContext sensors={sensors} collisionDetection={customCollisionDetectionAlgorithm} onDragEnd={handleDragEnd} onDragOver={handleDragOver} onDragStart={handleDragStart}>   
+        {rootId && bookmarksFinishedLoading ? <BookmarkContainer parentId={rootId} bookmarks={bookmarks} setBookmarks={setBookmarks} getMouseOffset={{x : coord.x - dragStartCoord.x, y : coord.y - dragStartCoord.y}} isBookmarkOverFolder={isBookmarkOverFolder}/> : <p>Loading!</p>}
         {rootId && foldersFinishedLoading ? <CardContainer parentId={rootId} folders={folders} setFolders={setFolders} /> : <p>Loading!</p>}
       </DndContext>
     </div>
