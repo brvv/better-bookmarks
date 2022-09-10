@@ -138,3 +138,18 @@ export const createNewBookmark = async (newBookmark : NewBookmark) : Promise<Boo
   const resultingBookmark = parseBookmarkNode(newBookmarkNode);
   return resultingBookmark;
 }
+
+export const changeBookmarkIndex = async (bookmark : Bookmark, newIndex : number) : Promise<void> => {
+  if (! bookmark.parentId) {
+    return;
+  }
+
+  await browser.bookmarks.move(bookmark.id, {index : newIndex});
+
+}
+
+export const changeFolderIndex = async (folder : BookmarkFolder, newIndex : number) : Promise<void> => {
+  const rootId = await getRootId();
+  if (folder.parentId === rootId) {newIndex +=1;}
+  await changeBookmarkIndex({title : folder.title, parentId : folder.parentId, id : folder.id}, newIndex);
+}

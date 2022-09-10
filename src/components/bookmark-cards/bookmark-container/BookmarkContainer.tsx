@@ -9,7 +9,10 @@ import {
   moveUpBookmark,
   getRootId,
   createNewBookmark,
+  changeBookmarkIndex,
 } from "../../../api";
+import { closestCenter, DndContext, MouseSensor, useSensor, DragEndEvent } from '@dnd-kit/core';
+import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
 
 type Props = {
   parentId: string;
@@ -20,6 +23,12 @@ export const BookmarkContainer: React.FC<Props> = ({ parentId }) => {
   const [bookmarksFinishedLoading, setBookmarksFinishedLoading] =
     useState(false);
   const [isInRootFolder, setIsInRootFolder] = useState(false);
+
+  const sensors = [useSensor(MouseSensor, {
+    activationConstraint : {
+      distance : 10
+    },
+  })];
 
   //Check if we are in the root folder of the program
   useEffect(() => {
@@ -36,6 +45,8 @@ export const BookmarkContainer: React.FC<Props> = ({ parentId }) => {
     });
     
   }, [parentId]);
+
+  useEffect(() => {console.log("trying to change boomarks", bookmarks)}, [bookmarks])
 
   const handleEditBookmark = async (newBookmark: Bookmark) => {
     const updatedBookmark = await updateBookmark(newBookmark);
@@ -73,21 +84,44 @@ export const BookmarkContainer: React.FC<Props> = ({ parentId }) => {
 
   const handleCreateBookmark = async (newBookmark : NewBookmark) => {
     const result = await createNewBookmark(newBookmark);
-    setBookmarks([...bookmarks, result]);
+    setBookmarks([...bookmarks, result]);}
+
+
+  const handleDragEnd = async ({active, over} : DragEndEvent) => {
+    if (! over) {return}
+
+    if (active.id !== over.id) {
+      let newBookmarks = [...bookmarks];
+      const oldIndex = newBookmarks.findIndex(bookmark => bookmark.id === active.id);
+      const newIndex = newBookmarks.findIndex(bookmark => bookmark.id === over.id);
+      
+      changeBookmarkIndex(bookmarks[oldIndex], newIndex);
+      const reorderedBookmarks = arrayMove(newBookmarks, oldIndex, newIndex);
+      setBookmarks(reorderedBookmarks);
+      
+    }
   }
 
   return (
-    <div className="bookmark-container">
+    <div className="bookmark-container" onClick={() => console.log(bookmarks)} >
       {bookmarksFinishedLoading ? (
-        (bookmarks.map((bookmark) => (
-          <Bookmark
-            key={bookmark.id}
-            bookmark={bookmark}
-            handleEdit={handleEditBookmark}
-            handleDelete={handleDeleteBookmark}
-            handleMoveUpBookmark={isInRootFolder ? undefined : handleMoveUpBookmark}
-          />
-        )))
+        
+        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>        
+          <SortableContext items={bookmarks.map(bookmark => bookmark.id)} strategy={verticalListSortingStrategy}>
+            {
+              bookmarks.map((bookmark) => (
+                <Bookmark
+                  key={bookmark.id}
+                  bookmark={bookmark}
+                  handleEdit={handleEditBookmark}
+                  handleDelete={handleDeleteBookmark}
+                  handleMoveUpBookmark={isInRootFolder ? undefined : handleMoveUpBookmark}
+                />
+              ))
+            }
+          </SortableContext>
+        </DndContext>
+
       ) : (
         <p>Loading!</p>
       )}

@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { CollapsableOptionsMenu } from "../../tools/CollapsableOptionsMenu/CollapsableOptionsMenu";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import "./Bookmark.css";
 
 type Props = {
@@ -17,11 +19,27 @@ export const Bookmark: React.FC<Props> = ({
   handleMoveUpBookmark,
 }) => {
 
-  const bookmarkContainerRef = useRef<HTMLDivElement>(null);
+  //const bookmarkContainerRef = useRef<HTMLDivElement>(null);
 
   const [isEditingActive, setIsEditingActive] = useState(false);
   const [title, setTitle] = useState(bookmark.title);
   const [url, setUrl] = useState(bookmark.url ? bookmark.url : "");
+  const bookmarkContainerRef = useRef<HTMLDivElement>(null);
+
+  const {
+    setNodeRef,
+    attributes,
+    listeners,
+    transition,
+    transform,
+    isDragging,
+    } = useSortable({ id: bookmark.id })
+
+  const style = {
+      transition,
+      transform: CSS.Transform.toString(transform),
+      opacity: isDragging ? 0.5 : 1,
+  }
 
   useEffect(() => {
     //since this useeffect only calls on changes, not true to true or false to false
@@ -57,50 +75,51 @@ export const Bookmark: React.FC<Props> = ({
   
 
   return (
-    <div className="bookmark-parent" ref={bookmarkContainerRef}>
-      {! isEditingActive ?       
-      <a
-        href={url}
-        className="bookmark"
-        target="_blank"
-        rel="noreferrer"
-      >
-        <div className="info-container">
-          <p className="title">{title}</p>
-          <p className="url">{url}</p>
-        </div>
+    <div className="bookmark-parent" ref={setNodeRef} {...attributes} {...listeners} style={style}>
+      <div ref={bookmarkContainerRef}>
+        {! isEditingActive ?       
+        <button
+          className="bookmark"
+          onClick={() => {window.open(url, "_blank")}}
+        >
+          <div className="info-container">
+            <p className="title">{title}</p>
+            <p className="url">{url}</p>
+          </div>
 
-      </a> : 
-      
-      <div className="bookmark">
-        <div className="info-container">
-          <input 
-                className="input-title" 
-                value={title} 
-                onChange={(e) => setTitle((e.target as HTMLInputElement).value)}
-                >
-                
-          </input>
-          <input 
-                className="input-url" 
-                value={url} 
-                onChange={(e) => setUrl((e.target as HTMLInputElement).value)}
-                >
-          
-          </input>
+        </button> : 
+        
+        <div className="bookmark">
+          <div className="info-container">
+            <input 
+                  className="input-title" 
+                  value={title} 
+                  onChange={(e) => setTitle((e.target as HTMLInputElement).value)}
+                  >
+                  
+            </input>
+            <input 
+                  className="input-url" 
+                  value={url} 
+                  onChange={(e) => setUrl((e.target as HTMLInputElement).value)}
+                  >
+            
+            </input>
+          </div>
         </div>
+        
+        
+        }
+
+
+          <CollapsableOptionsMenu
+            bookmark={bookmark}
+            handleToggleEditor={handleToggleEditor}
+            handleDelete={handleDelete}
+            handleMoveUp={handleMoveUpBookmark}
+          />
+
       </div>
-      
-      
-      }
-
-
-        <CollapsableOptionsMenu
-          bookmark={bookmark}
-          handleToggleEditor={handleToggleEditor}
-          handleDelete={handleDelete}
-          handleMoveUp={handleMoveUpBookmark}
-        />
     </div>
   );
 };

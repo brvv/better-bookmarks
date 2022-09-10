@@ -6,6 +6,8 @@ export {
   removeBookmark,
   moveUpBookmark,
   createNewBookmark,
+  changeBookmarkIndex,
+  changeFolderIndex
 } from "./bookmarks";
 export { getUncategorizedId, getRootId } from "./storage";
 export {
