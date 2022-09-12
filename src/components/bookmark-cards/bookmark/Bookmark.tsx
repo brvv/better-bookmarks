@@ -61,9 +61,17 @@ export const Bookmark: React.FC<Props> = ({
         title: title,
         url: url
       }
-      handleEdit(newBookmark);
+
+      if (newBookmark.url) {
+        try {
+          new URL(newBookmark.url);
+          console.log(newBookmark.url, "is valid");
+          handleEdit(newBookmark);
+        } catch (error) {
+          return;
+        }
+      }
     }
-    console.log(bookmarkContainerRef);
   },[isEditingActive])
 
   const handleClickOutside = (click : MouseEvent) => {
