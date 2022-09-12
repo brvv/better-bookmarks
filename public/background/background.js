@@ -1,5 +1,5 @@
 import { setupExtension } from "./modules/setup.js";
-import { getRootId, getUncategorizedId } from "./modules/misc.js";
+import { getRootId, getUncategorizedId, isBookmarkInExtensionFolders } from "./modules/misc.js";
 
 const handleInstalled = (details) => {
   console.log(details.reason);
@@ -16,24 +16,20 @@ const handleInstalled = (details) => {
   });
 };
 
-browser.bookmarks.getTree().then((tree) => {
-  console.log(tree[0]);
-});
-
 const handleCreateBookmark = async (id, bookmarkInfo) => {
   if (bookmarkInfo.type === "folder") {
     return;
   }
 
   const uncategorizedId = await getUncategorizedId();
-  console.log("Here!");
-  console.log(`To: ${uncategorizedId}  Target: ${bookmarkInfo.id}`);
+  console.log("New bookmark created ", bookmarkInfo.title, " ", bookmarkInfo.url);
+  const result = await isBookmarkInExtensionFolders(bookmarkInfo);
 
-  browser.bookmarks
-    .move(bookmarkInfo.id, { parentId: uncategorizedId })
-    .then((res) => {
-      console.log(res);
-    });
+  if (! result) {
+    await browser.bookmarks.move(bookmarkInfo.id, { parentId: uncategorizedId })
+    console.log("Moved bookmark to uncategorized ");
+  }
+
 };
 
 browser.bookmarks.onCreated.addListener(handleCreateBookmark);
