@@ -18,7 +18,7 @@ export const ToolbarCard: React.FC<Props> = ({ name }: Props) => {
     transition,
     transform,
     isDragging,
-    } = useSortable({ id: TOOLBAR_ID })
+    } = useSortable({ id: TOOLBAR_ID+"droppable" })
 
     const style = {
       transition,

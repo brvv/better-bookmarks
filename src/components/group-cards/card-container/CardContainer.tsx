@@ -25,7 +25,7 @@ export const CardContainer: React.FC<Props> = ({ parentId, folders }) => {
   return (
     <div className="card-container">
       {renderToolbar &&           
-          <SortableContext items={[TOOLBAR_ID]} strategy={undefined}>
+          <SortableContext items={[TOOLBAR_ID+"droppable"]} strategy={undefined}>
             {<ToolbarCard key={TOOLBAR_ID} name="toolbar" />}
           </SortableContext>}
 

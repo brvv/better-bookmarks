@@ -60,7 +60,7 @@ export const MainPage: React.FC = () => {
 
   const getIdCategory = (id : string) : "Bookmark" | "Folder" | void => {
     if (bookmarks.findIndex((bookmark) => bookmark.id === id) !== -1) {return "Bookmark"}
-    else if (folders.findIndex((folder) => folder.id === id)  !== -1 || id === TOOLBAR_ID) {return "Folder"}
+    else if (folders.findIndex((folder) => folder.id === id)  !== -1 || id === TOOLBAR_ID+"droppable") {return "Folder"}
     return;
   }
 
@@ -80,7 +80,7 @@ export const MainPage: React.FC = () => {
 
   const handleFolderOnFolderCollision = async ({active, over} : DragEndEvent) => {
     if (! over) {return;}
-    if (active.id === TOOLBAR_ID || over.id === TOOLBAR_ID) {return;}
+    if (active.id === TOOLBAR_ID+"droppable" || over.id === TOOLBAR_ID+"droppable") {return;}
 
     if (active.id !== over.id) {
       let newFolders = [...folders];
@@ -101,7 +101,9 @@ export const MainPage: React.FC = () => {
       let newBookmarks = [...bookmarks];
       const bookmarkIndex = newBookmarks.findIndex(bookmark => bookmark.id === active.id);
       const targetBookmark = newBookmarks[bookmarkIndex];
-      moveBookmark(targetBookmark, over.id as string);
+      let targetFolderId = (over.id as string);
+      if (targetFolderId === TOOLBAR_ID + "droppable") {targetFolderId = TOOLBAR_ID; }
+      moveBookmark(targetBookmark, targetFolderId);
       newBookmarks.splice(bookmarkIndex, 1);
       setBookmarks(newBookmarks);
       
@@ -115,11 +117,11 @@ export const MainPage: React.FC = () => {
     const overCategory = getIdCategory(over.id as string);
     console.log("Drag ended: ", activeCategory, active.id, "on ", overCategory, over.id);
 
-    if (activeCategory == "Bookmark" && overCategory === "Bookmark") {
+    if (activeCategory === "Bookmark" && overCategory === "Bookmark") {
       handleBookmarkOnBookmarkCollision({active, over} as DragEndEvent);
-    } else if (activeCategory == "Folder" && overCategory === "Folder") {
+    } else if (activeCategory === "Folder" && overCategory === "Folder") {
       handleFolderOnFolderCollision({active, over} as DragEndEvent);
-    } else if (activeCategory == "Bookmark" && overCategory === "Folder") {
+    } else if (activeCategory === "Bookmark" && overCategory === "Folder") {
       handleBookmarkOnFolderCollision({active, over} as DragEndEvent);
     }
     setIsBookmarkOverFolder(false);
@@ -148,7 +150,7 @@ export const MainPage: React.FC = () => {
     for(const element of centerCollisions) {
       const elementCategory = getIdCategory(element.id as string);
       const elementId = (element.id as string);
-      if (elementCategory === activeCategory && !(elementId === TOOLBAR_ID || activeId === TOOLBAR_ID)) {
+      if (elementCategory === activeCategory && !(elementId === TOOLBAR_ID+"droppable" || activeId === TOOLBAR_ID+"droppable")) {
         trueCollisions.push(element);
       }
     }
@@ -172,7 +174,6 @@ export const MainPage: React.FC = () => {
 
   const handleDragStart = async (event ?: DragStartEvent) => {
     if (event) {
-      console.log("Start", event);
       setDragStartCoord(coord);
     }
   }
