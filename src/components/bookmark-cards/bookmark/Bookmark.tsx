@@ -3,6 +3,7 @@ import { CollapsableOptionsMenu } from "../../tools/CollapsableOptionsMenu/Colla
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import "./Bookmark.css";
+import {getIcon} from "../../../api"
 
 type Props = {
   bookmark: Bookmark;
@@ -30,6 +31,9 @@ export const Bookmark: React.FC<Props> = ({
   const [url, setUrl] = useState(bookmark.url ? bookmark.url : "");
   const bookmarkContainerRef = useRef<HTMLDivElement>(null);
 
+  const [favicon, setFavicon] = useState("");
+  const [isFaviconLoaded, setIsFaviconLoaded] = useState(false);
+
 
   const {
     setNodeRef,
@@ -50,6 +54,13 @@ export const Bookmark: React.FC<Props> = ({
     transition : "transform 200ms ease-in-out", 
     transform : CSS.Transform.toString({x : 0 , y : 0, scaleX : isBookmarkOverFolder && isDragging ? 0.8: 1, scaleY : isBookmarkOverFolder && isDragging ? 0.8: 1 }),
   }
+
+  useEffect(() => {
+    getIcon(url).then((iconUrl) => {
+      setFavicon(iconUrl);
+      setIsFaviconLoaded(true);
+    })
+  }, [url])
 
   useEffect(() => {
     //since this useeffect only calls on changes, not true to true or false to false
@@ -101,7 +112,8 @@ export const Bookmark: React.FC<Props> = ({
           onClick={() => {window.open(url, "_blank")}}
         >
           <div className="info-container">
-            <p className="title">{title + " " + bookmark.id}</p>
+            
+            <p className="title">{isFaviconLoaded && <img src={favicon} className="bookmark-favicon"></img>}{title + " " + bookmark.id}</p>
             <p className="url">{url}</p>
           </div>
 
