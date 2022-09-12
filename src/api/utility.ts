@@ -6,8 +6,6 @@ export const getIcon = async (url : string) : Promise<string> => {
     }
 
     duckDuckGoIconUrl = duckDuckGoIconUrl + ".ico";
-    console.log(duckDuckGoIconUrl)
-
     const res = await fetch(duckDuckGoIconUrl);
     if (res) {
         const imageBlob = await res.blob();
