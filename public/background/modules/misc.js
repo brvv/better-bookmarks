@@ -25,3 +25,22 @@ export const getUncategorizedId = async () => {
   );
   return uncategorizedInfo[STORAGE_UNCATEGORIZED_KEY].id;
 };
+
+
+export const isBookmarkInExtensionFolders = async (bookmarkNode) => {
+  const extensionRootId = await getRootId();
+  if (bookmarkNode.parentId === extensionRootId) {
+    return false;
+  }
+
+  let currentLevel = (await browser.bookmarks.get(bookmarkNode.parentId))[0];
+
+  while (Object.hasOwn(currentLevel, "parentId") && currentLevel.parentId) {
+    if (currentLevel.parentId === extensionRootId) {
+      return true;
+    } else {
+      currentLevel = (await browser.bookmarks.get(currentLevel.parentId))[0];
+    }
+  }
+  return false;
+}
