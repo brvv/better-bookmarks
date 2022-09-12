@@ -19,6 +19,10 @@
   grid-column: 1/-1;
 }
 
+.card-container :first-child {
+  grid-column: 1/-1;
+}
+
 @media only screen and (max-width: 600px) {
   .card-container {
     gap: 5vw 7vw;

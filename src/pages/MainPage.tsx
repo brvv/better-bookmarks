@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { BookmarkContainer, CardContainer } from "../components";
-import { getRootId, getBookmarksFromParent, getFoldersFromParent, changeBookmarkIndex, changeFolderIndex, moveBookmark } from "../api";
+import { getRootId, getBookmarksFromParent, getFoldersFromParent, changeBookmarkIndex, changeFolderIndex, moveBookmark, TOOLBAR_ID } from "../api";
 import { useParams } from "react-router-dom";
 import { closestCenter, pointerWithin, Collision, DndContext, MouseSensor, useSensor, DragEndEvent, DragOverEvent, DragStartEvent } from '@dnd-kit/core';
 import { arrayMove } from '@dnd-kit/sortable';
@@ -60,7 +60,7 @@ export const MainPage: React.FC = () => {
 
   const getIdCategory = (id : string) : "Bookmark" | "Folder" | void => {
     if (bookmarks.findIndex((bookmark) => bookmark.id === id) !== -1) {return "Bookmark"}
-    else if (folders.findIndex((folder) => folder.id === id)  !== -1) {return "Folder"}
+    else if (folders.findIndex((folder) => folder.id === id)  !== -1 || id === TOOLBAR_ID) {return "Folder"}
     return;
   }
 
@@ -80,6 +80,7 @@ export const MainPage: React.FC = () => {
 
   const handleFolderOnFolderCollision = async ({active, over} : DragEndEvent) => {
     if (! over) {return;}
+    if (active.id === TOOLBAR_ID || over.id === TOOLBAR_ID) {return;}
 
     if (active.id !== over.id) {
       let newFolders = [...folders];
@@ -112,6 +113,7 @@ export const MainPage: React.FC = () => {
     
     const activeCategory = getIdCategory(active.id as string);
     const overCategory = getIdCategory(over.id as string);
+    console.log("Drag ended: ", activeCategory, active.id, "on ", overCategory, over.id);
 
     if (activeCategory == "Bookmark" && overCategory === "Bookmark") {
       handleBookmarkOnBookmarkCollision({active, over} as DragEndEvent);
@@ -126,12 +128,17 @@ export const MainPage: React.FC = () => {
   const customCollisionDetectionAlgorithm = (args : any) : Collision[] => {
     // First, let's see if there are any collisions with the pointer
     const activeCategory = getIdCategory(args.active.id as string);
+    const activeId = (args.active.id as string);
     const pointerCollisions = pointerWithin(args);
+
     
     // Collision detection algorithms return an array of collisions
     if (pointerCollisions.length > 0) {
-      if (!(activeCategory === "Folder" && getIdCategory(pointerCollisions[0].id as string) === "Bookmark")) {
-        return pointerCollisions;
+      const pointerCollisionId = pointerCollisions[0].id as string;
+      const pointerCollisionCategory = getIdCategory(pointerCollisionId);
+
+      if (activeCategory === "Bookmark" && pointerCollisionCategory === "Folder") {
+          return pointerCollisions;
       }
     }
     
@@ -139,7 +146,9 @@ export const MainPage: React.FC = () => {
     const trueCollisions:Collision[] = [];
 
     for(const element of centerCollisions) {
-      if (getIdCategory(element.id as string) === activeCategory) {
+      const elementCategory = getIdCategory(element.id as string);
+      const elementId = (element.id as string);
+      if (elementCategory === activeCategory && !(elementId === TOOLBAR_ID || activeId === TOOLBAR_ID)) {
         trueCollisions.push(element);
       }
     }
@@ -163,6 +172,7 @@ export const MainPage: React.FC = () => {
 
   const handleDragStart = async (event ?: DragStartEvent) => {
     if (event) {
+      console.log("Start", event);
       setDragStartCoord(coord);
     }
   }

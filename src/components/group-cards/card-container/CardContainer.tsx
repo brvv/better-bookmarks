@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState } from "react";
 import "./CardContainer.css";
 import { GroupCard } from "../group-card/GroupCard";
 import { ToolbarCard } from "../toolbar-card/ToolbarCard";
@@ -12,15 +12,28 @@ type Props = {
 };
 
 export const CardContainer: React.FC<Props> = ({ parentId, folders }) => {
+  const [renderToolbar, setRenderToolbar] = useState(true);
+
+  useEffect(() => {
+    setRenderToolbar(() => {
+      if (parentId === TOOLBAR_ID) {return false;} else {return true;}
+    })
+  }, [parentId]);
+
   return (
     <div className="card-container">
-      {parentId !== TOOLBAR_ID && <ToolbarCard name="toolbar" />}
+      {renderToolbar &&           
+          <SortableContext items={[TOOLBAR_ID]} strategy={undefined}>
+            {<ToolbarCard key={TOOLBAR_ID} name="toolbar" />}
+          </SortableContext>}
+
           <SortableContext items={folders.map(folders => folders.id)} strategy={ rectSortingStrategy }>
-            {
+          {
+
                         folders.map((folder) => (
                           <GroupCard key={folder.id} folder={folder} />
                         ))
-            }
+          }
           </SortableContext>
     </div>
   );
