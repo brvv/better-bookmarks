@@ -1,6 +1,8 @@
 import { setupExtension } from "./modules/setup.js";
 import { getRootId, getUncategorizedId, isBookmarkInExtensionFolders } from "./modules/misc.js";
 
+const IN_APP_TOOLBAR_MODIFIER = "BOOKMARK_CREATED_IN_APP";
+
 const handleInstalled = (details) => {
   console.log(details.reason);
 
@@ -17,12 +19,21 @@ const handleInstalled = (details) => {
 };
 
 const handleCreateBookmark = async (id, bookmarkInfo) => {
+  const rootId = await getRootId();
+
   if (bookmarkInfo.type === "folder") {
     return;
   }
 
+  if (bookmarkInfo.title.includes(IN_APP_TOOLBAR_MODIFIER + rootId)) {
+    console.log("Bookmark created in app in toolbar");
+    let newTitle = bookmarkInfo.title.slice(0, -((IN_APP_TOOLBAR_MODIFIER + rootId).length) );
+    await browser.bookmarks.update(bookmarkInfo.id, {title: newTitle});
+    return;
+  }
+
   const uncategorizedId = await getUncategorizedId();
-  console.log("New bookmark created ", bookmarkInfo.title, " ", bookmarkInfo.url);
+  console.log("New bookmark created ", bookmarkInfo);
   const result = await isBookmarkInExtensionFolders(bookmarkInfo);
 
   if (! result) {

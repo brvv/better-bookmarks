@@ -5,3 +5,4 @@ export const UNCATEGORIZED_NAME_BASE =
 
 export const STORAGE_ROOT_KEY = "rootInfo";
 export const STORAGE_UNCATEGORIZED_KEY = "uncategorizedInfo";
+export const IN_APP_TOOLBAR_MODIFIER = "BOOKMARK_CREATED_IN_APP";

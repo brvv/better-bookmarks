@@ -1,5 +1,5 @@
 import { getUncategorizedId, getRootId } from "./storage";
-import { TOOLBAR_ID } from "./constants";
+import { IN_APP_TOOLBAR_MODIFIER, TOOLBAR_ID } from "./constants";
 
 const parseFolderNode = (
   node: browser.bookmarks.BookmarkTreeNode
@@ -134,9 +134,17 @@ export const moveUpBookmark = async (bookmark: Bookmark): Promise<void> => {
 };
 
 export const createNewBookmark = async (newBookmark : NewBookmark) : Promise<Bookmark> => {
-  const newBookmarkNode = await browser.bookmarks.create({parentId : newBookmark.parentId, title : newBookmark.title, url : newBookmark.url});
+  let targetBookmark = {...newBookmark};
+  const rootId = await getRootId();
+  const originalTitle = targetBookmark.title ? targetBookmark.title : "no title";
+
+  if (targetBookmark.parentId === TOOLBAR_ID) {
+    targetBookmark.title = targetBookmark.title + IN_APP_TOOLBAR_MODIFIER + rootId;
+  }
+
+  const newBookmarkNode = await browser.bookmarks.create({parentId : targetBookmark.parentId, title : targetBookmark.title, url : targetBookmark.url});
   const resultingBookmark = parseBookmarkNode(newBookmarkNode);
-  return resultingBookmark;
+  return {...resultingBookmark, title : originalTitle};
 }
 
 export const changeBookmarkIndex = async (bookmark : Bookmark, newIndex : number) : Promise<void> => {
