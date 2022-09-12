@@ -1,5 +1,4 @@
 const openExtensionPage = async () => {
-  console.log("Here!");
   let createData = {
     url: "../index.html",
   };

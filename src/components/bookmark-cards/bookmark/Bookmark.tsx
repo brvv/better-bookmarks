@@ -65,7 +65,6 @@ export const Bookmark: React.FC<Props> = ({
       if (newBookmark.url) {
         try {
           new URL(newBookmark.url);
-          console.log(newBookmark.url, "is valid");
           handleEdit(newBookmark);
         } catch (error) {
           return;

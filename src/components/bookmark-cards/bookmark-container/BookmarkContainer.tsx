@@ -67,7 +67,7 @@ export const BookmarkContainer: React.FC<Props> = ({ parentId, bookmarks, setBoo
     setBookmarks([...bookmarks, result]);}
 
   return (
-    <div className="bookmark-container" onClick={() => console.log(bookmarks)} >  
+    <div className="bookmark-container">  
           <SortableContext items={bookmarks.map(bookmark => bookmark.id)} strategy={rectSortingStrategy}>
             {
               bookmarks.map((bookmark) => (

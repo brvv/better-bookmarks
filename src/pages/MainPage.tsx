@@ -109,8 +109,7 @@ export const MainPage: React.FC = () => {
 
   const handleDragEnd = async ({active, over} : DragEndEvent) => {
     if (!active || !over) {return;}
-    console.log("drag ended: ", active, over);
-
+    
     const activeCategory = getIdCategory(active.id as string);
     const overCategory = getIdCategory(over.id as string);
 
