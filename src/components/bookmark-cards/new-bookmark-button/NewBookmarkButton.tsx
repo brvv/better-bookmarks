@@ -40,9 +40,19 @@ export const NewBookmarkButton: React.FC<Props> = ({
             title : title,
             url : url,
         }
-        handleCreateNewBookmark(details);
-        setTitle(defaultTitleValue);
-        setUrl(defaultUrlValue);
+  
+        if (details.url) {
+          try {
+            new URL(details.url);
+            console.log(details.url, "is valid");
+            
+            handleCreateNewBookmark(details);
+            setTitle(defaultTitleValue);
+            setUrl(defaultUrlValue);
+          } catch (error) {
+            return;
+          }
+        }
       }
     }
 
