@@ -1,4 +1,5 @@
 .toolbar-card {
+  width: 100%;
   display: flex;
   text-decoration: none;
   color: black;

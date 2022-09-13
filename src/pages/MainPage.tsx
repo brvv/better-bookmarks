@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { BookmarkContainer, CardContainer } from "../components";
-import { getRootId, getBookmarksFromParent, getFoldersFromParent, changeBookmarkIndex, changeFolderIndex, moveBookmark } from "../api";
+import { getRootId, getBookmarksFromParent, getFoldersFromParent, changeBookmarkIndex, changeFolderIndex, moveBookmark, TOOLBAR_ID } from "../api";
 import { useParams } from "react-router-dom";
 import { closestCenter, pointerWithin, Collision, DndContext, MouseSensor, useSensor, DragEndEvent, DragOverEvent, DragStartEvent } from '@dnd-kit/core';
 import { arrayMove } from '@dnd-kit/sortable';
@@ -60,7 +60,7 @@ export const MainPage: React.FC = () => {
 
   const getIdCategory = (id : string) : "Bookmark" | "Folder" | void => {
     if (bookmarks.findIndex((bookmark) => bookmark.id === id) !== -1) {return "Bookmark"}
-    else if (folders.findIndex((folder) => folder.id === id)  !== -1) {return "Folder"}
+    else if (folders.findIndex((folder) => folder.id === id)  !== -1 || id === TOOLBAR_ID+"droppable") {return "Folder"}
     return;
   }
 
@@ -80,6 +80,7 @@ export const MainPage: React.FC = () => {
 
   const handleFolderOnFolderCollision = async ({active, over} : DragEndEvent) => {
     if (! over) {return;}
+    if (active.id === TOOLBAR_ID+"droppable" || over.id === TOOLBAR_ID+"droppable") {return;}
 
     if (active.id !== over.id) {
       let newFolders = [...folders];
@@ -100,7 +101,9 @@ export const MainPage: React.FC = () => {
       let newBookmarks = [...bookmarks];
       const bookmarkIndex = newBookmarks.findIndex(bookmark => bookmark.id === active.id);
       const targetBookmark = newBookmarks[bookmarkIndex];
-      moveBookmark(targetBookmark, over.id as string);
+      let targetFolderId = (over.id as string);
+      if (targetFolderId === TOOLBAR_ID + "droppable") {targetFolderId = TOOLBAR_ID; }
+      moveBookmark(targetBookmark, targetFolderId);
       newBookmarks.splice(bookmarkIndex, 1);
       setBookmarks(newBookmarks);
       
@@ -112,12 +115,13 @@ export const MainPage: React.FC = () => {
     
     const activeCategory = getIdCategory(active.id as string);
     const overCategory = getIdCategory(over.id as string);
+    console.log("Drag ended: ", activeCategory, active.id, "on ", overCategory, over.id);
 
-    if (activeCategory == "Bookmark" && overCategory === "Bookmark") {
+    if (activeCategory === "Bookmark" && overCategory === "Bookmark") {
       handleBookmarkOnBookmarkCollision({active, over} as DragEndEvent);
-    } else if (activeCategory == "Folder" && overCategory === "Folder") {
+    } else if (activeCategory === "Folder" && overCategory === "Folder") {
       handleFolderOnFolderCollision({active, over} as DragEndEvent);
-    } else if (activeCategory == "Bookmark" && overCategory === "Folder") {
+    } else if (activeCategory === "Bookmark" && overCategory === "Folder") {
       handleBookmarkOnFolderCollision({active, over} as DragEndEvent);
     }
     setIsBookmarkOverFolder(false);
@@ -126,12 +130,17 @@ export const MainPage: React.FC = () => {
   const customCollisionDetectionAlgorithm = (args : any) : Collision[] => {
     // First, let's see if there are any collisions with the pointer
     const activeCategory = getIdCategory(args.active.id as string);
+    const activeId = (args.active.id as string);
     const pointerCollisions = pointerWithin(args);
+
     
     // Collision detection algorithms return an array of collisions
     if (pointerCollisions.length > 0) {
-      if (!(activeCategory === "Folder" && getIdCategory(pointerCollisions[0].id as string) === "Bookmark")) {
-        return pointerCollisions;
+      const pointerCollisionId = pointerCollisions[0].id as string;
+      const pointerCollisionCategory = getIdCategory(pointerCollisionId);
+
+      if (activeCategory === "Bookmark" && pointerCollisionCategory === "Folder") {
+          return pointerCollisions;
       }
     }
     
@@ -139,7 +148,9 @@ export const MainPage: React.FC = () => {
     const trueCollisions:Collision[] = [];
 
     for(const element of centerCollisions) {
-      if (getIdCategory(element.id as string) === activeCategory) {
+      const elementCategory = getIdCategory(element.id as string);
+      const elementId = (element.id as string);
+      if (elementCategory === activeCategory && !(elementId === TOOLBAR_ID+"droppable" || activeId === TOOLBAR_ID+"droppable")) {
         trueCollisions.push(element);
       }
     }
