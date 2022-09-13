@@ -96,8 +96,10 @@ export const removeBookmark = async (bookmark: Bookmark): Promise<void> => {
   return;
 };
 
-const getParentOfParentId = async (bookmark: Bookmark): Promise<string | undefined> => {
-  if (! bookmark.parentId) {
+const getParentOfParentId = async (
+  bookmark: Bookmark
+): Promise<string | undefined> => {
+  if (!bookmark.parentId) {
     return;
   }
 
@@ -108,11 +110,10 @@ const getParentOfParentId = async (bookmark: Bookmark): Promise<string | undefin
   }
   const parentOfParent = parent.parentId;
   return parentOfParent;
-
-}
+};
 
 export const moveUpBookmark = async (bookmark: Bookmark): Promise<void> => {
-  if (! bookmark.parentId) {
+  if (!bookmark.parentId) {
     return;
   }
 
@@ -122,84 +123,115 @@ export const moveUpBookmark = async (bookmark: Bookmark): Promise<void> => {
     const rootId = await getRootId();
     const uncategorizedId = await getUncategorizedId();
 
-    if (targetId === rootId || bookmark.parentId == rootId || bookmark.parentId === TOOLBAR_ID) {
-      await browser.bookmarks.move(bookmark.id, {parentId : uncategorizedId})
-    }
-    else {
-      await browser.bookmarks.move(bookmark.id, {parentId : targetId})
+    if (
+      targetId === rootId ||
+      bookmark.parentId == rootId ||
+      bookmark.parentId === TOOLBAR_ID
+    ) {
+      await browser.bookmarks.move(bookmark.id, { parentId: uncategorizedId });
+    } else {
+      await browser.bookmarks.move(bookmark.id, { parentId: targetId });
     }
   }
 
   return;
 };
 
-export const createNewBookmark = async (newBookmark : NewBookmark) : Promise<Bookmark> => {
-  let targetBookmark = {...newBookmark};
+export const createNewBookmark = async (
+  newBookmark: NewBookmark
+): Promise<Bookmark> => {
+  let targetBookmark = { ...newBookmark };
   const rootId = await getRootId();
-  const originalTitle = targetBookmark.title ? targetBookmark.title : "no title";
+  const originalTitle = targetBookmark.title
+    ? targetBookmark.title
+    : "no title";
 
   if (targetBookmark.parentId === TOOLBAR_ID) {
-    targetBookmark.title = targetBookmark.title + IN_APP_TOOLBAR_MODIFIER + rootId;
+    targetBookmark.title =
+      targetBookmark.title + IN_APP_TOOLBAR_MODIFIER + rootId;
   }
 
-  const newBookmarkNode = await browser.bookmarks.create({parentId : targetBookmark.parentId, title : targetBookmark.title, url : targetBookmark.url});
+  const newBookmarkNode = await browser.bookmarks.create({
+    parentId: targetBookmark.parentId,
+    title: targetBookmark.title,
+    url: targetBookmark.url,
+  });
   const resultingBookmark = parseBookmarkNode(newBookmarkNode);
-  return {...resultingBookmark, title : originalTitle};
-}
+  return { ...resultingBookmark, title: originalTitle };
+};
 
-export const createNewFolder = async (title : string, parentId : string) : Promise<BookmarkFolder> => {
-    const rootId = await getRootId();
-    const originalTitle = title ? title : "no title";
-    let newTitle = title;
+export const createNewFolder = async (
+  title: string,
+  parentId: string
+): Promise<BookmarkFolder> => {
+  const rootId = await getRootId();
+  const originalTitle = title ? title : "no title";
+  let newTitle = title;
 
-    if (parentId === TOOLBAR_ID) {
-      newTitle = newTitle + IN_APP_TOOLBAR_MODIFIER + rootId;
-    }
+  if (parentId === TOOLBAR_ID) {
+    newTitle = newTitle + IN_APP_TOOLBAR_MODIFIER + rootId;
+  }
 
-    const newFolderNode = await browser.bookmarks.create({parentId : parentId, title : newTitle});
-    const resultingFolder = parseFolderNode(newFolderNode);
-    return {...resultingFolder, title : originalTitle}
-}
+  const newFolderNode = await browser.bookmarks.create({
+    parentId: parentId,
+    title: newTitle,
+  });
+  const resultingFolder = parseFolderNode(newFolderNode);
+  return { ...resultingFolder, title: originalTitle };
+};
 
-export const changeBookmarkIndex = async (bookmark : Bookmark, newIndex : number) : Promise<void> => {
-  if (! bookmark.parentId) {
+export const changeBookmarkIndex = async (
+  bookmark: Bookmark,
+  newIndex: number
+): Promise<void> => {
+  if (!bookmark.parentId) {
     return;
   }
 
-  await browser.bookmarks.move(bookmark.id, {index : newIndex});
+  await browser.bookmarks.move(bookmark.id, { index: newIndex });
+};
 
-}
-
-export const changeFolderIndex = async (folder : BookmarkFolder, newIndex : number) : Promise<void> => {
+export const changeFolderIndex = async (
+  folder: BookmarkFolder,
+  newIndex: number
+): Promise<void> => {
   const rootId = await getRootId();
-  if (folder.parentId === rootId) {newIndex +=1;}
-  await changeBookmarkIndex({title : folder.title, parentId : folder.parentId, id : folder.id}, newIndex);
-}
+  if (folder.parentId === rootId) {
+    newIndex += 1;
+  }
+  await changeBookmarkIndex(
+    { title: folder.title, parentId: folder.parentId, id: folder.id },
+    newIndex
+  );
+};
 
-export const moveBookmark = async (bookmark : Bookmark, targetId : string) => {
+export const moveBookmark = async (bookmark: Bookmark, targetId: string) => {
   const rootId = await getRootId();
   const uncategorizedId = await getUncategorizedId();
 
-  if (targetId === rootId || bookmark.parentId == rootId || bookmark.parentId === TOOLBAR_ID) {
-    await browser.bookmarks.move(bookmark.id, {parentId : uncategorizedId})
-  }
-  else {
-    await browser.bookmarks.move(bookmark.id, {parentId : targetId})
+  if (
+    targetId === rootId ||
+    bookmark.parentId == rootId ||
+    bookmark.parentId === TOOLBAR_ID
+  ) {
+    await browser.bookmarks.move(bookmark.id, { parentId: uncategorizedId });
+  } else {
+    await browser.bookmarks.move(bookmark.id, { parentId: targetId });
   }
   return;
-  
-}
+};
 
-export const isFolderEmpty = async (folder : BookmarkFolder) : Promise<boolean> => {
+export const isFolderEmpty = async (
+  folder: BookmarkFolder
+): Promise<boolean> => {
   const folderNode = (await browser.bookmarks.getSubTree(folder.id))[0];
   if (folderNode.children && folderNode.children?.length > 0) {
     return false;
   }
   return true;
+};
 
-}
-
-export const removeFolder = async (folder : BookmarkFolder): Promise<void> => {
+export const removeFolder = async (folder: BookmarkFolder): Promise<void> => {
   const res = await isFolderEmpty(folder);
   if (res) {
     await browser.bookmarks.remove(folder.id);
@@ -207,7 +239,9 @@ export const removeFolder = async (folder : BookmarkFolder): Promise<void> => {
   return;
 };
 
-export const updateFolder = async (folder : BookmarkFolder) : Promise<BookmarkFolder> => {
+export const updateFolder = async (
+  folder: BookmarkFolder
+): Promise<BookmarkFolder> => {
   const updatedFolder = await browser.bookmarks.update(folder.id, {
     title: folder.title,
   });

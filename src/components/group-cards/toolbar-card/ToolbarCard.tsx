@@ -18,20 +18,24 @@ export const ToolbarCard: React.FC<Props> = ({ name }: Props) => {
     transition,
     transform,
     isDragging,
-    } = useSortable({ id: TOOLBAR_ID+"droppable" })
+  } = useSortable({ id: TOOLBAR_ID + "droppable" });
 
-    const style = {
-      transition,
-      transform: CSS.Transform.toString(transform),
-      opacity: isDragging ? 0.5 : 1,
-    }
+  const style = {
+    transition,
+    transform: CSS.Transform.toString(transform),
+    opacity: isDragging ? 0.5 : 1,
+  };
 
   return (
-    <div  ref={setNodeRef} {...attributes} {...listeners} style={style}>
-    <button className="toolbar-card" onClick={() => {window.open("#/folder/" + id, "_self")}}>
-      {name}
-    </button>
-
+    <div ref={setNodeRef} {...attributes} {...listeners} style={style}>
+      <button
+        className="toolbar-card"
+        onClick={() => {
+          window.open("#/folder/" + id, "_self");
+        }}
+      >
+        {name}
+      </button>
     </div>
   );
 };

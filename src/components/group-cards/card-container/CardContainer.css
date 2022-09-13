@@ -15,7 +15,7 @@
   justify-self: center;
 }
 
-.card-container > :only-child{
+.card-container > :only-child {
   grid-column: 1/-1;
 }
 
