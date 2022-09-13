@@ -23,6 +23,7 @@ import {
 } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
 import { INVALID_ROUTER_PAGES } from "../api/constants";
+import { NavigationBar } from "../components/tools/NavigationBar/NavigationBar";
 
 export const MainPage: React.FC = () => {
   const params = useParams();
@@ -273,37 +274,40 @@ export const MainPage: React.FC = () => {
       {isInvalidPage ? (
         <div>This is a wrong page, idk why u are here</div>
       ) : (
-        <DndContext
-          sensors={sensors}
-          collisionDetection={customCollisionDetectionAlgorithm}
-          onDragEnd={handleDragEnd}
-          onDragOver={handleDragOver}
-          onDragStart={handleDragStart}
-        >
-          {rootId && bookmarksFinishedLoading ? (
-            <BookmarkContainer
-              parentId={rootId}
-              bookmarks={bookmarks}
-              setBookmarks={setBookmarks}
-              getMouseOffset={{
-                x: coord.x - dragStartCoord.x,
-                y: coord.y - dragStartCoord.y,
-              }}
-              isBookmarkOverFolder={isBookmarkOverFolder}
-            />
-          ) : (
-            <p>Loading!</p>
-          )}
-          {rootId && foldersFinishedLoading ? (
-            <CardContainer
-              parentId={rootId}
-              folders={folders}
-              setFolders={setFolders}
-            />
-          ) : (
-            <p>Loading!</p>
-          )}
-        </DndContext>
+        <div>
+          <NavigationBar parentId={rootId}></NavigationBar>
+          <DndContext
+            sensors={sensors}
+            collisionDetection={customCollisionDetectionAlgorithm}
+            onDragEnd={handleDragEnd}
+            onDragOver={handleDragOver}
+            onDragStart={handleDragStart}
+          >
+            {rootId && bookmarksFinishedLoading ? (
+              <BookmarkContainer
+                parentId={rootId}
+                bookmarks={bookmarks}
+                setBookmarks={setBookmarks}
+                getMouseOffset={{
+                  x: coord.x - dragStartCoord.x,
+                  y: coord.y - dragStartCoord.y,
+                }}
+                isBookmarkOverFolder={isBookmarkOverFolder}
+              />
+            ) : (
+              <p>Loading!</p>
+            )}
+            {rootId && foldersFinishedLoading ? (
+              <CardContainer
+                parentId={rootId}
+                folders={folders}
+                setFolders={setFolders}
+              />
+            ) : (
+              <p>Loading!</p>
+            )}
+          </DndContext>
+        </div>
       )}
     </div>
   );

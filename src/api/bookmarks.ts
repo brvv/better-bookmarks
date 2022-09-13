@@ -1,5 +1,9 @@
 import { getUncategorizedId, getRootId } from "./storage";
-import { IN_APP_TOOLBAR_MODIFIER, TOOLBAR_ID } from "./constants";
+import {
+  INVALID_ROUTER_PAGES,
+  IN_APP_TOOLBAR_MODIFIER,
+  TOOLBAR_ID,
+} from "./constants";
 
 const parseFolderNode = (
   node: browser.bookmarks.BookmarkTreeNode
@@ -246,4 +250,36 @@ export const updateFolder = async (
     title: folder.title,
   });
   return parseFolderNode(updatedFolder);
+};
+
+export const getFolderPath = async (
+  parentId: string
+): Promise<{ title: string; id: string }[]> => {
+  if (parentId === TOOLBAR_ID) {
+    return [{ title: "Toolbar", id: TOOLBAR_ID }];
+  }
+
+  const rootId = await getRootId();
+
+  if (parentId === rootId) {
+    return [{ title: "root", id: "" }];
+  }
+
+  let path: { title: string; id: string }[] = [];
+  let currentParentId: string | undefined = parentId;
+
+  while (
+    currentParentId &&
+    currentParentId !== rootId &&
+    !INVALID_ROUTER_PAGES.includes(currentParentId)
+  ) {
+    const newParent: browser.bookmarks.BookmarkTreeNode = (
+      await browser.bookmarks.get(currentParentId)
+    )[0];
+    const currentFolder = { title: newParent.title, id: newParent.id };
+    path.push(currentFolder);
+    currentParentId = newParent.parentId;
+  }
+
+  return path.reverse();
 };

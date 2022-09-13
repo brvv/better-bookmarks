@@ -1,0 +1,27 @@
+.navigation-container {
+  display: flex;
+  max-width: 45rem;
+  margin: 1rem auto;
+}
+
+.navigation-subcontainer {
+  display: flex;
+}
+
+.navigation-item {
+  padding: 0.3rem 0.5rem;
+  text-decoration: none;
+  color: rgb(86, 86, 86);
+  transition: 0.3s;
+  border-radius: 5px;
+}
+
+.navigation-separator {
+  padding: 0.3rem 0.2rem;
+  text-decoration: none;
+  color: rgb(86, 86, 86);
+}
+
+.navigation-item:hover {
+  background-color: rgb(214, 214, 214);
+}
