@@ -19,18 +19,28 @@ export const NewBookmarkButton: React.FC<Props> = ({
   const [title, setTitle] = useState(defaultTitleValue);
   const [url, setUrl] = useState(defaultUrlValue);
 
-  const handleClickOutside = (click : MouseEvent) => {
-    if (newButtonContainerRef && newButtonContainerRef.current && ! newButtonContainerRef.current.contains(click.target as Node)) {
+  const handleClickOutside = (event : MouseEvent | KeyboardEvent) => {
+    if (event instanceof KeyboardEvent) {
+      if (event.key==="Enter") {
+        setIsEditingActive(false);
+      }
+      return;
+    }
+
+
+    if (newButtonContainerRef && newButtonContainerRef.current && ! newButtonContainerRef.current.contains(event.target as Node)) {
       setIsEditingActive(false)
     }
   }
 
   useEffect(() => {
     document.addEventListener('click', handleClickOutside);
+    document.addEventListener('keypress', handleClickOutside);
     return () => {
       document.removeEventListener('click', handleClickOutside);
+      document.removeEventListener('keypress', handleClickOutside);
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (! isEditingActive) {

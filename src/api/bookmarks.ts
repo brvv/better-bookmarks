@@ -189,3 +189,27 @@ export const moveBookmark = async (bookmark : Bookmark, targetId : string) => {
   return;
   
 }
+
+export const isFolderEmpty = async (folder : BookmarkFolder) : Promise<boolean> => {
+  const folderNode = (await browser.bookmarks.getSubTree(folder.id))[0];
+  if (folderNode.children && folderNode.children?.length > 0) {
+    return false;
+  }
+  return true;
+
+}
+
+export const removeFolder = async (folder : BookmarkFolder): Promise<void> => {
+  const res = await isFolderEmpty(folder);
+  if (res) {
+    await browser.bookmarks.remove(folder.id);
+  }
+  return;
+};
+
+export const updateFolder = async (folder : BookmarkFolder) : Promise<BookmarkFolder> => {
+  const updatedFolder = await browser.bookmarks.update(folder.id, {
+    title: folder.title,
+  });
+  return parseFolderNode(updatedFolder);
+};

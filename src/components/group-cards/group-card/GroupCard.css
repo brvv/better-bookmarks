@@ -1,3 +1,7 @@
+.group-card-container {
+  position: relative;
+}
+
 .group-card {
   display: flex;
   text-decoration: none;
