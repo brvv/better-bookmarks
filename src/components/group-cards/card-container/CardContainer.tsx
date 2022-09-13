@@ -3,7 +3,8 @@ import React, {useEffect, useState } from "react";
 import "./CardContainer.css";
 import { GroupCard } from "../group-card/GroupCard";
 import { ToolbarCard } from "../toolbar-card/ToolbarCard";
-import { TOOLBAR_ID, getIcon } from "../../../api";
+import { NewFolderButton } from "../new-folder-button/NewFolderButton";
+import { TOOLBAR_ID, getIcon, createNewFolder } from "../../../api";
 import { SortableContext, rectSortingStrategy } from '@dnd-kit/sortable';
 
 type Props = {
@@ -13,7 +14,7 @@ type Props = {
 };
 
 
-export const CardContainer: React.FC<Props> = ({ parentId, folders }) => {
+export const CardContainer: React.FC<Props> = ({ parentId, folders, setFolders }) => {
   const [renderToolbar, setRenderToolbar] = useState(true);
 
   useEffect(() => {
@@ -21,6 +22,11 @@ export const CardContainer: React.FC<Props> = ({ parentId, folders }) => {
       if (parentId === TOOLBAR_ID) {return false;} else {return true;}
     })
   }, [parentId]);
+
+  const handleCreateNewFolder = async (title : string) => {
+    const newFolder = await createNewFolder(title, parentId);
+    setFolders([...folders, newFolder]);
+  }
 
   return (
     <div className="card-container">
@@ -37,6 +43,7 @@ export const CardContainer: React.FC<Props> = ({ parentId, folders }) => {
                         ))
           }
           </SortableContext>
+          <NewFolderButton handleCreateNewFolder={handleCreateNewFolder}/>
     </div>
   );
 };

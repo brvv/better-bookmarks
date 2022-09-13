@@ -21,14 +21,14 @@ const handleInstalled = (details) => {
 const handleCreateBookmark = async (id, bookmarkInfo) => {
   const rootId = await getRootId();
 
-  if (bookmarkInfo.type === "folder") {
+  if (bookmarkInfo.title.includes(IN_APP_TOOLBAR_MODIFIER + rootId)) {
+    console.log("Bookmark/Folder created in app in toolbar");
+    let newTitle = bookmarkInfo.title.slice(0, -((IN_APP_TOOLBAR_MODIFIER + rootId).length) );
+    await browser.bookmarks.update(bookmarkInfo.id, {title: newTitle});
     return;
   }
 
-  if (bookmarkInfo.title.includes(IN_APP_TOOLBAR_MODIFIER + rootId)) {
-    console.log("Bookmark created in app in toolbar");
-    let newTitle = bookmarkInfo.title.slice(0, -((IN_APP_TOOLBAR_MODIFIER + rootId).length) );
-    await browser.bookmarks.update(bookmarkInfo.id, {title: newTitle});
+  if (bookmarkInfo.type === "folder") {
     return;
   }
 

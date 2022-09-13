@@ -147,6 +147,20 @@ export const createNewBookmark = async (newBookmark : NewBookmark) : Promise<Boo
   return {...resultingBookmark, title : originalTitle};
 }
 
+export const createNewFolder = async (title : string, parentId : string) : Promise<BookmarkFolder> => {
+    const rootId = await getRootId();
+    const originalTitle = title ? title : "no title";
+    let newTitle = title;
+
+    if (parentId === TOOLBAR_ID) {
+      newTitle = newTitle + IN_APP_TOOLBAR_MODIFIER + rootId;
+    }
+
+    const newFolderNode = await browser.bookmarks.create({parentId : parentId, title : newTitle});
+    const resultingFolder = parseFolderNode(newFolderNode);
+    return {...resultingFolder, title : originalTitle}
+}
+
 export const changeBookmarkIndex = async (bookmark : Bookmark, newIndex : number) : Promise<void> => {
   if (! bookmark.parentId) {
     return;

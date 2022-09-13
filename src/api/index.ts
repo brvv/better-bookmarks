@@ -6,6 +6,7 @@ export {
   removeBookmark,
   moveUpBookmark,
   createNewBookmark,
+  createNewFolder,
   changeBookmarkIndex,
   changeFolderIndex,
   moveBookmark,
