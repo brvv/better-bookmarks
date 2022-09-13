@@ -22,6 +22,7 @@ import {
   DragStartEvent,
 } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
+import { INVALID_ROUTER_PAGES } from "../api/constants";
 
 export const MainPage: React.FC = () => {
   const params = useParams();
@@ -33,6 +34,8 @@ export const MainPage: React.FC = () => {
   const handleMouseMove = (e: any) => {
     setCoord({ x: e.pageX, y: e.pageY });
   };
+
+  const [isInvalidPage, setIsInvalidPage] = useState(false);
 
   const sensors = [
     useSensor(MouseSensor, {
@@ -58,10 +61,20 @@ export const MainPage: React.FC = () => {
     useState(false);
 
   useEffect(() => {
-    getBookmarksFromParent(rootId).then((bookmarks) => {
-      setBookmarks(bookmarks);
-      setBookmarksFinishedLoading(true);
-    });
+    if (INVALID_ROUTER_PAGES.includes(rootId)) {
+      setIsInvalidPage(true);
+      return;
+    }
+
+    getBookmarksFromParent(rootId)
+      .then((bookmarks) => {
+        setBookmarks(bookmarks);
+        setBookmarksFinishedLoading(true);
+      })
+      .catch((error) => {
+        console.log(error);
+        setIsInvalidPage(true);
+      });
   }, [rootId]);
 
   //Folders
@@ -249,37 +262,41 @@ export const MainPage: React.FC = () => {
 
   return (
     <div className="App" onMouseMove={handleMouseMove}>
-      <DndContext
-        sensors={sensors}
-        collisionDetection={customCollisionDetectionAlgorithm}
-        onDragEnd={handleDragEnd}
-        onDragOver={handleDragOver}
-        onDragStart={handleDragStart}
-      >
-        {rootId && bookmarksFinishedLoading ? (
-          <BookmarkContainer
-            parentId={rootId}
-            bookmarks={bookmarks}
-            setBookmarks={setBookmarks}
-            getMouseOffset={{
-              x: coord.x - dragStartCoord.x,
-              y: coord.y - dragStartCoord.y,
-            }}
-            isBookmarkOverFolder={isBookmarkOverFolder}
-          />
-        ) : (
-          <p>Loading!</p>
-        )}
-        {rootId && foldersFinishedLoading ? (
-          <CardContainer
-            parentId={rootId}
-            folders={folders}
-            setFolders={setFolders}
-          />
-        ) : (
-          <p>Loading!</p>
-        )}
-      </DndContext>
+      {isInvalidPage ? (
+        <div>This is a wrong page, idk why u are here</div>
+      ) : (
+        <DndContext
+          sensors={sensors}
+          collisionDetection={customCollisionDetectionAlgorithm}
+          onDragEnd={handleDragEnd}
+          onDragOver={handleDragOver}
+          onDragStart={handleDragStart}
+        >
+          {rootId && bookmarksFinishedLoading ? (
+            <BookmarkContainer
+              parentId={rootId}
+              bookmarks={bookmarks}
+              setBookmarks={setBookmarks}
+              getMouseOffset={{
+                x: coord.x - dragStartCoord.x,
+                y: coord.y - dragStartCoord.y,
+              }}
+              isBookmarkOverFolder={isBookmarkOverFolder}
+            />
+          ) : (
+            <p>Loading!</p>
+          )}
+          {rootId && foldersFinishedLoading ? (
+            <CardContainer
+              parentId={rootId}
+              folders={folders}
+              setFolders={setFolders}
+            />
+          ) : (
+            <p>Loading!</p>
+          )}
+        </DndContext>
+      )}
     </div>
   );
 };
