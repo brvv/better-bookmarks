@@ -27,6 +27,7 @@ import { INVALID_ROUTER_PAGES } from "../api/constants";
 export const MainPage: React.FC = () => {
   const params = useParams();
   const [rootId, setRootId] = useState("");
+  const [isRootIdLoaded, setIsRootIdLoaded] = useState(false);
   const [isBookmarkOverFolder, setIsBookmarkOverFolder] = useState(false);
 
   const [coord, setCoord] = useState({ x: 0, y: 0 });
@@ -48,9 +49,11 @@ export const MainPage: React.FC = () => {
   useEffect(() => {
     if (params.folderId) {
       setRootId(params.folderId);
+      setIsRootIdLoaded(true);
     } else {
       getRootId().then((id) => {
         setRootId(id);
+        setIsRootIdLoaded(true);
       });
     }
   }, [params]);
@@ -65,16 +68,17 @@ export const MainPage: React.FC = () => {
       setIsInvalidPage(true);
       return;
     }
-
-    getBookmarksFromParent(rootId)
-      .then((bookmarks) => {
-        setBookmarks(bookmarks);
-        setBookmarksFinishedLoading(true);
-      })
-      .catch((error) => {
-        console.log(error);
-        setIsInvalidPage(true);
-      });
+    if (isRootIdLoaded) {
+      getBookmarksFromParent(rootId)
+        .then((bookmarks) => {
+          setBookmarks(bookmarks);
+          setBookmarksFinishedLoading(true);
+        })
+        .catch((error) => {
+          console.log(error);
+          setIsInvalidPage(true);
+        });
+    }
   }, [rootId]);
 
   //Folders
@@ -82,10 +86,14 @@ export const MainPage: React.FC = () => {
   const [foldersFinishedLoading, setFoldersFinishedLoading] = useState(false);
 
   useEffect(() => {
-    getFoldersFromParent(rootId).then((folders) => {
-      setFolders(folders);
-      setFoldersFinishedLoading(true);
-    });
+    console.log(rootId);
+    if (isRootIdLoaded) {
+      getFoldersFromParent(rootId).then((folders) => {
+        console.log(folders, rootId);
+        setFolders(folders);
+        setFoldersFinishedLoading(true);
+      });
+    }
   }, [rootId]);
 
   const getIdCategory = (id: string): "Bookmark" | "Folder" | void => {
