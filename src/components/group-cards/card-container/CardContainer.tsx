@@ -64,30 +64,34 @@ export const CardContainer: React.FC<Props> = ({
   };
 
   return (
-    <div className="card-container">
-      {renderToolbar && (
-        <SortableContext
-          items={[TOOLBAR_ID + "droppable"]}
-          strategy={undefined}
-        >
-          {<ToolbarCard key={TOOLBAR_ID} name="toolbar" />}
-        </SortableContext>
-      )}
+    <div>
+      <div className="toolbar-container">
+        {renderToolbar && (
+          <SortableContext
+            items={[TOOLBAR_ID + "droppable"]}
+            strategy={undefined}
+          >
+            {<ToolbarCard key={TOOLBAR_ID} name="toolbar" />}
+          </SortableContext>
+        )}
+      </div>
 
-      <SortableContext
-        items={folders.map((folders) => folders.id)}
-        strategy={rectSortingStrategy}
-      >
-        {folders.map((folder) => (
-          <GroupCard
-            key={folder.id}
-            folder={folder}
-            handleDelete={handleDeleteFolder}
-            handleEdit={handleEditFolder}
-          />
-        ))}
-      </SortableContext>
-      <NewFolderButton handleCreateNewFolder={handleCreateNewFolder} />
+      <div className="card-container">
+        <SortableContext
+          items={folders.map((folders) => folders.id)}
+          strategy={rectSortingStrategy}
+        >
+          {folders.map((folder) => (
+            <GroupCard
+              key={folder.id}
+              folder={folder}
+              handleDelete={handleDeleteFolder}
+              handleEdit={handleEditFolder}
+            />
+          ))}
+        </SortableContext>
+        <NewFolderButton handleCreateNewFolder={handleCreateNewFolder} />
+      </div>
     </div>
   );
 };

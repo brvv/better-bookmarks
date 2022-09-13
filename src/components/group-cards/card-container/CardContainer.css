@@ -1,7 +1,8 @@
 .card-container {
   margin: 0 auto;
   display: grid;
-  padding: 1rem;
+  padding-inline: 1rem;
+  margin-top: 1rem;
   max-width: 45rem;
 }
 
@@ -15,12 +16,11 @@
   justify-self: center;
 }
 
-.card-container > :only-child {
-  grid-column: 1/-1;
-}
-
-.card-container :first-child {
-  grid-column: 1/-1;
+.toolbar-container {
+  margin: 0 auto;
+  padding-inline: 1rem;
+  margin-top: 1rem;
+  max-width: 45rem;
 }
 
 @media only screen and (max-width: 600px) {

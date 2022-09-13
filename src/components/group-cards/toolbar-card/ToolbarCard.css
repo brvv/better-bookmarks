@@ -4,12 +4,15 @@
   text-decoration: none;
   color: black;
   grid-column: 1/-1;
-  border: 2px solid rgba(128, 128, 128, 0.39);
   padding: 0.5rem 0;
   border-radius: 4px;
-  box-shadow: 0 0 5px rgba(193, 192, 192, 0.89);
+  box-shadow: 0 0 5px hsl(0, 0%, 62.4%);
   justify-content: center;
   cursor: pointer;
+  transition: 0.3s;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 3px;
 }
 
 .toolbar-card:hover,

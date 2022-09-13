@@ -93,6 +93,7 @@ export const GroupCard: React.FC<Props> = ({
               <input
                 className="input-title"
                 value={title}
+                style={{ textAlign: "center" }}
                 onChange={(e) => setTitle((e.target as HTMLInputElement).value)}
               ></input>
             </div>

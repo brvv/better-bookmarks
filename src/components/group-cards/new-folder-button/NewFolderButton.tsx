@@ -58,14 +58,14 @@ export const NewFolderButton: React.FC<Props> = ({ handleCreateNewFolder }) => {
         <div className="group-card">
           <div className="info-container">
             <input
-              className="input-title"
+              className="input-title input-title-new-folder"
               value={title}
               onChange={(e) => setTitle((e.target as HTMLInputElement).value)}
             ></input>
           </div>
         </div>
       ) : (
-        <div className="group-card">+</div>
+        <div className="new-folder-button">+ New Folder</div>
       )}
     </div>
   );
