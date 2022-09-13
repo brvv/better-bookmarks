@@ -23,6 +23,4 @@ export {
   STORAGE_UNCATEGORIZED_KEY,
   IN_APP_TOOLBAR_MODIFIER,
 } from "./constants";
-export {
-  getIcon
-} from "./utility"
+export { getIcon } from "./utility";

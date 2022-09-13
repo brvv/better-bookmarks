@@ -26,7 +26,6 @@ export const getUncategorizedId = async () => {
   return uncategorizedInfo[STORAGE_UNCATEGORIZED_KEY].id;
 };
 
-
 export const isBookmarkInExtensionFolders = async (bookmarkNode) => {
   const extensionRootId = await getRootId();
   if (bookmarkNode.parentId === extensionRootId) {
@@ -43,4 +42,4 @@ export const isBookmarkInExtensionFolders = async (bookmarkNode) => {
     }
   }
   return false;
-}
+};

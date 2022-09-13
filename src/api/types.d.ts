@@ -19,4 +19,4 @@ type NewBookmark = {
   parentId: string;
   title?: string;
   url: string;
-}
+};

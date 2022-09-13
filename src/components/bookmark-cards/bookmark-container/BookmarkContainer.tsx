@@ -1,33 +1,39 @@
 import React, { useEffect, useState } from "react";
 import "./BookmarkContainer.css";
 import { Bookmark } from "../bookmark/Bookmark";
-import { NewBookmarkButton} from "../new-bookmark-button/NewBookmarkButton"
+import { NewBookmarkButton } from "../new-bookmark-button/NewBookmarkButton";
 import {
   updateBookmark,
   removeBookmark,
   moveUpBookmark,
   getRootId,
-  createNewBookmark
+  createNewBookmark,
 } from "../../../api";
-import { SortableContext, rectSortingStrategy } from '@dnd-kit/sortable';
+import { SortableContext, rectSortingStrategy } from "@dnd-kit/sortable";
 
 type Props = {
   parentId: string;
-  bookmarks : Bookmark[];
-  setBookmarks : React.Dispatch<React.SetStateAction<Bookmark[]>>;
-  getMouseOffset : {x : number, y : number};
-  isBookmarkOverFolder ? : boolean;
+  bookmarks: Bookmark[];
+  setBookmarks: React.Dispatch<React.SetStateAction<Bookmark[]>>;
+  getMouseOffset: { x: number; y: number };
+  isBookmarkOverFolder?: boolean;
 };
 
-export const BookmarkContainer: React.FC<Props> = ({ parentId, bookmarks, setBookmarks, getMouseOffset, isBookmarkOverFolder }) => {
+export const BookmarkContainer: React.FC<Props> = ({
+  parentId,
+  bookmarks,
+  setBookmarks,
+  getMouseOffset,
+  isBookmarkOverFolder,
+}) => {
   const [isInRootFolder, setIsInRootFolder] = useState(false);
 
   //Check if we are in the root folder of the program
   useEffect(() => {
     getRootId().then((id) => {
       setIsInRootFolder(parentId === id);
-    })
-  }, [parentId])
+    });
+  }, [parentId]);
 
   const handleEditBookmark = async (newBookmark: Bookmark) => {
     const updatedBookmark = await updateBookmark(newBookmark);
@@ -60,30 +66,37 @@ export const BookmarkContainer: React.FC<Props> = ({ parentId, bookmarks, setBoo
       await moveUpBookmark(target);
     }
     setBookmarks(newBookmarks);
-  }
+  };
 
-  const handleCreateBookmark = async (newBookmark : NewBookmark) => {
+  const handleCreateBookmark = async (newBookmark: NewBookmark) => {
     const result = await createNewBookmark(newBookmark);
-    setBookmarks([...bookmarks, result]);}
+    setBookmarks([...bookmarks, result]);
+  };
 
   return (
-    <div className="bookmark-container">  
-          <SortableContext items={bookmarks.map(bookmark => bookmark.id)} strategy={rectSortingStrategy}>
-            {
-              bookmarks.map((bookmark) => (
-                <Bookmark
-                  key={bookmark.id}
-                  bookmark={bookmark}
-                  handleEdit={handleEditBookmark}
-                  handleDelete={handleDeleteBookmark}
-                  handleMoveUpBookmark={isInRootFolder ? undefined : handleMoveUpBookmark}
-                  dragTransform={getMouseOffset}
-                  isBookmarkOverFolder={isBookmarkOverFolder}
-                />
-              ))
+    <div className="bookmark-container">
+      <SortableContext
+        items={bookmarks.map((bookmark) => bookmark.id)}
+        strategy={rectSortingStrategy}
+      >
+        {bookmarks.map((bookmark) => (
+          <Bookmark
+            key={bookmark.id}
+            bookmark={bookmark}
+            handleEdit={handleEditBookmark}
+            handleDelete={handleDeleteBookmark}
+            handleMoveUpBookmark={
+              isInRootFolder ? undefined : handleMoveUpBookmark
             }
-          </SortableContext>
-      <NewBookmarkButton parentId= {parentId} handleCreateNewBookmark={handleCreateBookmark} />
+            dragTransform={getMouseOffset}
+            isBookmarkOverFolder={isBookmarkOverFolder}
+          />
+        ))}
+      </SortableContext>
+      <NewBookmarkButton
+        parentId={parentId}
+        handleCreateNewBookmark={handleCreateBookmark}
+      />
     </div>
   );
 };

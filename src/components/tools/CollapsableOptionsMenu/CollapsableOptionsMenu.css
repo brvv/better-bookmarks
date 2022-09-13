@@ -1,49 +1,45 @@
 * > .collapsable-options-menu {
-    display: none;
+  display: none;
 }
 
 *:hover > .collapsable-options-menu {
-    display: flex;
+  display: flex;
 }
 
 .collapsable-options-menu {
-    overflow: hidden;
-    position: absolute;
-    top: 50%;
-    right: min(1rem, 10%);
-    transform: translate(0, -50%);
+  overflow: hidden;
+  position: absolute;
+  top: 50%;
+  right: min(1rem, 10%);
+  transform: translate(0, -50%);
 
-    justify-content: space-between;
-    align-items: center;
-    
-    border-radius: 3px;
-    border: 1px solid rgb(178, 178, 178);
+  justify-content: space-between;
+  align-items: center;
 
+  border-radius: 3px;
+  border: 1px solid rgb(178, 178, 178);
 }
 
 .collapsable-options-menu > * {
-    width: 2rem;
-    height: 2rem;
-    border: none;
-    padding: 0.2rem;
-    background-color: rgb(218, 218, 218);
-
-    
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  padding: 0.2rem;
+  background-color: rgb(218, 218, 218);
 }
 
 .collapsable-options-menu > *:hover {
-    background-color: rgb(171, 171, 171);
+  background-color: rgb(171, 171, 171);
 }
 
-
 .collapsable-options-menu > button > img {
-    opacity: 0.5;
+  opacity: 0.5;
 }
 
 .collapsable-options-menu > .invisible {
-    display: none;
+  display: none;
 }
 
 .collapsable-options-menu:hover > .invisible {
-    display: block;
+  display: block;
 }

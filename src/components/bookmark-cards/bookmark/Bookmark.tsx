@@ -3,17 +3,16 @@ import { CollapsableOptionsMenu } from "../../tools/CollapsableOptionsMenu/Colla
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import "./Bookmark.css";
-import {getIcon} from "../../../api"
+import { getIcon } from "../../../api";
 
 type Props = {
   bookmark: Bookmark;
   handleEdit: (bookmark: Bookmark) => void;
   handleDelete: (bookmark: Bookmark) => void;
   handleMoveUpBookmark?: (bookmark: Bookmark) => void;
-  dragTransform ? : {x : number, y : number};
-  isBookmarkOverFolder ? : boolean;
+  dragTransform?: { x: number; y: number };
+  isBookmarkOverFolder?: boolean;
 };
-
 
 export const Bookmark: React.FC<Props> = ({
   bookmark,
@@ -23,7 +22,6 @@ export const Bookmark: React.FC<Props> = ({
   dragTransform,
   isBookmarkOverFolder,
 }) => {
-
   //const bookmarkContainerRef = useRef<HTMLDivElement>(null);
 
   const [isEditingActive, setIsEditingActive] = useState(false);
@@ -34,7 +32,6 @@ export const Bookmark: React.FC<Props> = ({
   const [favicon, setFavicon] = useState("");
   const [isFaviconLoaded, setIsFaviconLoaded] = useState(false);
 
-
   const {
     setNodeRef,
     attributes,
@@ -42,36 +39,49 @@ export const Bookmark: React.FC<Props> = ({
     transition,
     transform,
     isDragging,
-    } = useSortable({ id: bookmark.id })
+  } = useSortable({ id: bookmark.id });
 
   const style = {
-      transition,
-      transform: isDragging && dragTransform ? CSS.Transform.toString({x : dragTransform.x , y : dragTransform.y, scaleX : 1, scaleY : 1 }) : CSS.Transform.toString(transform),
-      opacity: isDragging ? 0.5 : 1,
-  }
+    transition,
+    transform:
+      isDragging && dragTransform
+        ? CSS.Transform.toString({
+            x: dragTransform.x,
+            y: dragTransform.y,
+            scaleX: 1,
+            scaleY: 1,
+          })
+        : CSS.Transform.toString(transform),
+    opacity: isDragging ? 0.5 : 1,
+  };
 
   const scaleDownStyle = {
-    transition : "transform 200ms ease-in-out", 
-    transform : CSS.Transform.toString({x : 0 , y : 0, scaleX : isBookmarkOverFolder && isDragging ? 0.8: 1, scaleY : isBookmarkOverFolder && isDragging ? 0.8: 1 }),
-  }
+    transition: "transform 200ms ease-in-out",
+    transform: CSS.Transform.toString({
+      x: 0,
+      y: 0,
+      scaleX: isBookmarkOverFolder && isDragging ? 0.8 : 1,
+      scaleY: isBookmarkOverFolder && isDragging ? 0.8 : 1,
+    }),
+  };
 
   useEffect(() => {
     getIcon(url).then((iconUrl) => {
       setFavicon(iconUrl);
       setIsFaviconLoaded(true);
-    })
-  }, [url])
+    });
+  }, [url]);
 
   useEffect(() => {
     //since this useeffect only calls on changes, not true to true or false to false
     //isEditingActive is false means that it was true before useEffect is called, meaning
     //the editor was closed
-    if (! isEditingActive) {
-      const newBookmark : Bookmark = {
+    if (!isEditingActive) {
+      const newBookmark: Bookmark = {
         id: bookmark.id,
         title: title,
-        url: url
-      }
+        url: url,
+      };
 
       if (newBookmark.url) {
         try {
@@ -82,84 +92,87 @@ export const Bookmark: React.FC<Props> = ({
         }
       }
     }
-  },[isEditingActive])
+  }, [isEditingActive]);
 
-
-  const handleClickOutside = (event : MouseEvent | KeyboardEvent) => {
+  const handleClickOutside = (event: MouseEvent | KeyboardEvent) => {
     if (event instanceof KeyboardEvent) {
-      if (event.key==="Enter") {
+      if (event.key === "Enter") {
         setIsEditingActive(false);
       }
       return;
     }
 
-
-    if (bookmarkContainerRef && bookmarkContainerRef.current && ! bookmarkContainerRef.current.contains(event.target as Node)) {
-      setIsEditingActive(false)
+    if (
+      bookmarkContainerRef &&
+      bookmarkContainerRef.current &&
+      !bookmarkContainerRef.current.contains(event.target as Node)
+    ) {
+      setIsEditingActive(false);
     }
-  }
+  };
 
   useEffect(() => {
-    document.addEventListener('click', handleClickOutside);
-    document.addEventListener('keypress', handleClickOutside);
+    document.addEventListener("click", handleClickOutside);
+    document.addEventListener("keypress", handleClickOutside);
     return () => {
-      document.removeEventListener('click', handleClickOutside);
-      document.removeEventListener('keypress', handleClickOutside);
-    }
+      document.removeEventListener("click", handleClickOutside);
+      document.removeEventListener("keypress", handleClickOutside);
+    };
   }, []);
 
   const handleToggleEditor = async () => {
     setIsEditingActive(!isEditingActive);
-  }
-  
-  
+  };
 
   return (
-    <div className="bookmark-parent" ref={setNodeRef} {...attributes} {...listeners} style={style}>
+    <div
+      className="bookmark-parent"
+      ref={setNodeRef}
+      {...attributes}
+      {...listeners}
+      style={style}
+    >
       <div ref={bookmarkContainerRef} style={scaleDownStyle}>
-        {! isEditingActive ?       
-        <button
-          className="bookmark"
-          onClick={() => {window.open(url, "_blank")}}
-        >
-          <div className="info-container">
-            
-            <p className="title">{isFaviconLoaded && <img src={favicon} className="bookmark-favicon"></img>}{title}</p>
-            <p className="url">{url}</p>
+        {!isEditingActive ? (
+          <button
+            className="bookmark"
+            onClick={() => {
+              window.open(url, "_blank");
+            }}
+          >
+            <div className="info-container">
+              <p className="title">
+                {isFaviconLoaded && (
+                  <img src={favicon} className="bookmark-favicon"></img>
+                )}
+                {title}
+              </p>
+              <p className="url">{url}</p>
+            </div>
+          </button>
+        ) : (
+          <div className="bookmark">
+            <div className="info-container">
+              <input
+                className="input-title"
+                value={title}
+                onChange={(e) => setTitle((e.target as HTMLInputElement).value)}
+              ></input>
+              <input
+                className="input-url"
+                value={url}
+                onChange={(e) => setUrl((e.target as HTMLInputElement).value)}
+              ></input>
+            </div>
           </div>
+        )}
 
-        </button> : 
-        
-        <div className="bookmark">
-          <div className="info-container">
-            <input 
-                  className="input-title" 
-                  value={title} 
-                  onChange={(e) => setTitle((e.target as HTMLInputElement).value)}
-                  >
-                  
-            </input>
-            <input 
-                  className="input-url" 
-                  value={url} 
-                  onChange={(e) => setUrl((e.target as HTMLInputElement).value)}
-                  >
-            
-            </input>
-          </div>
-        </div>
-        
-        
-        }
-
-
-          <CollapsableOptionsMenu
-            bookmark={bookmark}
-            handleToggleEditor={handleToggleEditor}
-            handleDelete={handleDelete}
-            handleMoveUp={handleMoveUpBookmark}
-          />
-
+        <CollapsableOptionsMenu
+          bookmark={bookmark}
+          handleToggleEditor={handleToggleEditor}
+          handleDelete={handleDelete}
+          handleMoveUp={handleMoveUpBookmark}
+        />
       </div>
     </div>
   );
