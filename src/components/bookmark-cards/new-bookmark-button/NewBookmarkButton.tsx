@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import "./NewBookmarkButton.css";
 
 type Props = {
   parentId: string;
@@ -77,8 +78,8 @@ export const NewBookmarkButton: React.FC<Props> = ({
       ref={newButtonContainerRef}
     >
       {!isEditingActive ? (
-        <div className="bookmark">
-          <div className="info-container">+</div>
+        <div className="new-bookmark-button">
+          <div className="info-container">+ New Bookmark</div>
         </div>
       ) : (
         <div className="bookmark">

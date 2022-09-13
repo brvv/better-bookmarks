@@ -16,6 +16,7 @@
   min-width: fit-content;
   text-align: left;
   width: 100%;
+  transition: 0.3s;
 }
 
 .bookmark:hover,

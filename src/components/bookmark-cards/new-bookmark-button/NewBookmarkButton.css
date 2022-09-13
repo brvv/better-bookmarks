@@ -1,0 +1,19 @@
+.new-bookmark-button {
+  text-decoration: none;
+
+  padding: 0.5rem;
+
+  background-color: rgb(255, 255, 255);
+
+  color: rgb(118, 118, 118);
+  min-width: fit-content;
+  text-align: left;
+  transition: 0.3s;
+  width: 100%;
+}
+
+.new-bookmark-button:hover {
+  background-color: rgba(128, 128, 128, 0.167);
+  box-shadow: 0 0 1px 0px gray;
+  cursor: pointer;
+}
