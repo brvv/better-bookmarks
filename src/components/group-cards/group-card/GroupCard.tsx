@@ -29,7 +29,7 @@ export const GroupCard: React.FC<Props> = ({folder}) => {
   return (
     <div  ref={setNodeRef} {...attributes} {...listeners} style={style}>
       <button className="group-card" onClick={() => {window.open("#/folder/" + folder.id, "_self")}}>
-        {folder.title + " " + folder.id}
+        {folder.title}
       </button>
 
     </div>

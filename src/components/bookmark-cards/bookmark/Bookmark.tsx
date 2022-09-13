@@ -113,7 +113,7 @@ export const Bookmark: React.FC<Props> = ({
         >
           <div className="info-container">
             
-            <p className="title">{isFaviconLoaded && <img src={favicon} className="bookmark-favicon"></img>}{title + " " + bookmark.id}</p>
+            <p className="title">{isFaviconLoaded && <img src={favicon} className="bookmark-favicon"></img>}{title}</p>
             <p className="url">{url}</p>
           </div>
 
