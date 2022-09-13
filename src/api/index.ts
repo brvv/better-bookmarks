@@ -10,6 +10,8 @@ export {
   changeBookmarkIndex,
   changeFolderIndex,
   moveBookmark,
+  isFolderEmpty,
+  removeFolder,
 } from "./bookmarks";
 export { getUncategorizedId, getRootId } from "./storage";
 export {

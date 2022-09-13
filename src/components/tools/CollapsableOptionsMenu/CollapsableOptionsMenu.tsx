@@ -2,10 +2,10 @@ import React from "react";
 import "./CollapsableOptionsMenu.css"
 
 type Props = {
-    bookmark: Bookmark;
+    bookmark: Bookmark | BookmarkFolder;
     handleToggleEditor: () => void;
-    handleDelete: (bookmark: Bookmark) => void;
-    handleMoveUp?: (bookmark: Bookmark) => void;
+    handleDelete?: (bookmark: Bookmark | BookmarkFolder) => void;
+    handleMoveUp?: (bookmark: Bookmark | BookmarkFolder) => void;
   };
 
 export const CollapsableOptionsMenu: React.FC<Props> = ({
@@ -24,12 +24,15 @@ export const CollapsableOptionsMenu: React.FC<Props> = ({
                 
             }
             
+            {
+                handleDelete &&
+                <button className="delete-button invisible"
+                onClick={() => {
+                    handleDelete(bookmark)
+                }}><img src={require("../../../assets/trash-icon.png")} alt="Move up" />
+                </button>
+            }
 
-            <button className="delete-button invisible"
-            onClick={() => {
-                handleDelete(bookmark)
-            }}><img src={require("../../../assets/trash-icon.png")} alt="Move up" />
-            </button>
 
             <button className="edit-button visible"
             onClick={() => {

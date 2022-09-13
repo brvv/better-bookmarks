@@ -84,18 +84,29 @@ export const Bookmark: React.FC<Props> = ({
     }
   },[isEditingActive])
 
-  const handleClickOutside = (click : MouseEvent) => {
-    if (bookmarkContainerRef && bookmarkContainerRef.current && ! bookmarkContainerRef.current.contains(click.target as Node)) {
+
+  const handleClickOutside = (event : MouseEvent | KeyboardEvent) => {
+    if (event instanceof KeyboardEvent) {
+      if (event.key==="Enter") {
+        setIsEditingActive(false);
+      }
+      return;
+    }
+
+
+    if (bookmarkContainerRef && bookmarkContainerRef.current && ! bookmarkContainerRef.current.contains(event.target as Node)) {
       setIsEditingActive(false)
     }
   }
 
   useEffect(() => {
     document.addEventListener('click', handleClickOutside);
+    document.addEventListener('keypress', handleClickOutside);
     return () => {
       document.removeEventListener('click', handleClickOutside);
+      document.removeEventListener('keypress', handleClickOutside);
     }
-  }, [])
+  }, []);
 
   const handleToggleEditor = async () => {
     setIsEditingActive(!isEditingActive);
