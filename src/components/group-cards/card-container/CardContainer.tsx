@@ -3,7 +3,7 @@ import "./CardContainer.css";
 import { GroupCard } from "../group-card/GroupCard";
 import { ToolbarCard } from "../toolbar-card/ToolbarCard";
 import { NewFolderButton } from "../new-folder-button/NewFolderButton";
-import { TOOLBAR_ID, createNewFolder, isFolderEmpty, removeFolder } from "../../../api";
+import { TOOLBAR_ID, createNewFolder, isFolderEmpty, removeFolder, updateFolder } from "../../../api";
 import { SortableContext, rectSortingStrategy } from '@dnd-kit/sortable';
 
 type Props = {
@@ -40,6 +40,16 @@ export const CardContainer: React.FC<Props> = ({ parentId, folders, setFolders }
     }
   }
 
+  const handleEditFolder = async (newFolder : BookmarkFolder) => {
+    const updatedFolder = await updateFolder(newFolder);
+    const folderIndex = folders.findIndex(
+      (folder) => folder.id === newFolder.id
+    );
+    const newFolders = [...folders];
+    newFolders[folderIndex] = updatedFolder;
+    setFolders(newFolders);
+  }
+
   return (
     <div className="card-container">
       {renderToolbar &&           
@@ -50,7 +60,7 @@ export const CardContainer: React.FC<Props> = ({ parentId, folders, setFolders }
           <SortableContext items={folders.map(folders => folders.id)} strategy={ rectSortingStrategy }>
           {
                         folders.map((folder) => (
-                          <GroupCard key={folder.id} folder={folder} handleDelete={handleDeleteFolder} />
+                          <GroupCard key={folder.id} folder={folder} handleDelete={handleDeleteFolder} handleEdit={handleEditFolder}/>
                         ))
           }
           </SortableContext>

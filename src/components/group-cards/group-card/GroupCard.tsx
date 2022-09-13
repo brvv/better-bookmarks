@@ -8,11 +8,11 @@ import { isFolderEmpty } from "../../../api";
 
 type Props = {
   folder : BookmarkFolder;
-  handleEdit?: (bookmark: BookmarkFolder) => void;
+  handleEdit: (bookmark: BookmarkFolder) => void;
   handleDelete: (bookmark: BookmarkFolder) => void;
 };
 
-export const GroupCard: React.FC<Props> = ({folder, handleDelete}) => {
+export const GroupCard: React.FC<Props> = ({folder, handleDelete, handleEdit}) => {
   const {
     setNodeRef,
     attributes,
@@ -39,6 +39,16 @@ export const GroupCard: React.FC<Props> = ({folder, handleDelete}) => {
         setIsEmpty(res);
       });
     },[])
+
+    useEffect(() => {
+      if (! isEditingActive) {
+        const newFolder : Bookmark = {...folder, title : title}
+  
+        if (newFolder.title) {
+            handleEdit(newFolder);
+        }
+      }
+    }, [isEditingActive])
 
     const handleClickOutside = (event : MouseEvent | KeyboardEvent) => {
       if (event instanceof KeyboardEvent) {

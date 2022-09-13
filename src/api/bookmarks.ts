@@ -206,3 +206,10 @@ export const removeFolder = async (folder : BookmarkFolder): Promise<void> => {
   }
   return;
 };
+
+export const updateFolder = async (folder : BookmarkFolder) : Promise<BookmarkFolder> => {
+  const updatedFolder = await browser.bookmarks.update(folder.id, {
+    title: folder.title,
+  });
+  return parseFolderNode(updatedFolder);
+};
