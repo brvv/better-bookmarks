@@ -54,6 +54,7 @@
 .input-url {
   width: 100%;
   padding: 0 0;
+  transition: 0.3s;
 }
 
 .bookmark-favicon {

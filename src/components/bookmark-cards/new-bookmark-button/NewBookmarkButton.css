@@ -8,8 +8,8 @@
   color: rgb(118, 118, 118);
   min-width: fit-content;
   text-align: left;
-  transition: 0.3s;
   width: 100%;
+  transition: 0.3s;
 }
 
 .new-bookmark-button:hover {
