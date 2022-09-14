@@ -13,6 +13,7 @@ export {
   isFolderEmpty,
   removeFolder,
   updateFolder,
+  getFolderPath,
 } from "./bookmarks";
 export { getUncategorizedId, getRootId } from "./storage";
 export {

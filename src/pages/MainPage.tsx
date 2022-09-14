@@ -23,12 +23,14 @@ import {
 } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
 import { INVALID_ROUTER_PAGES } from "../api/constants";
+import { NavigationBar } from "../components/tools/NavigationBar/NavigationBar";
 
 export const MainPage: React.FC = () => {
   const params = useParams();
   const [rootId, setRootId] = useState("");
   const [isRootIdLoaded, setIsRootIdLoaded] = useState(false);
   const [isBookmarkOverFolder, setIsBookmarkOverFolder] = useState(false);
+  const [overFolderId, setOverFolderId] = useState("");
 
   const [coord, setCoord] = useState({ x: 0, y: 0 });
   const [dragStartCoord, setDragStartCoord] = useState({ x: 0, y: 0 });
@@ -86,10 +88,8 @@ export const MainPage: React.FC = () => {
   const [foldersFinishedLoading, setFoldersFinishedLoading] = useState(false);
 
   useEffect(() => {
-    console.log(rootId);
     if (isRootIdLoaded) {
       getFoldersFromParent(rootId).then((folders) => {
-        console.log(folders, rootId);
         setFolders(folders);
         setFoldersFinishedLoading(true);
       });
@@ -189,14 +189,6 @@ export const MainPage: React.FC = () => {
 
     const activeCategory = getIdCategory(active.id as string);
     const overCategory = getIdCategory(over.id as string);
-    console.log(
-      "Drag ended: ",
-      activeCategory,
-      active.id,
-      "on ",
-      overCategory,
-      over.id
-    );
 
     if (activeCategory === "Bookmark" && overCategory === "Bookmark") {
       handleBookmarkOnBookmarkCollision({ active, over } as DragEndEvent);
@@ -205,6 +197,7 @@ export const MainPage: React.FC = () => {
     } else if (activeCategory === "Bookmark" && overCategory === "Folder") {
       handleBookmarkOnFolderCollision({ active, over } as DragEndEvent);
     }
+    setOverFolderId("");
     setIsBookmarkOverFolder(false);
   };
 
@@ -256,8 +249,10 @@ export const MainPage: React.FC = () => {
     const overCategory = getIdCategory(event.over.id as string);
 
     if (activeCategory === "Bookmark" && overCategory === "Folder") {
+      setOverFolderId(event.over.id as string);
       setIsBookmarkOverFolder(true);
     } else {
+      setOverFolderId("");
       setIsBookmarkOverFolder(false);
     }
   };
@@ -273,37 +268,48 @@ export const MainPage: React.FC = () => {
       {isInvalidPage ? (
         <div>This is a wrong page, idk why u are here</div>
       ) : (
-        <DndContext
-          sensors={sensors}
-          collisionDetection={customCollisionDetectionAlgorithm}
-          onDragEnd={handleDragEnd}
-          onDragOver={handleDragOver}
-          onDragStart={handleDragStart}
-        >
-          {rootId && bookmarksFinishedLoading ? (
-            <BookmarkContainer
-              parentId={rootId}
-              bookmarks={bookmarks}
-              setBookmarks={setBookmarks}
-              getMouseOffset={{
-                x: coord.x - dragStartCoord.x,
-                y: coord.y - dragStartCoord.y,
-              }}
-              isBookmarkOverFolder={isBookmarkOverFolder}
-            />
-          ) : (
-            <p>Loading!</p>
+        <div>
+          {rootId && isRootIdLoaded && (
+            <NavigationBar parentId={rootId}></NavigationBar>
           )}
-          {rootId && foldersFinishedLoading ? (
-            <CardContainer
-              parentId={rootId}
-              folders={folders}
-              setFolders={setFolders}
-            />
-          ) : (
-            <p>Loading!</p>
-          )}
-        </DndContext>
+
+          <DndContext
+            sensors={sensors}
+            collisionDetection={customCollisionDetectionAlgorithm}
+            onDragEnd={handleDragEnd}
+            onDragOver={handleDragOver}
+            onDragStart={handleDragStart}
+          >
+            {rootId && bookmarksFinishedLoading ? (
+              <BookmarkContainer
+                parentId={rootId}
+                bookmarks={bookmarks}
+                setBookmarks={setBookmarks}
+                getMouseOffset={{
+                  x: coord.x - dragStartCoord.x,
+                  y: coord.y - dragStartCoord.y,
+                }}
+                isBookmarkOverFolder={isBookmarkOverFolder}
+              />
+            ) : (
+              <p>Loading!</p>
+            )}
+            {rootId && foldersFinishedLoading ? (
+              <CardContainer
+                parentId={rootId}
+                folders={folders}
+                setFolders={setFolders}
+                bookmarkOverFolderId={
+                  isBookmarkOverFolder && overFolderId
+                    ? overFolderId
+                    : undefined
+                }
+              />
+            ) : (
+              <p>Loading!</p>
+            )}
+          </DndContext>
+        </div>
       )}
     </div>
   );

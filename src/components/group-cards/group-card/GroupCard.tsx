@@ -10,12 +10,14 @@ type Props = {
   folder: BookmarkFolder;
   handleEdit: (bookmark: BookmarkFolder) => void;
   handleDelete: (bookmark: BookmarkFolder) => void;
+  bookmarkOverFolder?: boolean;
 };
 
 export const GroupCard: React.FC<Props> = ({
   folder,
   handleDelete,
   handleEdit,
+  bookmarkOverFolder,
 }) => {
   const {
     setNodeRef,
@@ -30,6 +32,9 @@ export const GroupCard: React.FC<Props> = ({
     transition,
     transform: CSS.Transform.toString(transform),
     opacity: isDragging ? 0.5 : 1,
+    backgroundColor: bookmarkOverFolder
+      ? "rgba(128, 128, 128, 0.162)"
+      : "transparent",
   };
 
   const [isEditingActive, setIsEditingActive] = useState(false);
