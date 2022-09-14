@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "./ToolbarCard.css";
 import { TOOLBAR_ID } from "../../../api";
 import { useSortable } from "@dnd-kit/sortable";
@@ -14,10 +14,6 @@ export const ToolbarCard: React.FC<Props> = ({
   bookmarkOverFolder,
 }: Props) => {
   const id = TOOLBAR_ID;
-
-  useEffect(() => {
-    console.log(bookmarkOverFolder);
-  }, [bookmarkOverFolder]);
 
   const {
     setNodeRef,
