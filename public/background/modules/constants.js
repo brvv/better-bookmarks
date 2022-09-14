@@ -1,5 +1,6 @@
 export const TOOLBAR_ID = "toolbar_____";
 export const MENU_ID = "menu________";
+export const ROOT_ID = "root________";
 export const UNCATEGORIZED_NAME_BASE =
   "DO_NOT_DELETE-BetterBookmarks-Uncategorized";
 
