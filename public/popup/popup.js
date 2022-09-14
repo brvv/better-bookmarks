@@ -2,8 +2,9 @@ const openExtensionPage = async () => {
   let createData = {
     url: "../index.html",
   };
-  return await browser.tabs.create(createData);
+  await browser.tabs.create(createData);
+  window.close();
 };
 
-const pseudoButton = document.getElementById("pseudoButton");
-pseudoButton.addEventListener("click", openExtensionPage);
+const openDashboardButton = document.getElementById("openDashboardButton");
+openDashboardButton.addEventListener("click", openExtensionPage);
