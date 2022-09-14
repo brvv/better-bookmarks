@@ -16,12 +16,14 @@ type Props = {
   parentId: string;
   folders: BookmarkFolder[];
   setFolders: React.Dispatch<React.SetStateAction<BookmarkFolder[]>>;
+  bookmarkOverFolderId?: string;
 };
 
 export const CardContainer: React.FC<Props> = ({
   parentId,
   folders,
   setFolders,
+  bookmarkOverFolderId,
 }) => {
   const [renderToolbar, setRenderToolbar] = useState(true);
 
@@ -71,7 +73,18 @@ export const CardContainer: React.FC<Props> = ({
             items={[TOOLBAR_ID + "droppable"]}
             strategy={undefined}
           >
-            {<ToolbarCard key={TOOLBAR_ID} name="toolbar" />}
+            {
+              <ToolbarCard
+                key={TOOLBAR_ID}
+                name="toolbar"
+                bookmarkOverFolder={
+                  bookmarkOverFolderId &&
+                  bookmarkOverFolderId === TOOLBAR_ID + "droppable"
+                    ? true
+                    : undefined
+                }
+              />
+            }
           </SortableContext>
         )}
       </div>
@@ -87,6 +100,11 @@ export const CardContainer: React.FC<Props> = ({
               folder={folder}
               handleDelete={handleDeleteFolder}
               handleEdit={handleEditFolder}
+              bookmarkOverFolder={
+                bookmarkOverFolderId && bookmarkOverFolderId === folder.id
+                  ? true
+                  : undefined
+              }
             />
           ))}
         </SortableContext>

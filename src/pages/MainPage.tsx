@@ -30,6 +30,7 @@ export const MainPage: React.FC = () => {
   const [rootId, setRootId] = useState("");
   const [isRootIdLoaded, setIsRootIdLoaded] = useState(false);
   const [isBookmarkOverFolder, setIsBookmarkOverFolder] = useState(false);
+  const [overFolderId, setOverFolderId] = useState("");
 
   const [coord, setCoord] = useState({ x: 0, y: 0 });
   const [dragStartCoord, setDragStartCoord] = useState({ x: 0, y: 0 });
@@ -76,6 +77,7 @@ export const MainPage: React.FC = () => {
           setBookmarksFinishedLoading(true);
         })
         .catch((error) => {
+          console.log(error);
           setIsInvalidPage(true);
         });
     }
@@ -195,6 +197,7 @@ export const MainPage: React.FC = () => {
     } else if (activeCategory === "Bookmark" && overCategory === "Folder") {
       handleBookmarkOnFolderCollision({ active, over } as DragEndEvent);
     }
+    setOverFolderId("");
     setIsBookmarkOverFolder(false);
   };
 
@@ -246,8 +249,10 @@ export const MainPage: React.FC = () => {
     const overCategory = getIdCategory(event.over.id as string);
 
     if (activeCategory === "Bookmark" && overCategory === "Folder") {
+      setOverFolderId(event.over.id as string);
       setIsBookmarkOverFolder(true);
     } else {
+      setOverFolderId("");
       setIsBookmarkOverFolder(false);
     }
   };
@@ -294,6 +299,11 @@ export const MainPage: React.FC = () => {
                 parentId={rootId}
                 folders={folders}
                 setFolders={setFolders}
+                bookmarkOverFolderId={
+                  isBookmarkOverFolder && overFolderId
+                    ? overFolderId
+                    : undefined
+                }
               />
             ) : (
               <p>Loading!</p>
