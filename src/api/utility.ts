@@ -1,20 +1,21 @@
 export const getIcon = async (url: string): Promise<string> => {
-  let duckDuckGoIconUrl = `https://icons.duckduckgo.com/ip3/${url.replace(
-    /^https?:\/\//,
-    ""
-  )}`;
+  const urlObj = new URL(url);
+  console.log("Trying to get icon from", urlObj.hostname);
 
-  while (duckDuckGoIconUrl[duckDuckGoIconUrl.length - 1] === "/") {
-    duckDuckGoIconUrl = duckDuckGoIconUrl.slice(0, -1);
-  }
+  let duckDuckGoIconUrl = `https://icons.duckduckgo.com/ip3/${urlObj.hostname}.ico`;
 
-  duckDuckGoIconUrl = duckDuckGoIconUrl + ".ico";
-  const res = await fetch(duckDuckGoIconUrl);
-  if (res) {
-    const imageBlob = await res.blob();
-    const imageObjectUrl = URL.createObjectURL(imageBlob);
+  try {
+    const res = await fetch(duckDuckGoIconUrl);
+    if (res) {
+      const imageBlob = await res.blob();
+      const imageObjectUrl = URL.createObjectURL(imageBlob);
 
-    return imageObjectUrl;
+      return imageObjectUrl;
+    } else {
+      console.log("Could not retrieve favicon from", duckDuckGoIconUrl);
+    }
+  } catch (error) {
+    console.log("Could not retrieve favicon from", duckDuckGoIconUrl);
   }
   return "";
 };

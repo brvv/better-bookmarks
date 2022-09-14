@@ -256,7 +256,7 @@ export const getFolderPath = async (
   parentId: string
 ): Promise<{ title: string; id: string }[]> => {
   if (parentId === TOOLBAR_ID) {
-    return [{ title: "Toolbar", id: TOOLBAR_ID }];
+    return [{ title: "toolbar", id: TOOLBAR_ID }];
   }
 
   const rootId = await getRootId();

@@ -76,7 +76,6 @@ export const MainPage: React.FC = () => {
           setBookmarksFinishedLoading(true);
         })
         .catch((error) => {
-          console.log(error);
           setIsInvalidPage(true);
         });
     }
@@ -87,10 +86,8 @@ export const MainPage: React.FC = () => {
   const [foldersFinishedLoading, setFoldersFinishedLoading] = useState(false);
 
   useEffect(() => {
-    console.log(rootId);
     if (isRootIdLoaded) {
       getFoldersFromParent(rootId).then((folders) => {
-        console.log(folders, rootId);
         setFolders(folders);
         setFoldersFinishedLoading(true);
       });
@@ -190,14 +187,6 @@ export const MainPage: React.FC = () => {
 
     const activeCategory = getIdCategory(active.id as string);
     const overCategory = getIdCategory(over.id as string);
-    console.log(
-      "Drag ended: ",
-      activeCategory,
-      active.id,
-      "on ",
-      overCategory,
-      over.id
-    );
 
     if (activeCategory === "Bookmark" && overCategory === "Bookmark") {
       handleBookmarkOnBookmarkCollision({ active, over } as DragEndEvent);
@@ -275,7 +264,10 @@ export const MainPage: React.FC = () => {
         <div>This is a wrong page, idk why u are here</div>
       ) : (
         <div>
-          <NavigationBar parentId={rootId}></NavigationBar>
+          {rootId && isRootIdLoaded && (
+            <NavigationBar parentId={rootId}></NavigationBar>
+          )}
+
           <DndContext
             sensors={sensors}
             collisionDetection={customCollisionDetectionAlgorithm}
