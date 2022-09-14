@@ -1,4 +1,9 @@
-import { STORAGE_UNCATEGORIZED_KEY, STORAGE_ROOT_KEY } from "./constants.js";
+import {
+  STORAGE_UNCATEGORIZED_KEY,
+  STORAGE_ROOT_KEY,
+  TOOLBAR_ID,
+  ROOT_ID,
+} from "./constants.js";
 
 export const getAllBookmarks = (bookmarkTree, currentPath = "/") => {
   let bookmarks = [];
@@ -39,6 +44,20 @@ export const isBookmarkInExtensionFolders = async (bookmarkNode) => {
       return true;
     } else {
       currentLevel = (await browser.bookmarks.get(currentLevel.parentId))[0];
+    }
+  }
+  return false;
+};
+
+export const isBookmarkinToolbar = async (bookmarkInfo) => {
+  let currentParentId = bookmarkInfo.parentId;
+
+  while (currentParentId && currentParentId !== ROOT_ID) {
+    if (currentParentId === TOOLBAR_ID) {
+      return true;
+    } else {
+      const parentNode = (await browser.bookmarks.get(currentParentId))[0];
+      currentParentId = parentNode.parentId;
     }
   }
   return false;
