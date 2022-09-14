@@ -1,5 +1,5 @@
 .card-container {
-  margin: 0 auto;
+  margin: 1.5rem auto;
   display: grid;
   padding-inline: 1rem;
   margin-top: 1rem;
@@ -17,7 +17,7 @@
 }
 
 .toolbar-container {
-  margin: 0 auto;
+  margin: 1.5rem auto;
   padding-inline: 1rem;
   margin-top: 1rem;
   max-width: 45rem;
