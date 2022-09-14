@@ -3,6 +3,7 @@ import {
   getRootId,
   getUncategorizedId,
   isBookmarkInExtensionFolders,
+  isBookmarkinToolbar,
 } from "./modules/misc.js";
 
 const IN_APP_TOOLBAR_MODIFIER = "BOOKMARK_CREATED_IN_APP";
@@ -41,9 +42,10 @@ const handleCreateBookmark = async (id, bookmarkInfo) => {
 
   const uncategorizedId = await getUncategorizedId();
   console.log("New bookmark created ", bookmarkInfo);
-  const result = await isBookmarkInExtensionFolders(bookmarkInfo);
+  const isInExtFolders = await isBookmarkInExtensionFolders(bookmarkInfo);
+  const isInToolbar = await isBookmarkinToolbar(bookmarkInfo);
 
-  if (!result) {
+  if (!isInExtFolders && !isInToolbar) {
     await browser.bookmarks.move(bookmarkInfo.id, {
       parentId: uncategorizedId,
     });

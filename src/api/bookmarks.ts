@@ -212,12 +212,9 @@ export const changeFolderIndex = async (
 export const moveBookmark = async (bookmark: Bookmark, targetId: string) => {
   const rootId = await getRootId();
   const uncategorizedId = await getUncategorizedId();
+  console.log("Moving bookmark", bookmark.title, "to", targetId);
 
-  if (
-    targetId === rootId ||
-    bookmark.parentId == rootId ||
-    bookmark.parentId === TOOLBAR_ID
-  ) {
+  if (targetId === rootId || bookmark.parentId == rootId) {
     await browser.bookmarks.move(bookmark.id, { parentId: uncategorizedId });
   } else {
     await browser.bookmarks.move(bookmark.id, { parentId: targetId });
