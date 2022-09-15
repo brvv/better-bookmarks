@@ -1,9 +1,9 @@
 {
   "name": "Better Bookmarks",
-  "description": "Actually usable bookmarks.",
+  "description": "A simplified interface for managing in-browser bookmarks",
   "version": "1.0.0",
   "manifest_version": 2,
-  "homepage_url": "https://github.com",
+  "homepage_url": "https://github.com/brvv/better-bookmarks",
   "background": {
     "page": "./background/background.html"
   },
@@ -11,13 +11,11 @@
     "default_popup": "./popup/popup.html",
     "default_title": "UUID Generator",
     "default_icon": {
-      "48": "./icon.png",
-      "96": "./icon.png"
+      "48": "./icon.png"
     }
   },
   "permissions": ["bookmarks", "storage", "*://icons.duckduckgo.com/*"],
   "icons": {
-    "48": "./icon.png",
-    "96": "./icon.png"
+    "48": "./icon.png"
   }
 }
