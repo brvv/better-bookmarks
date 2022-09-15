@@ -34,6 +34,7 @@
 
 .info-container {
   width: 100%;
+  word-break: break-all;
 }
 
 .info-container > .url,

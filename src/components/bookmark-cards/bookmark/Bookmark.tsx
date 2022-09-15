@@ -145,9 +145,11 @@ export const Bookmark: React.FC<Props> = ({
                 {isFaviconLoaded && (
                   <img src={favicon} className="bookmark-favicon"></img>
                 )}
-                {title}
+                {title.length >= 130 ? title.substring(0, 120) + "..." : title}
               </p>
-              <p className="url">{url}</p>
+              <p className="url">
+                {url.length >= 130 ? url.substring(0, 120) + "..." : url}
+              </p>
             </div>
           </button>
         ) : (
