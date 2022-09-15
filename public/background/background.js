@@ -53,5 +53,22 @@ const handleCreateBookmark = async (id, bookmarkInfo) => {
   }
 };
 
+const handleMoveBookmark = async (id, moveInfo) => {
+  console.log("Bookmark moved");
+  const isInExtFolders = await isBookmarkInExtensionFolders(moveInfo);
+  const isInToolbar = await isBookmarkinToolbar(moveInfo);
+  console.log("Move destination is toolbar: ", isInToolbar);
+  console.log("Move destination is ext folders", isInExtFolders);
+
+  if (!isInExtFolders && !isInToolbar) {
+    const uncategorizedId = await getUncategorizedId();
+    await browser.bookmarks.move(id, {
+      parentId: uncategorizedId,
+    });
+    console.log("Moved bookmark to uncategorized ");
+  }
+};
+
 browser.bookmarks.onCreated.addListener(handleCreateBookmark);
+browser.bookmarks.onMoved.addListener(handleMoveBookmark);
 browser.runtime.onInstalled.addListener(handleInstalled);
