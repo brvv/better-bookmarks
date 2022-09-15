@@ -1,6 +1,5 @@
 export const getIcon = async (url: string): Promise<string> => {
   const urlObj = new URL(url);
-  console.log("Trying to get icon from", urlObj.hostname);
 
   let duckDuckGoIconUrl = `https://icons.duckduckgo.com/ip3/${urlObj.hostname}.ico`;
 
