@@ -31,7 +31,6 @@ export const NewFolderButton: React.FC<Props> = ({ handleCreateNewFolder }) => {
     setIsEditingActive(() => true);
   };
 
-  // dnd-kit bugs when Link is used in place of a button, so I use a button for now
   return (
     <div className="" onClick={enableEditor} ref={newButtonContainerRef}>
       {isEditingActive ? (

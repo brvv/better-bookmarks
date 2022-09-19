@@ -23,8 +23,6 @@ export const Bookmark: React.FC<Props> = ({
   dragTransform,
   isBookmarkOverFolder,
 }) => {
-  //const bookmarkContainerRef = useRef<HTMLDivElement>(null);
-
   const [isEditingActive, setIsEditingActive] = useState(false);
   const [title, setTitle] = useState(bookmark.title);
   const [url, setUrl] = useState(bookmark.url ? bookmark.url : "");
@@ -80,9 +78,6 @@ export const Bookmark: React.FC<Props> = ({
   }, [url]);
 
   useEffect(() => {
-    //since this useeffect only calls on changes, not true to true or false to false
-    //isEditingActive is false means that it was true before useEffect is called, meaning
-    //the editor was closed
     if (!isEditingActive) {
       const newBookmark: Bookmark = {
         id: bookmark.id,
