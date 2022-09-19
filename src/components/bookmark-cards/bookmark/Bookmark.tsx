@@ -4,6 +4,7 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import "./Bookmark.css";
 import { getIcon } from "../../../api";
+import { useClickOutsideToggler } from "../../../hooks";
 
 type Props = {
   bookmark: Bookmark;
@@ -31,6 +32,12 @@ export const Bookmark: React.FC<Props> = ({
 
   const [favicon, setFavicon] = useState("");
   const [isFaviconLoaded, setIsFaviconLoaded] = useState(false);
+
+  const clickOutsideTrigger = useClickOutsideToggler(bookmarkContainerRef);
+
+  useEffect(() => {
+    setIsEditingActive(false);
+  }, [clickOutsideTrigger]);
 
   const {
     setNodeRef,
@@ -93,32 +100,6 @@ export const Bookmark: React.FC<Props> = ({
       }
     }
   }, [isEditingActive]);
-
-  const handleClickOutside = (event: MouseEvent | KeyboardEvent) => {
-    if (event instanceof KeyboardEvent) {
-      if (event.key === "Enter") {
-        setIsEditingActive(false);
-      }
-      return;
-    }
-
-    if (
-      bookmarkContainerRef &&
-      bookmarkContainerRef.current &&
-      !bookmarkContainerRef.current.contains(event.target as Node)
-    ) {
-      setIsEditingActive(false);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("click", handleClickOutside);
-    document.addEventListener("keypress", handleClickOutside);
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-      document.removeEventListener("keypress", handleClickOutside);
-    };
-  }, []);
 
   const handleToggleEditor = async () => {
     setIsEditingActive(!isEditingActive);
