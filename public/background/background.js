@@ -4,6 +4,8 @@ import {
   getUncategorizedId,
   isBookmarkInExtensionFolders,
   isBookmarkinToolbar,
+  isBookmarkInExtensionRoot,
+  isBookmarkInUncategorized,
 } from "./modules/misc.js";
 
 const IN_APP_TOOLBAR_MODIFIER = "BOOKMARK_CREATED_IN_APP";
@@ -55,15 +57,29 @@ const handleCreateBookmark = async (id, bookmarkInfo) => {
 
 const handleMoveBookmark = async (id, moveInfo) => {
   console.log("Bookmark moved");
+  console.log(moveInfo);
   const isInExtFolders = await isBookmarkInExtensionFolders(moveInfo);
   const isInToolbar = await isBookmarkinToolbar(moveInfo);
+  const isInRoot = await isBookmarkInExtensionRoot(moveInfo);
+  const isInUncategorized = await isBookmarkInUncategorized(moveInfo);
+  const bookmark = (await browser.bookmarks.get(id))[0];
   console.log("Move destination is toolbar: ", isInToolbar);
   console.log("Move destination is ext folders", isInExtFolders);
+  console.log("Is in root", isInRoot);
+  console.log(bookmark);
 
-  if (!isInExtFolders && !isInToolbar) {
+  if (
+    (!isInExtFolders && !isInToolbar) ||
+    (bookmark.type === "bookmark" && isInRoot) ||
+    (bookmark.type === "folder" && isInUncategorized)
+  ) {
     const uncategorizedId = await getUncategorizedId();
+    const rootId = await getRootId();
+
+    const newParentId = bookmark.type === "bookmark" ? uncategorizedId : rootId;
+
     await browser.bookmarks.move(id, {
-      parentId: uncategorizedId,
+      parentId: newParentId,
     });
     console.log("Moved bookmark to uncategorized ");
   }
