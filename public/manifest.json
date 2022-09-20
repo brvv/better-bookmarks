@@ -1,7 +1,7 @@
 {
   "name": "Better Bookmarks",
   "description": "A simplified interface for managing in-browser bookmarks",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "manifest_version": 2,
   "homepage_url": "https://github.com/brvv/better-bookmarks",
   "background": {
