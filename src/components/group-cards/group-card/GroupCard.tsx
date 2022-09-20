@@ -5,6 +5,7 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { CollapsableOptionsMenu } from "../../tools/CollapsableOptionsMenu/CollapsableOptionsMenu";
 import { isFolderEmpty } from "../../../api";
+import { useClickOutsideToggler } from "../../../hooks";
 
 type Props = {
   folder: BookmarkFolder;
@@ -42,11 +43,17 @@ export const GroupCard: React.FC<Props> = ({
   const [title, setTitle] = useState(folder.title);
   const [isEmpty, setIsEmpty] = useState(false);
 
+  const clickOutsideTrigger = useClickOutsideToggler(folderContainerRef);
+
   useEffect(() => {
     isFolderEmpty(folder).then((res) => {
       setIsEmpty(res);
     });
   }, []);
+
+  useEffect(() => {
+    setIsEditingActive(false);
+  }, [clickOutsideTrigger]);
 
   useEffect(() => {
     if (!isEditingActive) {
@@ -58,34 +65,8 @@ export const GroupCard: React.FC<Props> = ({
     }
   }, [isEditingActive]);
 
-  const handleClickOutside = (event: MouseEvent | KeyboardEvent) => {
-    if (event instanceof KeyboardEvent) {
-      if (event.key === "Enter") {
-        setIsEditingActive(false);
-      }
-      return;
-    }
-
-    if (
-      folderContainerRef &&
-      folderContainerRef.current &&
-      !folderContainerRef.current.contains(event.target as Node)
-    ) {
-      setIsEditingActive(false);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("click", handleClickOutside);
-    document.addEventListener("keypress", handleClickOutside);
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-      document.removeEventListener("keypress", handleClickOutside);
-    };
-  }, []);
-
   const handleToggleEditor = async () => {
-    setIsEditingActive(!isEditingActive);
+    setIsEditingActive((isEditingActive) => !isEditingActive);
   };
 
   // dnd-kit bugs when Link is used in place of a button, so I use a button for now

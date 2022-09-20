@@ -4,6 +4,7 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import "./Bookmark.css";
 import { getIcon } from "../../../api";
+import { useClickOutsideToggler } from "../../../hooks";
 
 type Props = {
   bookmark: Bookmark;
@@ -22,8 +23,6 @@ export const Bookmark: React.FC<Props> = ({
   dragTransform,
   isBookmarkOverFolder,
 }) => {
-  //const bookmarkContainerRef = useRef<HTMLDivElement>(null);
-
   const [isEditingActive, setIsEditingActive] = useState(false);
   const [title, setTitle] = useState(bookmark.title);
   const [url, setUrl] = useState(bookmark.url ? bookmark.url : "");
@@ -31,6 +30,12 @@ export const Bookmark: React.FC<Props> = ({
 
   const [favicon, setFavicon] = useState("");
   const [isFaviconLoaded, setIsFaviconLoaded] = useState(false);
+
+  const clickOutsideTrigger = useClickOutsideToggler(bookmarkContainerRef);
+
+  useEffect(() => {
+    setIsEditingActive(false);
+  }, [clickOutsideTrigger]);
 
   const {
     setNodeRef,
@@ -73,9 +78,6 @@ export const Bookmark: React.FC<Props> = ({
   }, [url]);
 
   useEffect(() => {
-    //since this useeffect only calls on changes, not true to true or false to false
-    //isEditingActive is false means that it was true before useEffect is called, meaning
-    //the editor was closed
     if (!isEditingActive) {
       const newBookmark: Bookmark = {
         id: bookmark.id,
@@ -93,32 +95,6 @@ export const Bookmark: React.FC<Props> = ({
       }
     }
   }, [isEditingActive]);
-
-  const handleClickOutside = (event: MouseEvent | KeyboardEvent) => {
-    if (event instanceof KeyboardEvent) {
-      if (event.key === "Enter") {
-        setIsEditingActive(false);
-      }
-      return;
-    }
-
-    if (
-      bookmarkContainerRef &&
-      bookmarkContainerRef.current &&
-      !bookmarkContainerRef.current.contains(event.target as Node)
-    ) {
-      setIsEditingActive(false);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("click", handleClickOutside);
-    document.addEventListener("keypress", handleClickOutside);
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-      document.removeEventListener("keypress", handleClickOutside);
-    };
-  }, []);
 
   const handleToggleEditor = async () => {
     setIsEditingActive(!isEditingActive);
