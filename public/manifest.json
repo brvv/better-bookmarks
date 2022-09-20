@@ -9,7 +9,7 @@
   },
   "browser_action": {
     "default_popup": "./popup/popup.html",
-    "default_title": "UUID Generator",
+    "default_title": "Better Bookmarks",
     "default_icon": {
       "48": "./icon.png"
     }
