@@ -19,6 +19,7 @@ export const CollapsableOptionsMenu: React.FC<Props> = ({
       {handleMoveUp && (
         <button
           className="invisible"
+          title="move up one level"
           onClick={() => {
             handleMoveUp(bookmark);
           }}
@@ -33,6 +34,7 @@ export const CollapsableOptionsMenu: React.FC<Props> = ({
       {handleDelete && (
         <button
           className="delete-button invisible"
+          title="delete"
           onClick={() => {
             handleDelete(bookmark);
           }}
@@ -43,6 +45,7 @@ export const CollapsableOptionsMenu: React.FC<Props> = ({
 
       <button
         className="edit-button visible"
+        title="edit"
         onClick={() => {
           handleToggleEditor();
         }}
