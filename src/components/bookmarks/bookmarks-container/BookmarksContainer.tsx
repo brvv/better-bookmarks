@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./BookmarkContainer.css";
+import "./BookmarksContainer.css";
 import { Bookmark } from "../bookmark/Bookmark";
 import { NewBookmarkButton } from "../new-bookmark-button/NewBookmarkButton";
 import {
@@ -19,7 +19,7 @@ type Props = {
   isBookmarkOverFolder?: boolean;
 };
 
-export const BookmarkContainer: React.FC<Props> = ({
+export const BookmarksContainer: React.FC<Props> = ({
   parentId,
   bookmarks,
   setBookmarks,

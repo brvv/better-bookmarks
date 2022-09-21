@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import "./CardContainer.css";
-import { GroupCard } from "../group-card/GroupCard";
-import { ToolbarCard } from "../toolbar-card/ToolbarCard";
+import "./FoldersContainer.css";
+import { Folder } from "../folder/Folder";
+import { ToolbarFolder } from "../toolbar-folder/ToolbarFolder";
 import { NewFolderButton } from "../new-folder-button/NewFolderButton";
 import {
   TOOLBAR_ID,
@@ -19,7 +19,7 @@ type Props = {
   bookmarkOverFolderId?: string;
 };
 
-export const CardContainer: React.FC<Props> = ({
+export const FoldersContainer: React.FC<Props> = ({
   parentId,
   folders,
   setFolders,
@@ -74,7 +74,7 @@ export const CardContainer: React.FC<Props> = ({
             strategy={undefined}
           >
             {
-              <ToolbarCard
+              <ToolbarFolder
                 key={TOOLBAR_ID}
                 name="toolbar"
                 bookmarkOverFolder={
@@ -95,7 +95,7 @@ export const CardContainer: React.FC<Props> = ({
           strategy={rectSortingStrategy}
         >
           {folders.map((folder) => (
-            <GroupCard
+            <Folder
               key={folder.id}
               folder={folder}
               handleDelete={handleDeleteFolder}

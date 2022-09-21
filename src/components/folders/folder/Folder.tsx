@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 //import { Link } from "react-router-dom";
-import "./GroupCard.css";
+import "./Folder.css";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { CollapsableOptionsMenu } from "../../tools/CollapsableOptionsMenu/CollapsableOptionsMenu";
@@ -14,7 +14,7 @@ type Props = {
   bookmarkOverFolder?: boolean;
 };
 
-export const GroupCard: React.FC<Props> = ({
+export const Folder: React.FC<Props> = ({
   folder,
   handleDelete,
   handleEdit,

@@ -1,6 +1,5 @@
-export { ToolbarCard } from "./group-cards/toolbar-card/ToolbarCard";
-export { GroupCard } from "./group-cards/group-card/GroupCard";
-export { CardContainer } from "./group-cards/card-container/CardContainer";
-export { BookmarkContainer } from "./bookmark-cards/bookmark-container/BookmarkContainer";
-export { Bookmark } from "./bookmark-cards/bookmark/Bookmark";
-export { BookmarkEditor } from "./modal/BookmarkEditor/BookmarkEditor";
+export { ToolbarFolder } from "./folders/toolbar-folder/ToolbarFolder";
+export { Folder } from "./folders/folder/Folder";
+export { FoldersContainer } from "./folders/folders-container/FoldersContainer";
+export { BookmarksContainer } from "./bookmarks/bookmarks-container/BookmarksContainer";
+export { Bookmark } from "./bookmarks/bookmark/Bookmark";

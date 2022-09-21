@@ -1,5 +1,5 @@
 import React from "react";
-import "./ToolbarCard.css";
+import "./ToolbarFolder.css";
 import { TOOLBAR_ID } from "../../../api";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
@@ -9,7 +9,7 @@ type Props = {
   bookmarkOverFolder?: boolean;
 };
 
-export const ToolbarCard: React.FC<Props> = ({
+export const ToolbarFolder: React.FC<Props> = ({
   name,
   bookmarkOverFolder,
 }: Props) => {
