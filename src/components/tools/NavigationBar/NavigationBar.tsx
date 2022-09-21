@@ -25,7 +25,7 @@ export const NavigationBar: React.FC<Props> = ({ parentId }) => {
   return (
     <div className="navigation-container">
       {currentPath.map((path) => (
-        <div className="navigation-subcontainer">
+        <div key={path.id} className="navigation-subcontainer">
           <Link
             to={(path.id ? "/folder/" : "/") + path.id}
             className="navigation-item"

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 
-export const useClickOutsideToggler = (ref: React.RefObject<any>): boolean => {
+export const useClickOutsideToggler = (
+  ref: React.RefObject<HTMLElement>
+): boolean => {
   const [toggleOnOutsideClick, setToggleOnOutsideClick] = useState(false);
 
   useEffect(() => {

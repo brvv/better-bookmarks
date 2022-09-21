@@ -34,7 +34,7 @@ export const MainPage: React.FC = () => {
 
   const [coord, setCoord] = useState({ x: 0, y: 0 });
   const [dragStartCoord, setDragStartCoord] = useState({ x: 0, y: 0 });
-  const handleMouseMove = (e: any) => {
+  const handleMouseMove = (e: React.MouseEvent) => {
     setCoord({ x: e.pageX, y: e.pageY });
   };
 
@@ -117,7 +117,7 @@ export const MainPage: React.FC = () => {
     }
 
     if (active.id !== over.id) {
-      let newBookmarks = [...bookmarks];
+      const newBookmarks = [...bookmarks];
       const oldIndex = newBookmarks.findIndex(
         (bookmark) => bookmark.id === active.id
       );
@@ -146,7 +146,7 @@ export const MainPage: React.FC = () => {
     }
 
     if (active.id !== over.id) {
-      let newFolders = [...folders];
+      const newFolders = [...folders];
       const oldIndex = newFolders.findIndex(
         (folder) => folder.id === active.id
       );
@@ -167,7 +167,7 @@ export const MainPage: React.FC = () => {
     }
 
     if (active.id !== over.id) {
-      let newBookmarks = [...bookmarks];
+      const newBookmarks = [...bookmarks];
       const bookmarkIndex = newBookmarks.findIndex(
         (bookmark) => bookmark.id === active.id
       );
