@@ -5,10 +5,8 @@ import {
   TOOLBAR_ID,
 } from "./constants";
 
-const parseFolderNode = (
-  node: browser.bookmarks.BookmarkTreeNode
-): BookmarkFolder => {
-  const folder: BookmarkFolder = {
+const parseFolderNode = (node: browser.bookmarks.BookmarkTreeNode): Folder => {
+  const folder: Folder = {
     id: node.id,
     title: node.title,
   };
@@ -48,12 +46,10 @@ const parseBookmarkNode = (
   return bookmark;
 };
 
-export const getFoldersFromParent = async (
-  id: string
-): Promise<BookmarkFolder[]> => {
+export const getFoldersFromParent = async (id: string): Promise<Folder[]> => {
   const tree = (await browser.bookmarks.getSubTree(id))[0];
   const uncategorizedId = await getUncategorizedId();
-  const folders: BookmarkFolder[] = [];
+  const folders: Folder[] = [];
   if (!tree.children) {
     return folders;
   }
@@ -167,7 +163,7 @@ export const createNewBookmark = async (
 export const createNewFolder = async (
   title: string,
   parentId: string
-): Promise<BookmarkFolder> => {
+): Promise<Folder> => {
   const rootId = await getRootId();
   const originalTitle = title ? title : "no title";
   let newTitle = title;
@@ -196,7 +192,7 @@ export const changeBookmarkIndex = async (
 };
 
 export const changeFolderIndex = async (
-  folder: BookmarkFolder,
+  folder: Folder,
   newIndex: number
 ): Promise<void> => {
   const rootId = await getRootId();
@@ -222,9 +218,7 @@ export const moveBookmark = async (bookmark: Bookmark, targetId: string) => {
   return;
 };
 
-export const isFolderEmpty = async (
-  folder: BookmarkFolder
-): Promise<boolean> => {
+export const isFolderEmpty = async (folder: Folder): Promise<boolean> => {
   const folderNode = (await browser.bookmarks.getSubTree(folder.id))[0];
   if (folderNode.children && folderNode.children?.length > 0) {
     return false;
@@ -232,7 +226,7 @@ export const isFolderEmpty = async (
   return true;
 };
 
-export const removeFolder = async (folder: BookmarkFolder): Promise<void> => {
+export const removeFolder = async (folder: Folder): Promise<void> => {
   const res = await isFolderEmpty(folder);
   if (res) {
     await browser.bookmarks.remove(folder.id);
@@ -240,9 +234,7 @@ export const removeFolder = async (folder: BookmarkFolder): Promise<void> => {
   return;
 };
 
-export const updateFolder = async (
-  folder: BookmarkFolder
-): Promise<BookmarkFolder> => {
+export const updateFolder = async (folder: Folder): Promise<Folder> => {
   const updatedFolder = await browser.bookmarks.update(folder.id, {
     title: folder.title,
   });

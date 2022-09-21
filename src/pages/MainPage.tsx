@@ -84,7 +84,7 @@ export const MainPage: React.FC = () => {
   }, [rootId]);
 
   //Folders
-  const [folders, setFolders] = useState<BookmarkFolder[]>([]);
+  const [folders, setFolders] = useState<Folder[]>([]);
   const [foldersFinishedLoading, setFoldersFinishedLoading] = useState(false);
 
   useEffect(() => {

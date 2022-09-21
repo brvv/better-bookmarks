@@ -8,9 +8,9 @@ import { isFolderEmpty } from "../../../api";
 import { useClickOutsideToggler } from "../../../hooks";
 
 type Props = {
-  folder: BookmarkFolder;
-  handleEdit: (bookmark: BookmarkFolder) => void;
-  handleDelete: (bookmark: BookmarkFolder) => void;
+  folder: Folder;
+  handleEdit: (bookmark: Folder) => void;
+  handleDelete: (bookmark: Folder) => void;
   bookmarkOverFolder?: boolean;
 };
 

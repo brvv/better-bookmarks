@@ -14,8 +14,8 @@ import { SortableContext, rectSortingStrategy } from "@dnd-kit/sortable";
 
 type Props = {
   parentId: string;
-  folders: BookmarkFolder[];
-  setFolders: React.Dispatch<React.SetStateAction<BookmarkFolder[]>>;
+  folders: Folder[];
+  setFolders: React.Dispatch<React.SetStateAction<Folder[]>>;
   bookmarkOverFolderId?: string;
 };
 
@@ -42,7 +42,7 @@ export const FoldersContainer: React.FC<Props> = ({
     setFolders([...folders, newFolder]);
   };
 
-  const handleDeleteFolder = async (target: BookmarkFolder) => {
+  const handleDeleteFolder = async (target: Folder) => {
     const isEmpty = await isFolderEmpty(target);
     if (isEmpty) {
       await removeFolder(target);
@@ -55,7 +55,7 @@ export const FoldersContainer: React.FC<Props> = ({
     }
   };
 
-  const handleEditFolder = async (newFolder: BookmarkFolder) => {
+  const handleEditFolder = async (newFolder: Folder) => {
     const updatedFolder = await updateFolder(newFolder);
     const folderIndex = folders.findIndex(
       (folder) => folder.id === newFolder.id

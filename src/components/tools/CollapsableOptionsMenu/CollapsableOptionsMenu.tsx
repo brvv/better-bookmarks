@@ -2,10 +2,10 @@ import React from "react";
 import "./CollapsableOptionsMenu.css";
 
 type Props = {
-  bookmark: Bookmark | BookmarkFolder;
+  bookmark: Bookmark | Folder;
   handleToggleEditor: () => void;
-  handleDelete?: (bookmark: Bookmark | BookmarkFolder) => void;
-  handleMoveUp?: (bookmark: Bookmark | BookmarkFolder) => void;
+  handleDelete?: (bookmark: Bookmark | Folder) => void;
+  handleMoveUp?: (bookmark: Bookmark | Folder) => void;
 };
 
 export const CollapsableOptionsMenu: React.FC<Props> = ({
