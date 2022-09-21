@@ -5,6 +5,19 @@ export const useClickOutsideToggler = (
 ): boolean => {
   const [toggleOnOutsideClick, setToggleOnOutsideClick] = useState(false);
 
+  const handleClickOutside = (event: MouseEvent | KeyboardEvent) => {
+    if (event instanceof KeyboardEvent) {
+      if (event.key === "Enter") {
+        setToggleOnOutsideClick((current) => !current);
+      }
+      return;
+    }
+
+    if (ref && ref.current && !ref.current.contains(event.target as Node)) {
+      setToggleOnOutsideClick((current) => !current);
+    }
+  };
+
   useEffect(() => {
     document.addEventListener("click", handleClickOutside);
     document.addEventListener("keypress", handleClickOutside);
@@ -13,21 +26,6 @@ export const useClickOutsideToggler = (
       document.removeEventListener("keypress", handleClickOutside);
     };
   }, []);
-
-  const handleClickOutside = (event: MouseEvent | KeyboardEvent) => {
-    if (event instanceof KeyboardEvent) {
-      if (event.key === "Enter") {
-        setToggleOnOutsideClick(
-          (toggleOnOutsideClick) => !toggleOnOutsideClick
-        );
-      }
-      return;
-    }
-
-    if (ref && ref.current && !ref.current.contains(event.target as Node)) {
-      setToggleOnOutsideClick((toggleOnOutsideClick) => !toggleOnOutsideClick);
-    }
-  };
 
   return toggleOnOutsideClick;
 };

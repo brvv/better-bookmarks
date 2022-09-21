@@ -66,7 +66,7 @@ export const GroupCard: React.FC<Props> = ({
   }, [isEditingActive]);
 
   const handleToggleEditor = async () => {
-    setIsEditingActive((isEditingActive) => !isEditingActive);
+    setIsEditingActive((current) => !current);
   };
 
   // dnd-kit bugs when Link is used in place of a button, so I use a button for now

@@ -72,8 +72,8 @@ export const MainPage: React.FC = () => {
     }
     if (isRootIdLoaded) {
       getBookmarksFromParent(rootId)
-        .then((bookmarks) => {
-          setBookmarks(bookmarks);
+        .then((newBookmarks) => {
+          setBookmarks(newBookmarks);
           setBookmarksFinishedLoading(true);
         })
         .catch((error) => {
@@ -89,8 +89,8 @@ export const MainPage: React.FC = () => {
 
   useEffect(() => {
     if (isRootIdLoaded) {
-      getFoldersFromParent(rootId).then((folders) => {
-        setFolders(folders);
+      getFoldersFromParent(rootId).then((newFolders) => {
+        setFolders(newFolders);
         setFoldersFinishedLoading(true);
       });
     }

@@ -91,7 +91,7 @@ export const CardContainer: React.FC<Props> = ({
 
       <div className="card-container">
         <SortableContext
-          items={folders.map((folders) => folders.id)}
+          items={folders.map((folder) => folder.id)}
           strategy={rectSortingStrategy}
         >
           {folders.map((folder) => (
