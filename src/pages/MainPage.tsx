@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BookmarkContainer, CardContainer } from "../components";
+import { BookmarksContainer, FoldersContainer } from "../components";
 import {
   getRootId,
   getBookmarksFromParent,
@@ -84,7 +84,7 @@ export const MainPage: React.FC = () => {
   }, [rootId]);
 
   //Folders
-  const [folders, setFolders] = useState<BookmarkFolder[]>([]);
+  const [folders, setFolders] = useState<Folder[]>([]);
   const [foldersFinishedLoading, setFoldersFinishedLoading] = useState(false);
 
   useEffect(() => {
@@ -281,7 +281,7 @@ export const MainPage: React.FC = () => {
             onDragStart={handleDragStart}
           >
             {rootId && bookmarksFinishedLoading ? (
-              <BookmarkContainer
+              <BookmarksContainer
                 parentId={rootId}
                 bookmarks={bookmarks}
                 setBookmarks={setBookmarks}
@@ -295,7 +295,7 @@ export const MainPage: React.FC = () => {
               <p>Loading!</p>
             )}
             {rootId && foldersFinishedLoading ? (
-              <CardContainer
+              <FoldersContainer
                 parentId={rootId}
                 folders={folders}
                 setFolders={setFolders}

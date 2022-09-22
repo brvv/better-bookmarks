@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import "./CardContainer.css";
-import { GroupCard } from "../group-card/GroupCard";
-import { ToolbarCard } from "../toolbar-card/ToolbarCard";
+import "./FoldersContainer.css";
+import { Folder } from "../folder/Folder";
+import { ToolbarFolder } from "../toolbar-folder/ToolbarFolder";
 import { NewFolderButton } from "../new-folder-button/NewFolderButton";
 import {
   TOOLBAR_ID,
@@ -14,12 +14,12 @@ import { SortableContext, rectSortingStrategy } from "@dnd-kit/sortable";
 
 type Props = {
   parentId: string;
-  folders: BookmarkFolder[];
-  setFolders: React.Dispatch<React.SetStateAction<BookmarkFolder[]>>;
+  folders: Folder[];
+  setFolders: React.Dispatch<React.SetStateAction<Folder[]>>;
   bookmarkOverFolderId?: string;
 };
 
-export const CardContainer: React.FC<Props> = ({
+export const FoldersContainer: React.FC<Props> = ({
   parentId,
   folders,
   setFolders,
@@ -42,7 +42,7 @@ export const CardContainer: React.FC<Props> = ({
     setFolders([...folders, newFolder]);
   };
 
-  const handleDeleteFolder = async (target: BookmarkFolder) => {
+  const handleDeleteFolder = async (target: Folder) => {
     const isEmpty = await isFolderEmpty(target);
     if (isEmpty) {
       await removeFolder(target);
@@ -55,7 +55,7 @@ export const CardContainer: React.FC<Props> = ({
     }
   };
 
-  const handleEditFolder = async (newFolder: BookmarkFolder) => {
+  const handleEditFolder = async (newFolder: Folder) => {
     const updatedFolder = await updateFolder(newFolder);
     const folderIndex = folders.findIndex(
       (folder) => folder.id === newFolder.id
@@ -74,7 +74,7 @@ export const CardContainer: React.FC<Props> = ({
             strategy={undefined}
           >
             {
-              <ToolbarCard
+              <ToolbarFolder
                 key={TOOLBAR_ID}
                 name="toolbar"
                 bookmarkOverFolder={
@@ -95,7 +95,7 @@ export const CardContainer: React.FC<Props> = ({
           strategy={rectSortingStrategy}
         >
           {folders.map((folder) => (
-            <GroupCard
+            <Folder
               key={folder.id}
               folder={folder}
               handleDelete={handleDeleteFolder}

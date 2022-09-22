@@ -1,4 +1,4 @@
-type BookmarkFolder = {
+type Folder = {
   dateAdded?: Date;
   dateGroupModified?: Date;
   id: string;
