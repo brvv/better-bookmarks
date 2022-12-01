@@ -58,8 +58,7 @@ export const EditableBookmark: React.FC<Props> = ({
         <Bookmark bookmark={bookmark} />
       ) : (
         <BookmarkEditor
-          title={title}
-          url={url}
+          bookmark={{ id: bookmark.id, title: title, url: url }}
           setTitle={setTitle}
           setUrl={setUrl}
         />

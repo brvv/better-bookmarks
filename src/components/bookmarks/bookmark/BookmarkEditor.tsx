@@ -1,15 +1,13 @@
 import React, { Dispatch, SetStateAction } from "react";
 
 type Props = {
-  title: string;
-  url: string;
+  bookmark: Bookmark;
   setUrl: Dispatch<SetStateAction<string>>;
   setTitle: Dispatch<SetStateAction<string>>;
 };
 
 export const BookmarkEditor: React.FC<Props> = ({
-  title,
-  url,
+  bookmark,
   setUrl,
   setTitle,
 }: Props) => {
@@ -18,12 +16,12 @@ export const BookmarkEditor: React.FC<Props> = ({
       <div className="info-container">
         <input
           className="input-title"
-          value={title}
+          value={bookmark.title}
           onChange={(e) => setTitle((e.target as HTMLInputElement).value)}
         ></input>
         <input
           className="input-url"
-          value={url}
+          value={bookmark.url}
           onChange={(e) => setUrl((e.target as HTMLInputElement).value)}
         ></input>
       </div>
