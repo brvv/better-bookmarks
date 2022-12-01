@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./BookmarksContainer.css";
 import { Bookmark } from "../bookmark/Bookmark";
+import { SortableBookmark } from "../bookmark/wrappers/SortableBookmark";
 import { NewBookmarkButton } from "../new-bookmark-button/NewBookmarkButton";
 import {
   updateBookmark,
@@ -80,17 +81,21 @@ export const BookmarksContainer: React.FC<Props> = ({
         strategy={rectSortingStrategy}
       >
         {bookmarks.map((bookmark) => (
-          <Bookmark
-            key={bookmark.id}
+          <SortableBookmark
             bookmark={bookmark}
-            handleEdit={handleEditBookmark}
-            handleDelete={handleDeleteBookmark}
-            handleMoveUpBookmark={
-              isInRootFolder ? undefined : handleMoveUpBookmark
-            }
             dragTransform={getMouseOffset}
             isBookmarkOverFolder={isBookmarkOverFolder}
-          />
+            key={bookmark.id}
+          >
+            <Bookmark
+              bookmark={bookmark}
+              handleEdit={handleEditBookmark}
+              handleDelete={handleDeleteBookmark}
+              handleMoveUpBookmark={
+                isInRootFolder ? undefined : handleMoveUpBookmark
+              }
+            />
+          </SortableBookmark>
         ))}
       </SortableContext>
       <NewBookmarkButton
