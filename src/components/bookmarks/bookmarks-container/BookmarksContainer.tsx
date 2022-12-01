@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./BookmarksContainer.css";
-import { Bookmark } from "../bookmark/Bookmark";
+import { EditableBookmark } from "../bookmark/EditableBookmark";
 import { SortableBookmark } from "../bookmark/wrappers/SortableBookmark";
 import { NewBookmarkButton } from "../new-bookmark-button/NewBookmarkButton";
 import {
@@ -87,7 +87,7 @@ export const BookmarksContainer: React.FC<Props> = ({
             isBookmarkOverFolder={isBookmarkOverFolder}
             key={bookmark.id}
           >
-            <Bookmark
+            <EditableBookmark
               bookmark={bookmark}
               handleEdit={handleEditBookmark}
               handleDelete={handleDeleteBookmark}
