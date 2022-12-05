@@ -11,21 +11,21 @@ import {
   updateFolder,
 } from "../../../api";
 import { SortableContext, rectSortingStrategy } from "@dnd-kit/sortable";
+import { useBookmarkOverFolder } from "../../../contexts/dnd-context";
 
 type Props = {
   parentId: string;
   folders: Folder[];
   setFolders: React.Dispatch<React.SetStateAction<Folder[]>>;
-  bookmarkOverFolderId?: string;
 };
 
 export const FoldersContainer: React.FC<Props> = ({
   parentId,
   folders,
   setFolders,
-  bookmarkOverFolderId,
 }) => {
   const [renderToolbar, setRenderToolbar] = useState(true);
+  const bookmarkOverFolder = useBookmarkOverFolder();
 
   useEffect(() => {
     setRenderToolbar(() => {
@@ -78,8 +78,8 @@ export const FoldersContainer: React.FC<Props> = ({
                 key={TOOLBAR_ID}
                 name="toolbar"
                 bookmarkOverFolder={
-                  bookmarkOverFolderId &&
-                  bookmarkOverFolderId === TOOLBAR_ID + "droppable"
+                  bookmarkOverFolder &&
+                  bookmarkOverFolder.overFolderId === TOOLBAR_ID + "droppable"
                     ? true
                     : undefined
                 }
@@ -101,7 +101,8 @@ export const FoldersContainer: React.FC<Props> = ({
               handleDelete={handleDeleteFolder}
               handleEdit={handleEditFolder}
               bookmarkOverFolder={
-                bookmarkOverFolderId && bookmarkOverFolderId === folder.id
+                bookmarkOverFolder &&
+                bookmarkOverFolder.overFolderId === folder.id
                   ? true
                   : undefined
               }
