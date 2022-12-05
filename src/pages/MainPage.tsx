@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BookmarksContainer, FoldersContainer } from "../components";
+import { BookmarkSortableContainer, FoldersContainer } from "../components";
 import {
   getRootId,
   getBookmarksFromParent,
@@ -281,7 +281,7 @@ export const MainPage: React.FC = () => {
             onDragStart={handleDragStart}
           >
             {rootId && bookmarksFinishedLoading ? (
-              <BookmarksContainer
+              <BookmarkSortableContainer
                 parentId={rootId}
                 bookmarks={bookmarks}
                 setBookmarks={setBookmarks}

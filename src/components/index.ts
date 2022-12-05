@@ -1,6 +1,5 @@
-export { BookmarksContainer } from "./bookmarks";
-export { EditableBookmark } from "./bookmarks";
-export { NewBookmarkButton } from "./bookmarks";
+export { BookmarkContainer, BookmarkSortableContainer } from "./bookmarks";
+export { EditableBookmark, Bookmark } from "./bookmarks";
 
 export { ToolbarFolder } from "./folders";
 export { Folder } from "./folders";

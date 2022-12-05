@@ -3,7 +3,7 @@ import { CollapsableOptionsMenu } from "../../tools/CollapsableOptionsMenu/Colla
 import "./Bookmark.css";
 import { useClickOutsideToggler } from "../../../hooks";
 import { Bookmark } from "./Bookmark";
-import { BookmarkEditor } from "./BookmarkEditor";
+import { BookmarkEditor } from "./tools/BookmarkEditor";
 
 type Props = {
   bookmark: Bookmark;
