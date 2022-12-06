@@ -17,7 +17,7 @@ type Props = {
 type ContainerOptions = {
   disableEditing?: boolean;
   disableMoveUp?: boolean;
-  includeNewBookmarkButton?: boolean;
+  disableNewBookmarkButton?: boolean;
 };
 
 export const BookmarkSortableContainer: React.FC<Props> = ({
@@ -27,11 +27,9 @@ export const BookmarkSortableContainer: React.FC<Props> = ({
   options = {
     disableEditing: false,
     disableMoveUp: false,
-    includeNewBookmarkButton: true,
+    disableNewBookmarkButton: false,
   },
 }) => {
-  //Check if we are in the root folder of the program
-
   const {
     isInRootFolder,
     handleEditBookmark,
@@ -65,7 +63,7 @@ export const BookmarkSortableContainer: React.FC<Props> = ({
           </SortableBookmark>
         ))}
       </SortableContext>
-      {options.includeNewBookmarkButton && (
+      {!options.disableNewBookmarkButton && (
         <NewBookmarkButton
           parentId={parentId}
           handleCreateNewBookmark={handleCreateBookmark}

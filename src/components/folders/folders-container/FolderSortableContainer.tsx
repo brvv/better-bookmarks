@@ -2,10 +2,12 @@ import React from "react";
 import "./FolderContainer.css";
 import { EditableFolder } from "../folder/EditableFolder";
 import { Folder } from "../folder/Folder";
+import { ToolbarFolder } from "../toolbar-folder/ToolbarFolder";
 import { NewFolderButton } from "../new-folder-button/NewFolderButton";
 import { useFolders } from "./useFolders";
 import { SortableContext, rectSortingStrategy } from "@dnd-kit/sortable";
 import { SortableFolder } from "../folder/tools/SortableFolder";
+import { TOOLBAR_ID, TOOLBAR_TITLE } from "../../../api";
 
 type Props = {
   parentId: string;
@@ -34,7 +36,21 @@ export const FolderSortableContainer: React.FC<Props> = ({
 
   return (
     <div>
-      <div className="toolbar-container">{renderToolbar}</div>
+      <div className="toolbar-container">
+        {renderToolbar && (
+          <SortableContext
+            items={[TOOLBAR_ID + "droppable"]}
+            strategy={undefined}
+          >
+            <SortableFolder
+              key={TOOLBAR_ID + "droppable"}
+              folder={{ id: TOOLBAR_ID + "droppable", title: TOOLBAR_TITLE }}
+            >
+              <ToolbarFolder name="toolbar" />
+            </SortableFolder>
+          </SortableContext>
+        )}
+      </div>
 
       <SortableContext
         items={folders.map((folderInfo) => folderInfo.id)}
