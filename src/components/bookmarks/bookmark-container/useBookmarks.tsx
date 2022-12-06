@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from "react";
-import "./BookmarksContainer.css";
-import { Bookmark } from "../bookmark/Bookmark";
-import { NewBookmarkButton } from "../new-bookmark-button/NewBookmarkButton";
+import React, { useState, useEffect } from "react";
+
 import {
   updateBookmark,
   removeBookmark,
@@ -9,33 +7,23 @@ import {
   getRootId,
   createNewBookmark,
 } from "../../../api";
-import { SortableContext, rectSortingStrategy } from "@dnd-kit/sortable";
 
 type Props = {
   parentId: string;
   bookmarks: Bookmark[];
   setBookmarks: React.Dispatch<React.SetStateAction<Bookmark[]>>;
-  getMouseOffset: { x: number; y: number };
-  isBookmarkOverFolder?: boolean;
 };
 
-export const BookmarksContainer: React.FC<Props> = ({
-  parentId,
-  bookmarks,
-  setBookmarks,
-  getMouseOffset,
-  isBookmarkOverFolder,
-}) => {
+export const useBookmarks = ({ parentId, bookmarks, setBookmarks }: Props) => {
   const [isInRootFolder, setIsInRootFolder] = useState(false);
 
-  //Check if we are in the root folder of the program
   useEffect(() => {
     getRootId().then((id) => {
       setIsInRootFolder(parentId === id);
     });
   }, [parentId]);
 
-  const handleEditBookmark = async (newBookmark: Bookmark) => {
+  const handleEditBookmark = async (newBookmark: Bookmark): Promise<void> => {
     const updatedBookmark = await updateBookmark(newBookmark);
     const bookmarkIndex = bookmarks.findIndex(
       (bookmark) => bookmark.id === newBookmark.id
@@ -73,30 +61,11 @@ export const BookmarksContainer: React.FC<Props> = ({
     setBookmarks([...bookmarks, result]);
   };
 
-  return (
-    <div className="bookmark-container">
-      <SortableContext
-        items={bookmarks.map((bookmark) => bookmark.id)}
-        strategy={rectSortingStrategy}
-      >
-        {bookmarks.map((bookmark) => (
-          <Bookmark
-            key={bookmark.id}
-            bookmark={bookmark}
-            handleEdit={handleEditBookmark}
-            handleDelete={handleDeleteBookmark}
-            handleMoveUpBookmark={
-              isInRootFolder ? undefined : handleMoveUpBookmark
-            }
-            dragTransform={getMouseOffset}
-            isBookmarkOverFolder={isBookmarkOverFolder}
-          />
-        ))}
-      </SortableContext>
-      <NewBookmarkButton
-        parentId={parentId}
-        handleCreateNewBookmark={handleCreateBookmark}
-      />
-    </div>
-  );
+  return {
+    isInRootFolder,
+    handleEditBookmark,
+    handleDeleteBookmark,
+    handleMoveUpBookmark,
+    handleCreateBookmark,
+  };
 };
