@@ -10,7 +10,7 @@ import {
 } from "../../api";
 import { useParams } from "react-router-dom";
 import { INVALID_ROUTER_PAGES } from "../../api/constants";
-import { NavigationBar } from "../../components/tools/NavigationBar/NavigationBar";
+import { NavBar } from "../../components/tools/NavigationBar/NavBar";
 import { DragDropProvider } from "../../contexts/dnd-context";
 
 export const Main: React.FC = () => {
@@ -74,9 +74,7 @@ export const Main: React.FC = () => {
         <div>This is a wrong page, idk why u are here</div>
       ) : (
         <div>
-          {rootId && isRootIdLoaded && (
-            <NavigationBar parentId={rootId}></NavigationBar>
-          )}
+          {rootId && isRootIdLoaded && <NavBar parentId={rootId} />}
           <DragDropProvider
             bookmarks={bookmarks}
             setBookmarks={setBookmarks}
