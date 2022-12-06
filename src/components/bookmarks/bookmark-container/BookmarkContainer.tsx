@@ -40,10 +40,11 @@ export const BookmarkContainer: React.FC<Props> = ({
 
   return (
     <div className="bookmark-container">
-      {bookmarks.map((bookmarkInfo) =>
-        options.disableEditing ? (
+      {bookmarks.map((bookmarkInfo) => (
+        <div key={bookmarkInfo.id}>
+          options.disableEditing ? (
           <Bookmark bookmark={bookmarkInfo} />
-        ) : (
+          ) : (
           <EditableBookmark
             bookmark={bookmarkInfo}
             handleEdit={handleEditBookmark}
@@ -54,8 +55,9 @@ export const BookmarkContainer: React.FC<Props> = ({
                 : handleMoveUpBookmark
             }
           />
-        )
-      )}
+          )
+        </div>
+      ))}
       {options.includeNewBookmarkButton && (
         <NewBookmarkButton
           parentId={parentId}

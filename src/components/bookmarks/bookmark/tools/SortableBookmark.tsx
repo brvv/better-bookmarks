@@ -45,9 +45,17 @@ export const SortableBookmark: React.FC<Props> = ({ bookmark, children }) => {
       x: 0,
       y: 0,
       scaleX:
-        bookmarkOverFolder && bookmarkOverFolder.isBookmarkOverFolder ? 0.8 : 1,
+        isDragging &&
+        bookmarkOverFolder &&
+        bookmarkOverFolder.isBookmarkOverFolder
+          ? 0.8
+          : 1,
       scaleY:
-        bookmarkOverFolder && bookmarkOverFolder.isBookmarkOverFolder ? 0.8 : 1,
+        isDragging &&
+        bookmarkOverFolder &&
+        bookmarkOverFolder.isBookmarkOverFolder
+          ? 0.8
+          : 1,
     }),
   };
 

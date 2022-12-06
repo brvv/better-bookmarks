@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { BookmarkSortableContainer, FoldersContainer } from "../../components";
+import {
+  BookmarkSortableContainer,
+  FolderSortableContainer,
+} from "../../components";
 import {
   getRootId,
   getBookmarksFromParent,
@@ -90,7 +93,7 @@ export const Main: React.FC = () => {
               <p>Loading!</p>
             )}
             {rootId && foldersFinishedLoading ? (
-              <FoldersContainer
+              <FolderSortableContainer
                 parentId={rootId}
                 folders={folders}
                 setFolders={setFolders}
