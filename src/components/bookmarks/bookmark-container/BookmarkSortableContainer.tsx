@@ -6,10 +6,6 @@ import { SortableBookmark } from "../bookmark/tools/SortableBookmark";
 import { NewBookmarkButton } from "../new-bookmark-button/NewBookmarkButton";
 import { SortableContext, rectSortingStrategy } from "@dnd-kit/sortable";
 import { useBookmarks } from "./useBookmarks";
-import {
-  useBookmarkOverFolder,
-  useMouseOffset,
-} from "../../../contexts/dnd-context";
 
 type Props = {
   parentId: string;
@@ -40,9 +36,6 @@ export const BookmarkSortableContainer: React.FC<Props> = ({
     handleCreateBookmark,
   } = useBookmarks({ parentId, bookmarks, setBookmarks });
 
-  const bookmarkOverFolder = useBookmarkOverFolder();
-  const mouseOffset = useMouseOffset();
-
   return (
     <div className="bookmark-container">
       <SortableContext
@@ -50,16 +43,7 @@ export const BookmarkSortableContainer: React.FC<Props> = ({
         strategy={rectSortingStrategy}
       >
         {bookmarks.map((bookmarkInfo) => (
-          <SortableBookmark
-            bookmark={bookmarkInfo}
-            dragTransform={mouseOffset === null ? { x: 0, y: 0 } : mouseOffset}
-            isBookmarkOverFolder={
-              bookmarkOverFolder === null
-                ? false
-                : bookmarkOverFolder.isBookmarkOverFolder
-            }
-            key={bookmarkInfo.id}
-          >
+          <SortableBookmark bookmark={bookmarkInfo} key={bookmarkInfo.id}>
             {options.disableEditing ? (
               <Bookmark bookmark={bookmarkInfo} />
             ) : (

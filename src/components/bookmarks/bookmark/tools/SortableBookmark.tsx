@@ -2,19 +2,17 @@ import React from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
+import {
+  useBookmarkOverFolder,
+  useMouseOffset,
+} from "../../../../contexts/dnd-context";
+
 type Props = {
   bookmark: Bookmark;
-  dragTransform?: { x: number; y: number };
-  isBookmarkOverFolder?: boolean;
   children: React.ReactNode;
 };
 
-export const SortableBookmark: React.FC<Props> = ({
-  bookmark,
-  dragTransform,
-  isBookmarkOverFolder,
-  children,
-}) => {
+export const SortableBookmark: React.FC<Props> = ({ bookmark, children }) => {
   const {
     setNodeRef,
     attributes,
@@ -24,13 +22,16 @@ export const SortableBookmark: React.FC<Props> = ({
     isDragging,
   } = useSortable({ id: bookmark.id });
 
+  const bookmarkOverFolder = useBookmarkOverFolder();
+  const mouseOffset = useMouseOffset();
+
   const style = {
     transition,
     transform:
-      isDragging && dragTransform
+      isDragging && mouseOffset
         ? CSS.Transform.toString({
-            x: dragTransform.x,
-            y: dragTransform.y,
+            x: mouseOffset.x,
+            y: mouseOffset.y,
             scaleX: 1,
             scaleY: 1,
           })
@@ -43,8 +44,10 @@ export const SortableBookmark: React.FC<Props> = ({
     transform: CSS.Transform.toString({
       x: 0,
       y: 0,
-      scaleX: isBookmarkOverFolder && isDragging ? 0.8 : 1,
-      scaleY: isBookmarkOverFolder && isDragging ? 0.8 : 1,
+      scaleX:
+        bookmarkOverFolder && bookmarkOverFolder.isBookmarkOverFolder ? 0.8 : 1,
+      scaleY:
+        bookmarkOverFolder && bookmarkOverFolder.isBookmarkOverFolder ? 0.8 : 1,
     }),
   };
 
