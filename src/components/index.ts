@@ -7,4 +7,4 @@ export { FolderSortableContainer } from "./folders";
 export { NewFolderButton } from "./folders";
 
 export { CollapsableOptionsMenu } from "./tools";
-export { NavigationBar } from "./tools";
+export { NavBar } from "./tools";
