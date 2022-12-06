@@ -1,44 +1,41 @@
-import React, { useEffect, useState } from "react";
-import { BookmarksContainer, FoldersContainer } from "../components";
-import {
-  getRootId,
-  getBookmarksFromParent,
-  getFoldersFromParent,
-  changeBookmarkIndex,
-  changeFolderIndex,
-  moveBookmark,
-  TOOLBAR_ID,
-} from "../api";
-import { useParams } from "react-router-dom";
+import React, { useState } from "react";
+
 import {
   closestCenter,
   pointerWithin,
   Collision,
-  DndContext,
   MouseSensor,
   useSensor,
   DragEndEvent,
   DragOverEvent,
   DragStartEvent,
 } from "@dnd-kit/core";
+import {
+  changeBookmarkIndex,
+  changeFolderIndex,
+  moveBookmark,
+  TOOLBAR_ID,
+} from "../../api";
 import { arrayMove } from "@dnd-kit/sortable";
-import { INVALID_ROUTER_PAGES } from "../api/constants";
-import { NavigationBar } from "../components/tools/NavigationBar/NavigationBar";
 
-export const MainPage: React.FC = () => {
-  const params = useParams();
-  const [rootId, setRootId] = useState("");
-  const [isRootIdLoaded, setIsRootIdLoaded] = useState(false);
+type Props = {
+  bookmarks: Bookmark[];
+  setBookmarks: React.Dispatch<React.SetStateAction<Bookmark[]>>;
+  folders: Folder[];
+  setFolders: React.Dispatch<React.SetStateAction<Folder[]>>;
+  mouseCoord: { x: number; y: number };
+};
+
+export const useDragDrop = ({
+  bookmarks,
+  setBookmarks,
+  folders,
+  setFolders,
+  mouseCoord,
+}: Props) => {
   const [isBookmarkOverFolder, setIsBookmarkOverFolder] = useState(false);
   const [overFolderId, setOverFolderId] = useState("");
-
-  const [coord, setCoord] = useState({ x: 0, y: 0 });
   const [dragStartCoord, setDragStartCoord] = useState({ x: 0, y: 0 });
-  const handleMouseMove = (e: React.MouseEvent) => {
-    setCoord({ x: e.pageX, y: e.pageY });
-  };
-
-  const [isInvalidPage, setIsInvalidPage] = useState(false);
 
   const sensors = [
     useSensor(MouseSensor, {
@@ -47,54 +44,6 @@ export const MainPage: React.FC = () => {
       },
     }),
   ];
-
-  useEffect(() => {
-    if (params.folderId) {
-      setRootId(params.folderId);
-      setIsRootIdLoaded(true);
-    } else {
-      getRootId().then((id) => {
-        setRootId(id);
-        setIsRootIdLoaded(true);
-      });
-    }
-  }, [params]);
-
-  //Bookmarks
-  const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
-  const [bookmarksFinishedLoading, setBookmarksFinishedLoading] =
-    useState(false);
-
-  useEffect(() => {
-    if (INVALID_ROUTER_PAGES.includes(rootId)) {
-      setIsInvalidPage(true);
-      return;
-    }
-    if (isRootIdLoaded) {
-      getBookmarksFromParent(rootId)
-        .then((newBookmarks) => {
-          setBookmarks(newBookmarks);
-          setBookmarksFinishedLoading(true);
-        })
-        .catch((error) => {
-          console.log(error);
-          setIsInvalidPage(true);
-        });
-    }
-  }, [rootId]);
-
-  //Folders
-  const [folders, setFolders] = useState<Folder[]>([]);
-  const [foldersFinishedLoading, setFoldersFinishedLoading] = useState(false);
-
-  useEffect(() => {
-    if (isRootIdLoaded) {
-      getFoldersFromParent(rootId).then((newFolders) => {
-        setFolders(newFolders);
-        setFoldersFinishedLoading(true);
-      });
-    }
-  }, [rootId]);
 
   const getIdCategory = (id: string): "Bookmark" | "Folder" | void => {
     if (bookmarks.findIndex((bookmark) => bookmark.id === id) !== -1) {
@@ -259,58 +208,21 @@ export const MainPage: React.FC = () => {
 
   const handleDragStart = async (event?: DragStartEvent) => {
     if (event) {
-      setDragStartCoord(coord);
+      setDragStartCoord(mouseCoord);
     }
   };
 
-  return (
-    <div className="App" onMouseMove={handleMouseMove}>
-      {isInvalidPage ? (
-        <div>This is a wrong page, idk why u are here</div>
-      ) : (
-        <div>
-          {rootId && isRootIdLoaded && (
-            <NavigationBar parentId={rootId}></NavigationBar>
-          )}
-
-          <DndContext
-            sensors={sensors}
-            collisionDetection={customCollisionDetectionAlgorithm}
-            onDragEnd={handleDragEnd}
-            onDragOver={handleDragOver}
-            onDragStart={handleDragStart}
-          >
-            {rootId && bookmarksFinishedLoading ? (
-              <BookmarksContainer
-                parentId={rootId}
-                bookmarks={bookmarks}
-                setBookmarks={setBookmarks}
-                getMouseOffset={{
-                  x: coord.x - dragStartCoord.x,
-                  y: coord.y - dragStartCoord.y,
-                }}
-                isBookmarkOverFolder={isBookmarkOverFolder}
-              />
-            ) : (
-              <p>Loading!</p>
-            )}
-            {rootId && foldersFinishedLoading ? (
-              <FoldersContainer
-                parentId={rootId}
-                folders={folders}
-                setFolders={setFolders}
-                bookmarkOverFolderId={
-                  isBookmarkOverFolder && overFolderId
-                    ? overFolderId
-                    : undefined
-                }
-              />
-            ) : (
-              <p>Loading!</p>
-            )}
-          </DndContext>
-        </div>
-      )}
-    </div>
-  );
+  return {
+    isBookmarkOverFolder,
+    overFolderId,
+    mouseOffset: {
+      x: mouseCoord.x - dragStartCoord.x,
+      y: mouseCoord.y - dragStartCoord.y,
+    },
+    sensors,
+    handleDragEnd,
+    handleDragOver,
+    handleDragStart,
+    customCollisionDetectionAlgorithm,
+  };
 };

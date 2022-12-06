@@ -18,6 +18,7 @@ export {
 export { getUncategorizedId, getRootId } from "./storage";
 export {
   TOOLBAR_ID,
+  TOOLBAR_TITLE,
   MENU_ID,
   UNCATEGORIZED_NAME_BASE,
   STORAGE_ROOT_KEY,

@@ -1,4 +1,5 @@
 export const TOOLBAR_ID = "toolbar_____";
+export const TOOLBAR_TITLE = "Bookmarks Toolbar";
 export const MENU_ID = "menu________";
 export const UNCATEGORIZED_NAME_BASE =
   "DO_NOT_DELETE-BetterBookmarks-Uncategorized";
