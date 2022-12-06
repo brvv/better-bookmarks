@@ -24,7 +24,11 @@ export const BookmarkSortableContainer: React.FC<Props> = ({
   parentId,
   bookmarks,
   setBookmarks,
-  options = { disableEditing: false, disableMoveUp: false },
+  options = {
+    disableEditing: false,
+    disableMoveUp: false,
+    includeNewBookmarkButton: true,
+  },
 }) => {
   //Check if we are in the root folder of the program
 
