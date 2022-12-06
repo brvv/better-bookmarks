@@ -8,6 +8,7 @@
   color: black;
   padding: 1rem;
   min-height: 6rem;
+  max-height: 6rem;
   border-radius: 4px;
   box-shadow: 0 0 5px hsl(0, 0%, 62.4%);
   justify-content: center;
@@ -16,6 +17,7 @@
   text-align: center;
   width: 100%;
   transition: 0.3s;
+  overflow: hidden;
 }
 
 .group-card:hover,
