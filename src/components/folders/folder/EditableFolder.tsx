@@ -52,7 +52,10 @@ export const EditableFolder: React.FC<Props> = ({
     <div>
       <div ref={folderContainerRef} className="group-card-container">
         {isEditingActive ? (
-          <FolderEditor folder={folder} setTitle={setTitle} />
+          <FolderEditor
+            folder={{ id: folder.id, title: title }}
+            setTitle={setTitle}
+          />
         ) : (
           <Folder folder={folder} />
         )}
