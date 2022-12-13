@@ -1,43 +1,42 @@
 import React, { useContext, useState } from "react";
-import { useDragDrop } from "./useDragDrop";
-import { DndContext } from "@dnd-kit/core";
+import { useDragDrop, DraggedOverItem } from "./useDragDrop";
+import {
+  DndContext,
+  DragEndEvent,
+  DragOverEvent,
+  DragStartEvent,
+} from "@dnd-kit/core";
 
 type MouseOffsetType = {
   x: number;
   y: number;
 };
 
-type BookmarkOverFolderType = {
-  isBookmarkOverFolder: boolean;
-  overFolderId: string;
-};
-
 type Props = {
-  bookmarks: Bookmark[];
-  setBookmarks: React.Dispatch<React.SetStateAction<Bookmark[]>>;
-  folders: Folder[];
-  setFolders: React.Dispatch<React.SetStateAction<Folder[]>>;
   children: React.ReactNode;
+  onDragStart(event: DragStartEvent): undefined;
+  onDragOver(event: DragOverEvent): undefined;
+  onDragEnd(event: DragEndEvent): undefined;
 };
 
 const MouseOffsetContext = React.createContext<MouseOffsetType | null>(null);
-const BookmarkOverFolderContext =
-  React.createContext<BookmarkOverFolderType | null>(null);
+const DraggedOverItemContext = React.createContext<DraggedOverItem | null>(
+  null
+);
 
 export const useMouseOffset = () => {
   return useContext(MouseOffsetContext);
 };
 
-export const useBookmarkOverFolder = () => {
-  return useContext(BookmarkOverFolderContext);
+export const useDraggedOverItem = () => {
+  return useContext(DraggedOverItemContext);
 };
 
-export const DragDropProvider = ({
-  bookmarks,
-  setBookmarks,
-  folders,
-  setFolders,
+export const DragDropContext = ({
   children,
+  onDragStart,
+  onDragOver,
+  onDragEnd,
 }: Props) => {
   const [mouseCoord, setMouseCoord] = useState({ x: 0, y: 0 });
   const handleMouseMove = (e: React.MouseEvent) => {
@@ -45,20 +44,18 @@ export const DragDropProvider = ({
   };
 
   const {
-    isBookmarkOverFolder,
-    overFolderId,
+    draggedOverItem,
     mouseOffset,
     sensors,
     handleDragEnd,
     handleDragOver,
     handleDragStart,
-    customCollisionDetectionAlgorithm,
+    compoundCollisionDetection,
   } = useDragDrop({
-    bookmarks,
-    setBookmarks,
-    folders,
-    setFolders,
     mouseCoord,
+    onDragStart,
+    onDragOver,
+    onDragEnd,
   });
 
   return (
@@ -66,16 +63,14 @@ export const DragDropProvider = ({
       <MouseOffsetContext.Provider value={mouseOffset}>
         <DndContext
           sensors={sensors}
-          collisionDetection={customCollisionDetectionAlgorithm}
+          collisionDetection={compoundCollisionDetection}
           onDragEnd={handleDragEnd}
           onDragOver={handleDragOver}
           onDragStart={handleDragStart}
         >
-          <BookmarkOverFolderContext.Provider
-            value={{ isBookmarkOverFolder, overFolderId }}
-          >
+          <DraggedOverItemContext.Provider value={draggedOverItem}>
             {children}
-          </BookmarkOverFolderContext.Provider>
+          </DraggedOverItemContext.Provider>
         </DndContext>
       </MouseOffsetContext.Provider>
     </div>
