@@ -1,6 +1,6 @@
-const separator = "&";
+import { GeneratedId } from "./types";
 
-export type GeneratedId = string;
+const separator = "&";
 
 const isNumericDigit = (c: string) => {
   if (c.length !== 1) {

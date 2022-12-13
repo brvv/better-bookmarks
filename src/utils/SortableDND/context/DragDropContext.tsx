@@ -1,16 +1,12 @@
 import React, { useContext, useState } from "react";
-import { useDragDrop, DraggedOverItem } from "./useDragDrop";
+import { useDragDrop } from "./useDragDrop";
 import {
   DndContext,
   DragEndEvent,
   DragOverEvent,
   DragStartEvent,
 } from "@dnd-kit/core";
-
-type MouseOffset = {
-  x: number;
-  y: number;
-};
+import { MouseOffset, DraggedOverItem } from "../types";
 
 type Props = {
   children: React.ReactNode;

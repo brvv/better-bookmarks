@@ -9,19 +9,15 @@ import {
   DragOverEvent,
   DragStartEvent,
   rectIntersection,
-  UniqueIdentifier,
 } from "@dnd-kit/core";
+
+import { DraggedOverItem } from "../types";
 
 type Props = {
   mouseCoord: { x: number; y: number };
   onDragStart?(event: DragStartEvent): undefined;
   onDragOver?(event: DragOverEvent): undefined;
   onDragEnd?(event: DragEndEvent): undefined;
-};
-
-export type DraggedOverItem = {
-  id: UniqueIdentifier;
-  data: any;
 };
 
 export const useDragDrop = ({
