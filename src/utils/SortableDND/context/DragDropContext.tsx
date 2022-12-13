@@ -7,7 +7,7 @@ import {
   DragStartEvent,
 } from "@dnd-kit/core";
 
-type MouseOffsetType = {
+type MouseOffset = {
   x: number;
   y: number;
 };
@@ -19,7 +19,7 @@ type Props = {
   onDragEnd(event: DragEndEvent): undefined;
 };
 
-const MouseOffsetContext = React.createContext<MouseOffsetType | null>(null);
+const MouseOffsetContext = React.createContext<MouseOffset | null>(null);
 const DraggedOverItemContext = React.createContext<DraggedOverItem | null>(
   null
 );
