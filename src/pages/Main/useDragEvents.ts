@@ -5,10 +5,10 @@ import { InteractableItem } from "../../api/enums";
 import { SortableItemData } from "../../utils/SortableDND/types";
 import { arrayMove } from "@dnd-kit/sortable";
 import {
-  areItemsMovable,
-  getContainerByItem,
-  getItemIndexInContainer,
-  areItemsCombinable,
+  canMove,
+  findContainerFromItem,
+  findItemIndex,
+  canCombine,
 } from "./utils";
 
 //TODO: come up with generic type for items that has a mandatory id: Bookmark and Folder will extend it
@@ -24,45 +24,45 @@ export type SortableArray = {
 
 export const useDragEvents = ({ sortableContainers }: Props) => {
   //TODO: Add api call integration
-  const handleItemMove = (
+  const moveItems = (
     activeData: SortableItemData,
     overData: SortableItemData
   ) => {
-    if (!areItemsMovable(activeData, overData)) {
+    if (!canMove(activeData, overData)) {
       return;
     }
-    const container = getContainerByItem(activeData, sortableContainers);
-    const activeIndex = getItemIndexInContainer(activeData, container);
-    const overIndex = getItemIndexInContainer(overData, container);
-    const newItems = [...container.items];
-    const reorderedItems = arrayMove(newItems, activeIndex, overIndex);
+    const container = findContainerFromItem(activeData, sortableContainers);
+    const activeIndex = findItemIndex(activeData, container);
+    const overIndex = findItemIndex(overData, container);
+    const itemsCopy = [...container.items];
+    const reorderedItems = arrayMove(itemsCopy, activeIndex, overIndex);
     container.setItems(reorderedItems);
   };
 
   //TODO: Add api call integration
-  const handleItemCombine = (
+  const combineItems = (
     activeData: SortableItemData,
     overData: SortableItemData
   ) => {
-    if (!areItemsCombinable(activeData, overData)) {
+    if (!canCombine(activeData, overData)) {
       return;
     }
 
-    const container = getContainerByItem(activeData, sortableContainers);
-    const activeIndex = getItemIndexInContainer(activeData, container);
-    const newItems = [...container.items];
-    newItems.splice(activeIndex, 1);
-    container.setItems(newItems);
+    const container = findContainerFromItem(activeData, sortableContainers);
+    const activeIndex = findItemIndex(activeData, container);
+    const itemsCopy = [...container.items];
+    itemsCopy.splice(activeIndex, 1);
+    container.setItems(itemsCopy);
   };
 
   const handleDragEnd = (
     activeData: SortableItemData,
     overData: SortableItemData
   ) => {
-    if (areItemsMovable(activeData, overData)) {
-      handleItemMove(activeData, overData);
-    } else if (areItemsCombinable(activeData, overData)) {
-      handleItemCombine(activeData, overData);
+    if (canMove(activeData, overData)) {
+      moveItems(activeData, overData);
+    } else if (canCombine(activeData, overData)) {
+      combineItems(activeData, overData);
     }
   };
 

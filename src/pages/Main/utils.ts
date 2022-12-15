@@ -1,14 +1,14 @@
 import { SortableItemData } from "../../utils/SortableDND/types";
 import { SortableArray } from "./useDragEvents";
 
-export const areItemsMovable = (
+export const canMove = (
   activeData: SortableItemData,
   overData: SortableItemData
 ) => {
   return activeData.type === overData.type;
 };
 
-export const areItemsCombinable = (
+export const canCombine = (
   activeData: SortableItemData,
   overData: SortableItemData
 ) => {
@@ -18,7 +18,7 @@ export const areItemsCombinable = (
   );
 };
 
-export const getContainerByItem = (
+export const findContainerFromItem = (
   item: SortableItemData,
   sortableContainers: SortableArray[]
 ): SortableArray => {
@@ -28,7 +28,7 @@ export const getContainerByItem = (
   return sortableContainers[index];
 };
 
-export const getItemIndexInContainer = (
+export const findItemIndex = (
   target: SortableItemData,
   container: SortableArray
 ) => {
