@@ -2,10 +2,12 @@ import React from "react";
 import "./BookmarkContainer.css";
 import { EditableBookmark } from "../bookmark/EditableBookmark";
 import { Bookmark } from "../bookmark/Bookmark";
-import { SortableBookmark } from "../bookmark/tools/SortableBookmark";
 import { NewBookmarkButton } from "../new-bookmark-button/NewBookmarkButton";
 import { SortableContext, rectSortingStrategy } from "@dnd-kit/sortable";
 import { useBookmarks } from "./useBookmarks";
+import { SortableItem } from "../../../utils/SortableDND";
+import { generateItemId } from "../../../utils/SortableDND";
+import { InteractableItem } from "../../../api/enums";
 
 type Props = {
   parentId: string;
@@ -41,11 +43,24 @@ export const BookmarkSortableContainer: React.FC<Props> = ({
   return (
     <div className="bookmark-container">
       <SortableContext
-        items={bookmarks.map((bookmark) => bookmark.id)}
+        items={bookmarks.map((bookmark) =>
+          generateItemId(bookmark.id, InteractableItem.Bookmark)
+        )}
         strategy={rectSortingStrategy}
       >
         {bookmarks.map((bookmarkInfo) => (
-          <SortableBookmark bookmark={bookmarkInfo} key={bookmarkInfo.id}>
+          <SortableItem
+            item={{
+              uniqueSortableId: generateItemId(
+                bookmarkInfo.id,
+                InteractableItem.Bookmark
+              ),
+              backendId: bookmarkInfo.id,
+              type: InteractableItem.Bookmark,
+              accepts: [InteractableItem.Bookmark],
+            }}
+            key={generateItemId(bookmarkInfo.id, InteractableItem.Bookmark)}
+          >
             {options.disableEditing ? (
               <Bookmark bookmark={bookmarkInfo} />
             ) : (
@@ -60,7 +75,7 @@ export const BookmarkSortableContainer: React.FC<Props> = ({
                 }
               />
             )}
-          </SortableBookmark>
+          </SortableItem>
         ))}
       </SortableContext>
       {!options.disableNewBookmarkButton && (

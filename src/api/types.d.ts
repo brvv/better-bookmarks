@@ -20,10 +20,3 @@ type NewBookmark = {
   title?: string;
   url: string;
 };
-
-type InteractableItem =
-  | "Bookmark"
-  | "Folder"
-  | "NavigationBarItem"
-  | "Toolbar"
-  | undefined;

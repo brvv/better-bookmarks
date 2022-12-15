@@ -1,10 +1,10 @@
 import React from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { useStyle } from "./useStyle";
-import { ItemInfo } from "../types";
+import { SortableItemData } from "../types";
 
 type Props = {
-  item: ItemInfo;
+  item: SortableItemData;
   children: React.ReactNode;
 };
 
@@ -18,7 +18,7 @@ export const SortableItem: React.FC<Props> = ({ item, children }) => {
     isDragging,
   } = useSortable({
     id: item.uniqueSortableId,
-    data: { type: item.type, accepts: item.accepts },
+    data: { type: item.type, accepts: item.accepts, backendId: item.backendId },
   });
 
   const { mainStyle, scaleDownStyle } = useStyle(item, {

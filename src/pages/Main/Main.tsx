@@ -10,8 +10,9 @@ import {
 } from "../../api";
 import { useParams } from "react-router-dom";
 import { INVALID_ROUTER_PAGES } from "../../api/constants";
-import { NavBar } from "../../components/tools/NavigationBar/NavBar";
-import { DragDropProvider } from "../../contexts/dnd-context";
+import { DragDropContext } from "../../utils/SortableDND";
+import { useDragEvents } from "./useDragEvents";
+import { InteractableItem } from "../../api/enums";
 
 export const Main: React.FC = () => {
   const params = useParams();
@@ -68,18 +69,31 @@ export const Main: React.FC = () => {
     }
   }, [rootId]);
 
+  const { onDragStart, onDragOver, onDragEnd } = useDragEvents({
+    sortableContainers: [
+      {
+        type: InteractableItem.Bookmark,
+        items: bookmarks,
+        setItems: setBookmarks,
+      },
+      {
+        type: InteractableItem.Folder,
+        items: folders,
+        setItems: setFolders,
+      },
+    ],
+  });
+
   return (
     <div className="App">
       {isInvalidPage ? (
         <div>This is a wrong page, idk why u are here</div>
       ) : (
         <div>
-          {rootId && isRootIdLoaded && <NavBar parentId={rootId} />}
-          <DragDropProvider
-            bookmarks={bookmarks}
-            setBookmarks={setBookmarks}
-            folders={folders}
-            setFolders={setFolders}
+          <DragDropContext
+            customDragStartAction={onDragStart}
+            customDragOverAction={onDragOver}
+            customDragEndAction={onDragEnd}
           >
             {rootId && bookmarksFinishedLoading ? (
               <BookmarkSortableContainer
@@ -99,7 +113,7 @@ export const Main: React.FC = () => {
             ) : (
               <p>Loading!</p>
             )}
-          </DragDropProvider>
+          </DragDropContext>
         </div>
       )}
     </div>

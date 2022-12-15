@@ -2,12 +2,12 @@ import React from "react";
 import "./FolderContainer.css";
 import { EditableFolder } from "../folder/EditableFolder";
 import { Folder } from "../folder/Folder";
-import { ToolbarFolder } from "../toolbar-folder/ToolbarFolder";
 import { NewFolderButton } from "../new-folder-button/NewFolderButton";
 import { useFolders } from "./useFolders";
 import { SortableContext, rectSortingStrategy } from "@dnd-kit/sortable";
-import { SortableFolder } from "../folder/tools/SortableFolder";
-import { TOOLBAR_ID, TOOLBAR_TITLE } from "../../../api";
+import { SortableItem } from "../../../utils/SortableDND";
+import { generateItemId } from "../../../utils/SortableDND";
+import { InteractableItem } from "../../../api/enums";
 
 type Props = {
   parentId: string;
@@ -27,38 +27,31 @@ export const FolderSortableContainer: React.FC<Props> = ({
   setFolders,
   options = { disableEditing: false, includeNewFolderButton: true },
 }) => {
-  const {
-    renderToolbar,
-    handleCreateNewFolder,
-    handleDeleteFolder,
-    handleEditFolder,
-  } = useFolders({ parentId, folders, setFolders });
+  const { handleCreateNewFolder, handleDeleteFolder, handleEditFolder } =
+    useFolders({ parentId, folders, setFolders });
 
   return (
     <div>
-      <div className="toolbar-container">
-        {renderToolbar && (
-          <SortableContext
-            items={[TOOLBAR_ID + "droppable"]}
-            strategy={undefined}
-          >
-            <SortableFolder
-              key={TOOLBAR_ID + "droppable"}
-              folder={{ id: TOOLBAR_ID + "droppable", title: TOOLBAR_TITLE }}
-            >
-              <ToolbarFolder name="toolbar" />
-            </SortableFolder>
-          </SortableContext>
-        )}
-      </div>
-
       <SortableContext
-        items={folders.map((folderInfo) => folderInfo.id)}
+        items={folders.map((folderInfo) =>
+          generateItemId(folderInfo.id, InteractableItem.Folder)
+        )}
         strategy={rectSortingStrategy}
       >
         <div className="card-container">
           {folders.map((folderInfo) => (
-            <SortableFolder folder={folderInfo} key={folderInfo.id}>
+            <SortableItem
+              item={{
+                uniqueSortableId: generateItemId(
+                  folderInfo.id,
+                  InteractableItem.Folder
+                ),
+                backendId: folderInfo.id,
+                type: InteractableItem.Folder,
+                accepts: [InteractableItem.Folder, InteractableItem.Bookmark],
+              }}
+              key={generateItemId(folderInfo.id, InteractableItem.Folder)}
+            >
               {options.disableEditing ? (
                 <Folder folder={folderInfo} />
               ) : (
@@ -68,7 +61,7 @@ export const FolderSortableContainer: React.FC<Props> = ({
                   handleDelete={handleDeleteFolder}
                 />
               )}
-            </SortableFolder>
+            </SortableItem>
           ))}
           {!options.disableNewFolderButton && (
             <NewFolderButton handleCreateNewFolder={handleCreateNewFolder} />

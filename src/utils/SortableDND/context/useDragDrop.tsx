@@ -15,16 +15,16 @@ import { DraggedOverItem } from "../types";
 
 type Props = {
   mouseCoord: { x: number; y: number };
-  onDragStart?(event: DragStartEvent): undefined;
-  onDragOver?(event: DragOverEvent): undefined;
-  onDragEnd?(event: DragEndEvent): undefined;
+  customDragStartAction?(event: DragStartEvent): undefined;
+  customDragOverAction?(event: DragOverEvent): undefined;
+  customDragEndAction?(event: DragEndEvent): undefined;
 };
 
 export const useDragDrop = ({
   mouseCoord,
-  onDragStart,
-  onDragOver,
-  onDragEnd,
+  customDragStartAction,
+  customDragOverAction,
+  customDragEndAction,
 }: Props) => {
   const [draggedOverItem, setDraggedOverItem] =
     useState<DraggedOverItem | null>(null);
@@ -51,8 +51,8 @@ export const useDragDrop = ({
     if (event) {
       setDragStartCoord(mouseCoord);
     }
-    if (onDragStart) {
-      onDragStart(event);
+    if (customDragStartAction) {
+      customDragStartAction(event);
     }
   };
 
@@ -65,21 +65,26 @@ export const useDragDrop = ({
     const { active } = event;
     setDraggedOverItem({ id: active.id, data: active.data.current });
 
-    if (onDragOver) {
-      onDragOver(event);
+    if (customDragOverAction) {
+      customDragOverAction(event);
     }
   };
 
   const handleDragEnd = async (event: DragEndEvent) => {
+    console.log("Drag ended");
+    console.log("Event: ", event);
     const { active, over } = event;
-
-    if (!active || !over) {
+    if (!active || !over || active.id === over.id) {
+      console.log("Exited here!");
+      setDraggedOverItem(null);
       return;
     }
 
     setDraggedOverItem(null);
-    if (onDragEnd) {
-      onDragEnd(event);
+    if (customDragEndAction) {
+      console.log("Here!");
+      customDragEndAction(event);
+      console.log(customDragEndAction, event);
     }
   };
 

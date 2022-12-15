@@ -1,10 +1,11 @@
 import { CSS } from "@dnd-kit/utilities";
 import { useDraggedOverItem, useMouseOffset } from "../context/DragDropContext";
-import { ItemInfo, TransformInfo } from "../types";
+import { SortableItemData, SortableTransformData } from "../types";
+import { InteractableItem } from "../../../api/enums";
 
 export const useStyle = (
-  item: ItemInfo,
-  { transform, transition, isDragging }: TransformInfo
+  item: SortableItemData,
+  { transform, transition, isDragging }: SortableTransformData
 ) => {
   const draggedOverItem = useDraggedOverItem();
   const mouseOffset = useMouseOffset();
@@ -23,16 +24,6 @@ export const useStyle = (
     opacity: isDragging ? 0.5 : 1,
   };
 
-  const FolderMoveStyle = {
-    transition,
-    transform: CSS.Transform.toString(transform),
-    opacity: isDragging ? 0.5 : 1,
-    backgroundColor:
-      draggedOverItem && draggedOverItem.id === item.uniqueSortableId
-        ? "rgba(128, 128, 128, 0.162)"
-        : "transparent",
-  };
-
   const BookmarkScaleDownStyle = {
     transition: "transform 200ms ease-in-out",
     transform: CSS.Transform.toString({
@@ -43,11 +34,26 @@ export const useStyle = (
     }),
   };
 
+  const FolderMoveStyle = {
+    transition,
+    transform: CSS.Transform.toString(transform),
+    opacity: isDragging ? 0.5 : 1,
+    backgroundColor:
+      draggedOverItem && draggedOverItem.id === item.uniqueSortableId
+        ? "rgba(128, 128, 128, 0.162)"
+        : "transparent",
+  };
+
   const FolderScaleDownStyle = {};
 
   return {
-    mainStyle: item.type === "Bookmark" ? BookmarkMoveStyle : FolderMoveStyle,
+    mainStyle:
+      item.type === InteractableItem.Bookmark
+        ? BookmarkMoveStyle
+        : FolderMoveStyle,
     scaleDownStyle:
-      item.type === "Bookmark" ? BookmarkScaleDownStyle : FolderScaleDownStyle,
+      item.type === InteractableItem.Bookmark
+        ? BookmarkScaleDownStyle
+        : FolderScaleDownStyle,
   };
 };

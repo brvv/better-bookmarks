@@ -1,4 +1,5 @@
-import { GeneratedId } from "./types";
+import { Active, Over, UniqueIdentifier } from "@dnd-kit/core";
+import { GeneratedId, SortableItemData } from "./types";
 
 const separator = "&";
 
@@ -47,4 +48,29 @@ export const parseGeneratedItemId = (generatedId: GeneratedId) => {
     return { originalId: originalId, type: type };
   }
   throw Error("wrong input");
+};
+
+const isValidData = (item: any) => {
+  return !!item.backendId && !!item.type && !!item.accepts;
+};
+
+const isValidId = (itemId: UniqueIdentifier) => {
+  return !!parseGeneratedItemId(String(itemId));
+};
+
+export const getSortableItemData = (
+  item: Active | Over | null
+): SortableItemData | undefined => {
+  if (item == null) {
+    return;
+  }
+  const rawData = item.data.current;
+  if (isValidId(item.id) && !!rawData && isValidData(rawData)) {
+    return {
+      uniqueSortableId: item.id as GeneratedId,
+      backendId: rawData.backendId,
+      type: rawData.type,
+      accepts: rawData.accepts,
+    };
+  }
 };

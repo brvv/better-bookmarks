@@ -10,9 +10,9 @@ import { MouseOffset, DraggedOverItem } from "../types";
 
 type Props = {
   children: React.ReactNode;
-  onDragStart(event: DragStartEvent): undefined;
-  onDragOver(event: DragOverEvent): undefined;
-  onDragEnd(event: DragEndEvent): undefined;
+  customDragStartAction(event: DragStartEvent): undefined;
+  customDragOverAction(event: DragOverEvent): undefined;
+  customDragEndAction(event: DragEndEvent): undefined;
 };
 
 const MouseOffsetContext = React.createContext<MouseOffset | null>(null);
@@ -30,9 +30,9 @@ export const useDraggedOverItem = () => {
 
 export const DragDropContext = ({
   children,
-  onDragStart,
-  onDragOver,
-  onDragEnd,
+  customDragStartAction,
+  customDragOverAction,
+  customDragEndAction,
 }: Props) => {
   const [mouseCoord, setMouseCoord] = useState({ x: 0, y: 0 });
   const handleMouseMove = (e: React.MouseEvent) => {
@@ -43,15 +43,14 @@ export const DragDropContext = ({
     draggedOverItem,
     mouseOffset,
     sensors,
-    handleDragEnd,
     handleDragOver,
     handleDragStart,
     compoundCollisionDetection,
   } = useDragDrop({
     mouseCoord,
-    onDragStart,
-    onDragOver,
-    onDragEnd,
+    customDragStartAction,
+    customDragOverAction,
+    customDragEndAction,
   });
 
   return (
@@ -60,7 +59,7 @@ export const DragDropContext = ({
         <DndContext
           sensors={sensors}
           collisionDetection={compoundCollisionDetection}
-          onDragEnd={handleDragEnd}
+          onDragEnd={customDragEndAction}
           onDragOver={handleDragOver}
           onDragStart={handleDragStart}
         >
