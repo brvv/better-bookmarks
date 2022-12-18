@@ -20,3 +20,8 @@ type NewBookmark = {
   title?: string;
   url: string;
 };
+
+type NewFolder = {
+  parentId: string;
+  title: string;
+};

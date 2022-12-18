@@ -3,7 +3,7 @@ import "./BookmarkContainer.css";
 import { EditableBookmark } from "../bookmark/EditableBookmark";
 import { Bookmark } from "../bookmark/Bookmark";
 import { NewBookmarkButton } from "../new-bookmark-button/NewBookmarkButton";
-import { useBookmarks } from "./useBookmarks";
+import { useBookmarkActions } from "../../../hooks/Bookmarks/useBookmarkActions";
 
 type Props = {
   parentId: string;
@@ -30,13 +30,8 @@ export const BookmarkContainer: React.FC<Props> = ({
 }) => {
   //Check if we are in the root folder of the program
 
-  const {
-    isInRootFolder,
-    handleEditBookmark,
-    handleDeleteBookmark,
-    handleMoveUpBookmark,
-    handleCreateBookmark,
-  } = useBookmarks({ parentId, bookmarks, setBookmarks });
+  const { handleCreate, handleDelete, handleEdit, handleMoveUp } =
+    useBookmarkActions({ bookmarks, setBookmarks });
 
   return (
     <div className="bookmark-container">
@@ -47,12 +42,10 @@ export const BookmarkContainer: React.FC<Props> = ({
           ) : (
           <EditableBookmark
             bookmark={bookmarkInfo}
-            handleEdit={handleEditBookmark}
-            handleDelete={handleDeleteBookmark}
+            handleEdit={handleEdit}
+            handleDelete={handleDelete}
             handleMoveUpBookmark={
-              isInRootFolder && !options.disableMoveUp
-                ? undefined
-                : handleMoveUpBookmark
+              !parentId || options.disableMoveUp ? undefined : handleMoveUp
             }
           />
           )
@@ -61,7 +54,7 @@ export const BookmarkContainer: React.FC<Props> = ({
       {!options.disableNewBookmarkButton && (
         <NewBookmarkButton
           parentId={parentId}
-          handleCreateNewBookmark={handleCreateBookmark}
+          handleCreateNewBookmark={handleCreate}
         />
       )}
     </div>

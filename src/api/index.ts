@@ -1,21 +1,3 @@
-//functions
-export {
-  getFoldersFromParent,
-  getBookmarksFromParent,
-  updateBookmark,
-  removeBookmark,
-  moveUpBookmark,
-  createNewBookmark,
-  createNewFolder,
-  changeBookmarkIndex,
-  changeFolderIndex,
-  moveBookmark,
-  isFolderEmpty,
-  removeFolder,
-  updateFolder,
-  getFolderPath,
-} from "./bookmarks";
-export { getUncategorizedId, getRootId } from "./storage";
 export {
   TOOLBAR_ID,
   TOOLBAR_TITLE,
@@ -25,4 +7,4 @@ export {
   STORAGE_UNCATEGORIZED_KEY,
   IN_APP_TOOLBAR_MODIFIER,
 } from "./constants";
-export { getIcon } from "./utility";
+export { getIcon } from "./Requests/getIcon";

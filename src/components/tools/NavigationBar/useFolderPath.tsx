@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getFolderPath } from "../../../api";
+import { getFolderPath } from "../../../api/Bookmarks";
 
 export const useFolderPath = (parentId: string) => {
   const [folderPath, setFolderPath] = useState([{ title: "root", id: "" }]);

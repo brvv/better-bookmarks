@@ -3,10 +3,14 @@ import "./NewFolderButton.css";
 import { useClickOutsideToggler } from "../../../hooks";
 
 type Props = {
-  handleCreateNewFolder: (folderTitle: string) => void;
+  parentId: string;
+  handleCreateNewFolder: (folderTitle: NewFolder) => void;
 };
 
-export const NewFolderButton: React.FC<Props> = ({ handleCreateNewFolder }) => {
+export const NewFolderButton: React.FC<Props> = ({
+  parentId,
+  handleCreateNewFolder,
+}) => {
   const defaultTitleValue = "";
 
   const [title, setTitle] = useState("");
@@ -21,7 +25,7 @@ export const NewFolderButton: React.FC<Props> = ({ handleCreateNewFolder }) => {
   useEffect(() => {
     if (!isEditingActive) {
       if (title && handleCreateNewFolder) {
-        handleCreateNewFolder(title);
+        handleCreateNewFolder({ parentId, title });
         setTitle(defaultTitleValue);
       }
     }

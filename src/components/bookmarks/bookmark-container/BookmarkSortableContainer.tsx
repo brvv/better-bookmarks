@@ -4,10 +4,10 @@ import { EditableBookmark } from "../bookmark/EditableBookmark";
 import { Bookmark } from "../bookmark/Bookmark";
 import { NewBookmarkButton } from "../new-bookmark-button/NewBookmarkButton";
 import { SortableContext, rectSortingStrategy } from "@dnd-kit/sortable";
-import { useBookmarks } from "./useBookmarks";
 import { SortableItem } from "../../../utils/SortableDND";
 import { generateItemId } from "../../../utils/SortableDND";
 import { InteractableItem } from "../../../api/enums";
+import { useBookmarkActions } from "../../../hooks/Bookmarks/useBookmarkActions";
 
 type Props = {
   parentId: string;
@@ -32,13 +32,8 @@ export const BookmarkSortableContainer: React.FC<Props> = ({
     disableNewBookmarkButton: false,
   },
 }) => {
-  const {
-    isInRootFolder,
-    handleEditBookmark,
-    handleDeleteBookmark,
-    handleMoveUpBookmark,
-    handleCreateBookmark,
-  } = useBookmarks({ parentId, bookmarks, setBookmarks });
+  const { handleCreate, handleDelete, handleEdit, handleMoveUp } =
+    useBookmarkActions({ bookmarks, setBookmarks });
 
   return (
     <div className="bookmark-container">
@@ -66,12 +61,10 @@ export const BookmarkSortableContainer: React.FC<Props> = ({
             ) : (
               <EditableBookmark
                 bookmark={bookmarkInfo}
-                handleEdit={handleEditBookmark}
-                handleDelete={handleDeleteBookmark}
+                handleEdit={handleEdit}
+                handleDelete={handleDelete}
                 handleMoveUpBookmark={
-                  isInRootFolder && !options.disableMoveUp
-                    ? undefined
-                    : handleMoveUpBookmark
+                  !parentId || options.disableMoveUp ? undefined : handleMoveUp
                 }
               />
             )}
@@ -81,7 +74,7 @@ export const BookmarkSortableContainer: React.FC<Props> = ({
       {!options.disableNewBookmarkButton && (
         <NewBookmarkButton
           parentId={parentId}
-          handleCreateNewBookmark={handleCreateBookmark}
+          handleCreateNewBookmark={handleCreate}
         />
       )}
     </div>

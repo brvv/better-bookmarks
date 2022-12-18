@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./Folder.css";
 import { CollapsableOptionsMenu } from "../../tools/CollapsableOptionsMenu/CollapsableOptionsMenu";
-import { isFolderEmpty } from "../../../api";
+import { isFolderEmpty } from "../../../api/Bookmarks";
 import { useClickOutsideToggler } from "../../../hooks";
 import { FolderEditor } from "./tools/FolderEditor";
 import { Folder } from "./Folder";

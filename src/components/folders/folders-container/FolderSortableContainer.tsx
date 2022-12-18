@@ -3,11 +3,11 @@ import "./FolderContainer.css";
 import { EditableFolder } from "../folder/EditableFolder";
 import { Folder } from "../folder/Folder";
 import { NewFolderButton } from "../new-folder-button/NewFolderButton";
-import { useFolders } from "./useFolders";
 import { SortableContext, rectSortingStrategy } from "@dnd-kit/sortable";
 import { SortableItem } from "../../../utils/SortableDND";
 import { generateItemId } from "../../../utils/SortableDND";
 import { InteractableItem } from "../../../api/enums";
+import { useFolderActions } from "../../../hooks/Folders/useFolderActions";
 
 type Props = {
   parentId: string;
@@ -27,8 +27,10 @@ export const FolderSortableContainer: React.FC<Props> = ({
   setFolders,
   options = { disableEditing: false, includeNewFolderButton: true },
 }) => {
-  const { handleCreateNewFolder, handleDeleteFolder, handleEditFolder } =
-    useFolders({ parentId, folders, setFolders });
+  const { handleCreate, handleDelete, handleEdit } = useFolderActions({
+    folders,
+    setFolders,
+  });
 
   return (
     <div>
@@ -57,14 +59,17 @@ export const FolderSortableContainer: React.FC<Props> = ({
               ) : (
                 <EditableFolder
                   folder={folderInfo}
-                  handleEdit={handleEditFolder}
-                  handleDelete={handleDeleteFolder}
+                  handleEdit={handleEdit}
+                  handleDelete={handleDelete}
                 />
               )}
             </SortableItem>
           ))}
           {!options.disableNewFolderButton && (
-            <NewFolderButton handleCreateNewFolder={handleCreateNewFolder} />
+            <NewFolderButton
+              handleCreateNewFolder={handleCreate}
+              parentId={parentId}
+            />
           )}
         </div>
       </SortableContext>
