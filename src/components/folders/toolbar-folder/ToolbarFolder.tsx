@@ -1,14 +1,12 @@
 import React from "react";
 import "./ToolbarFolder.css";
-import { TOOLBAR_ID } from "../../../api";
 
 type Props = {
+  id: string;
   name?: string;
 };
 
-export const ToolbarFolder: React.FC<Props> = ({ name }: Props) => {
-  const id = TOOLBAR_ID;
-
+export const ToolbarFolder: React.FC<Props> = ({ id, name }: Props) => {
   return (
     <button
       className="toolbar-card"

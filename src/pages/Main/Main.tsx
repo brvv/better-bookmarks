@@ -10,6 +10,8 @@ import { useRouterFolderId } from "../../hooks/useRouterFolderId";
 import { InteractableItem } from "../../api/enums";
 import { useBookmarks } from "../../hooks/Bookmarks/useBookmarks";
 import { useFolders } from "../../hooks/Folders/useFolders";
+import { TOOLBAR_ID } from "../../api";
+import { DroppableToolbarContainer } from "../../components/folders";
 
 export const Main: React.FC = () => {
   const params = useParams();
@@ -57,6 +59,7 @@ export const Main: React.FC = () => {
             ) : (
               <p>Loading!</p>
             )}
+            <DroppableToolbarContainer toolbarId={TOOLBAR_ID} name="TOOLBAR" />
             {folderId && folders ? (
               <FolderSortableContainer
                 parentId={folderId}
