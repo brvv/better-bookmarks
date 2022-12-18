@@ -9,6 +9,7 @@ import {
   DragOverEvent,
   DragStartEvent,
   rectIntersection,
+  Active,
 } from "@dnd-kit/core";
 
 import { DraggedOverItem } from "../types";
@@ -38,12 +39,32 @@ export const useDragDrop = ({
     }),
   ];
 
+  const isValidRectCollision = (
+    active: Active,
+    collision: Collision
+  ): boolean => {
+    const activeType = active.data?.current?.type;
+    if (activeType) {
+      const collisionType =
+        collision.data?.droppableContainer?.data?.current?.type;
+      if (collisionType && collisionType !== activeType) {
+        return false;
+      }
+    }
+    return true;
+  };
+
   const compoundCollisionDetection = (args: any): Collision[] => {
     const pointerCollisions = pointerWithin(args);
     if (pointerCollisions.length > 0) {
       return pointerCollisions;
     }
     const rectCollisions = rectIntersection(args);
+    if (args.active) {
+      return rectCollisions.filter((collision) =>
+        isValidRectCollision(args.active, collision)
+      );
+    }
     return rectCollisions;
   };
 
@@ -71,20 +92,15 @@ export const useDragDrop = ({
   };
 
   const handleDragEnd = async (event: DragEndEvent) => {
-    console.log("Drag ended");
-    console.log("Event: ", event);
     const { active, over } = event;
     if (!active || !over || active.id === over.id) {
-      console.log("Exited here!");
       setDraggedOverItem(null);
       return;
     }
 
     setDraggedOverItem(null);
     if (customDragEndAction) {
-      console.log("Here!");
       customDragEndAction(event);
-      console.log(customDragEndAction, event);
     }
   };
 

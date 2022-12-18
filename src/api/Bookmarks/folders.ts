@@ -105,9 +105,7 @@ export const changeIndex = async (
   const folderNode = (await browser.bookmarks.get(folder.id))[0];
   const rootId = await getRootId();
   if (folderNode.parentId === rootId) {
-    console.log("the move is in the root");
     newIndex += 1;
   }
-  console.log("New index is", newIndex);
   await browser.bookmarks.move(folder.id, { index: newIndex });
 };

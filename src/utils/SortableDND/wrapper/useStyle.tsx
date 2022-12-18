@@ -9,7 +9,7 @@ export const useStyle = (
 ) => {
   const draggedOverItem = useDraggedOverItem();
   const mouseOffset = useMouseOffset();
-  console.log(draggedOverItem?.data.type);
+
   const BookmarkMoveStyle = {
     transition,
     transform:

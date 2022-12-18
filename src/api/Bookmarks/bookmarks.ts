@@ -97,7 +97,6 @@ export const changeIndex = async (
 export const move = async (bookmark: Bookmark, targetId: string) => {
   const rootId = await getRootId();
   const uncategorizedId = await getUncategorizedId();
-  console.log("Moving bookmark", bookmark.title, "to", targetId);
 
   if (targetId === rootId || bookmark.parentId == rootId) {
     await browser.bookmarks.move(bookmark.id, { parentId: uncategorizedId });
