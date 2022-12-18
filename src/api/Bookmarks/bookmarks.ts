@@ -91,10 +91,6 @@ export const changeIndex = async (
   bookmark: Bookmark,
   newIndex: number
 ): Promise<void> => {
-  if (!bookmark.parentId) {
-    return;
-  }
-
   await browser.bookmarks.move(bookmark.id, { index: newIndex });
 };
 

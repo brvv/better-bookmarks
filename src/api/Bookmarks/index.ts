@@ -16,3 +16,4 @@ export {
   getPath as getFolderPath,
   changeIndex as changeFolderIndex,
 } from "./folders";
+export { combineItems, moveItems } from "./utils";

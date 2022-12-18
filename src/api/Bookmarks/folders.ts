@@ -102,12 +102,12 @@ export const changeIndex = async (
   folder: Folder,
   newIndex: number
 ): Promise<void> => {
-  if (!folder.parentId) {
-    return;
-  }
+  const folderNode = (await browser.bookmarks.get(folder.id))[0];
   const rootId = await getRootId();
-  if (folder.parentId === rootId) {
+  if (folderNode.parentId === rootId) {
+    console.log("the move is in the root");
     newIndex += 1;
   }
+  console.log("New index is", newIndex);
   await browser.bookmarks.move(folder.id, { index: newIndex });
 };
