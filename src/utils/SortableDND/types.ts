@@ -15,7 +15,6 @@ export type SortableTransformData = {
   isDragging: boolean;
 };
 
-//TODO: data should be ItemData?
 export type DraggedOverItem = {
   id: UniqueIdentifier;
   data: any;

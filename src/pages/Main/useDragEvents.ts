@@ -15,7 +15,6 @@ import {
   combineItems as backendCombineItems,
 } from "../../api/Bookmarks";
 
-//TODO: come up with generic type for items that has a mandatory id: Bookmark and Folder will extend it
 type Props = {
   sortableContainers: SortableArray[];
 };
@@ -27,7 +26,6 @@ export type SortableArray = {
 };
 
 export const useDragEvents = ({ sortableContainers }: Props) => {
-  //TODO: Add api call integration
   const moveItems = (
     activeData: SortableItemData,
     overData: SortableItemData
@@ -44,7 +42,6 @@ export const useDragEvents = ({ sortableContainers }: Props) => {
     backendMoveItems(activeData, overIndex);
   };
 
-  //TODO: Add api call integration
   const combineItems = (
     activeData: SortableItemData,
     overData: SortableItemData
