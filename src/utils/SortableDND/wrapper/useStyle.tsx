@@ -9,7 +9,7 @@ export const useStyle = (
 ) => {
   const draggedOverItem = useDraggedOverItem();
   const mouseOffset = useMouseOffset();
-
+  console.log(draggedOverItem?.data.type);
   const BookmarkMoveStyle = {
     transition,
     transform:
@@ -29,8 +29,22 @@ export const useStyle = (
     transform: CSS.Transform.toString({
       x: 0,
       y: 0,
-      scaleX: isDragging && draggedOverItem ? 0.8 : 1,
-      scaleY: isDragging && draggedOverItem ? 0.8 : 1,
+      scaleX:
+        isDragging &&
+        draggedOverItem &&
+        draggedOverItem.data.accepts &&
+        draggedOverItem.data.accepts.includes(item.type) &&
+        draggedOverItem.data.type !== item.type
+          ? 0.8
+          : 1,
+      scaleY:
+        isDragging &&
+        draggedOverItem &&
+        draggedOverItem.data.accepts &&
+        draggedOverItem.data.accepts.includes(item.type) &&
+        draggedOverItem.data.type !== item.type
+          ? 0.8
+          : 1,
     }),
   };
 

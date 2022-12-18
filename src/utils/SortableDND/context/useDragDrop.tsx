@@ -62,8 +62,8 @@ export const useDragDrop = ({
       return;
     }
 
-    const { active } = event;
-    setDraggedOverItem({ id: active.id, data: active.data.current });
+    const { over } = event;
+    setDraggedOverItem({ id: over.id, data: over.data.current });
 
     if (customDragOverAction) {
       customDragOverAction(event);
