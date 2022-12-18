@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./BookmarkContainer.css";
 import { EditableBookmark } from "../bookmark/EditableBookmark";
 import { Bookmark } from "../bookmark/Bookmark";
@@ -17,23 +17,29 @@ type Props = {
 };
 
 type ContainerOptions = {
-  disableEditing?: boolean;
-  disableMoveUp?: boolean;
-  disableNewBookmarkButton?: boolean;
+  enableEditing?: boolean;
+  enableMoveUp?: boolean;
+  enableNewBookmarkButton?: boolean;
+};
+
+const defaultOptions = {
+  enableEditing: true,
+  enableMoveUp: true,
+  enableNewBookmarkButton: true,
 };
 
 export const BookmarkSortableContainer: React.FC<Props> = ({
   parentId,
   bookmarks,
   setBookmarks,
-  options = {
-    disableEditing: false,
-    disableMoveUp: false,
-    disableNewBookmarkButton: false,
-  },
+  options,
 }) => {
   const { handleCreate, handleDelete, handleEdit, handleMoveUp } =
     useBookmarkActions({ bookmarks, setBookmarks });
+
+  const [combinedOptions] = useState(
+    Object.assign({}, defaultOptions, options)
+  );
 
   return (
     <div className="bookmark-container">
@@ -56,22 +62,22 @@ export const BookmarkSortableContainer: React.FC<Props> = ({
             }}
             key={generateItemId(bookmarkInfo.id, InteractableItem.Bookmark)}
           >
-            {options.disableEditing ? (
-              <Bookmark bookmark={bookmarkInfo} />
-            ) : (
+            {combinedOptions.enableEditing ? (
               <EditableBookmark
                 bookmark={bookmarkInfo}
                 handleEdit={handleEdit}
                 handleDelete={handleDelete}
                 handleMoveUpBookmark={
-                  !parentId || options.disableMoveUp ? undefined : handleMoveUp
+                  combinedOptions.enableMoveUp ? handleMoveUp : undefined
                 }
               />
+            ) : (
+              <Bookmark bookmark={bookmarkInfo} />
             )}
           </SortableItem>
         ))}
       </SortableContext>
-      {!options.disableNewBookmarkButton && (
+      {combinedOptions.enableNewBookmarkButton && (
         <NewBookmarkButton
           parentId={parentId}
           handleCreateNewBookmark={handleCreate}

@@ -13,7 +13,7 @@ import { useFolders } from "../../hooks/Folders/useFolders";
 
 export const Main: React.FC = () => {
   const params = useParams();
-  const { folderId, isValid } = useRouterFolderId(params.folderId);
+  const { folderId, isValid, isRoot } = useRouterFolderId(params.folderId);
   const { bookmarks, setBookmarks } = useBookmarks({
     folderId,
   });
@@ -52,6 +52,7 @@ export const Main: React.FC = () => {
                 parentId={folderId}
                 bookmarks={bookmarks}
                 setBookmarks={setBookmarks}
+                options={{ enableMoveUp: !isRoot }}
               />
             ) : (
               <p>Loading!</p>

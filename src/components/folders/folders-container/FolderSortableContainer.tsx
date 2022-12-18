@@ -17,15 +17,15 @@ type Props = {
 };
 
 type ContainerOptions = {
-  disableEditing?: boolean;
-  disableNewFolderButton?: boolean;
+  enableEditing?: boolean;
+  enableNewFolderButton?: boolean;
 };
 
 export const FolderSortableContainer: React.FC<Props> = ({
   parentId,
   folders,
   setFolders,
-  options = { disableEditing: false, includeNewFolderButton: true },
+  options = { enableEditing: true, enableNewFolderButton: true },
 }) => {
   const { handleCreate, handleDelete, handleEdit } = useFolderActions({
     folders,
@@ -54,18 +54,18 @@ export const FolderSortableContainer: React.FC<Props> = ({
               }}
               key={generateItemId(folderInfo.id, InteractableItem.Folder)}
             >
-              {options.disableEditing ? (
-                <Folder folder={folderInfo} />
-              ) : (
+              {options.enableEditing ? (
                 <EditableFolder
                   folder={folderInfo}
                   handleEdit={handleEdit}
                   handleDelete={handleDelete}
                 />
+              ) : (
+                <Folder folder={folderInfo} />
               )}
             </SortableItem>
           ))}
-          {!options.disableNewFolderButton && (
+          {options.enableNewFolderButton && (
             <NewFolderButton
               handleCreateNewFolder={handleCreate}
               parentId={parentId}
