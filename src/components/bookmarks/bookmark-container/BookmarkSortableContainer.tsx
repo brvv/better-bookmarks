@@ -1,13 +1,11 @@
 import React, { useState } from "react";
 import "./BookmarkContainer.css";
-import { EditableBookmark } from "../bookmark/EditableBookmark";
-import { Bookmark } from "../bookmark/Bookmark";
 import { NewBookmarkButton } from "../new-bookmark-button/NewBookmarkButton";
 import { SortableContext, rectSortingStrategy } from "@dnd-kit/sortable";
-import { SortableItem } from "../../../utils/SortableDND";
 import { generateItemId } from "../../../utils/SortableDND";
 import { InteractableItem } from "../../../api/enums";
 import { useBookmarkActions } from "../../../hooks/Bookmarks/useBookmarkActions";
+import { SortableBookmark } from "../bookmark/SortableBookmark";
 
 type Props = {
   parentId: string;
@@ -50,31 +48,16 @@ export const BookmarkSortableContainer: React.FC<Props> = ({
         strategy={rectSortingStrategy}
       >
         {bookmarks.map((bookmarkInfo) => (
-          <SortableItem
-            item={{
-              uniqueSortableId: generateItemId(
-                bookmarkInfo.id,
-                InteractableItem.Bookmark
-              ),
-              backendId: bookmarkInfo.id,
-              type: InteractableItem.Bookmark,
-              accepts: [InteractableItem.Bookmark],
-            }}
+          <SortableBookmark
             key={generateItemId(bookmarkInfo.id, InteractableItem.Bookmark)}
-          >
-            {combinedOptions.enableEditing ? (
-              <EditableBookmark
-                bookmark={bookmarkInfo}
-                handleEdit={handleEdit}
-                handleDelete={handleDelete}
-                handleMoveUpBookmark={
-                  combinedOptions.enableMoveUp ? handleMoveUp : undefined
-                }
-              />
-            ) : (
-              <Bookmark bookmark={bookmarkInfo} />
-            )}
-          </SortableItem>
+            editable={combinedOptions.enableEditing}
+            bookmark={bookmarkInfo}
+            handleEdit={handleEdit}
+            handleDelete={handleDelete}
+            handleMoveUp={
+              combinedOptions.enableMoveUp ? handleMoveUp : undefined
+            }
+          />
         ))}
       </SortableContext>
       {combinedOptions.enableNewBookmarkButton && (
