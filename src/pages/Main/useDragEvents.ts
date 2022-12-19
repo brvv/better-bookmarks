@@ -50,12 +50,15 @@ export const useDragEvents = ({ sortableContainers }: Props) => {
       return;
     }
 
-    const container = findContainerFromItem(activeData, sortableContainers);
-    const activeIndex = findItemIndex(activeData, container);
-    const itemsCopy = [...container.items];
-    itemsCopy.splice(activeIndex, 1);
-    container.setItems(itemsCopy);
-    backendCombineItems(activeData, overData);
+    backendCombineItems(activeData, overData).then((res) => {
+      if (res) {
+        const container = findContainerFromItem(activeData, sortableContainers);
+        const activeIndex = findItemIndex(activeData, container);
+        const itemsCopy = [...container.items];
+        itemsCopy.splice(activeIndex, 1);
+        container.setItems(itemsCopy);
+      }
+    });
   };
 
   const handleDragEnd = (
