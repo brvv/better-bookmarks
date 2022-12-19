@@ -32,6 +32,7 @@ export const DroppableToolbarContainer: React.FC<Props> = ({
               accepts: [InteractableItem.Bookmark],
             }}
             key={generateItemId(toolbarId, InteractableItem.Toolbar)}
+            disableDragging={true}
           >
             <ToolbarFolder id={toolbarId} name={name} />
           </SortableItem>

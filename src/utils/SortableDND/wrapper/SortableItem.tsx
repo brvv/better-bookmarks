@@ -6,9 +6,14 @@ import { SortableItemData } from "../types";
 type Props = {
   item: SortableItemData;
   children: React.ReactNode;
+  disableDragging?: boolean;
 };
 
-export const SortableItem: React.FC<Props> = ({ item, children }) => {
+export const SortableItem: React.FC<Props> = ({
+  item,
+  children,
+  disableDragging,
+}) => {
   const {
     setNodeRef,
     attributes,
@@ -19,6 +24,7 @@ export const SortableItem: React.FC<Props> = ({ item, children }) => {
   } = useSortable({
     id: item.uniqueSortableId,
     data: { type: item.type, accepts: item.accepts, backendId: item.backendId },
+    disabled: disableDragging,
   });
 
   const { mainStyle, scaleDownStyle } = useStyle(item, {
