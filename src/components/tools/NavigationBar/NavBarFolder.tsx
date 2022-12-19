@@ -11,11 +11,8 @@ export const NavBarFolder: React.FC<Props> = ({ title, id }) => {
   const folderPath = () => (id ? "/folder/" : "/") + id;
 
   return (
-    <div className="navigation-subcontainer">
-      <Link to={folderPath()} className="navigation-item">
-        <div>{folderTitle()}</div>
-      </Link>
-      <div className="navigation-separator">/</div>
-    </div>
+    <Link to={folderPath()} className="navigation-item">
+      <div>{folderTitle()}</div>
+    </Link>
   );
 };

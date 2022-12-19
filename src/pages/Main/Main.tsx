@@ -12,7 +12,7 @@ import {
   SortableFolderContainer,
 } from "../../components/folders";
 import { SortableBookmarkContainer } from "../../components/bookmarks/bookmark-container";
-import { NavBar } from "../../components";
+import { DroppableNavBar } from "../../components/tools/NavigationBar/DroppableNavBar";
 
 export const Main: React.FC = () => {
   const params = useParams();
@@ -45,13 +45,12 @@ export const Main: React.FC = () => {
         <div>This is a wrong page, idk why u are here</div>
       ) : (
         <div>
-          {folderId && <NavBar parentId={folderId} />}
-
           <DragDropContext
             customDragStartAction={onDragStart}
             customDragOverAction={onDragOver}
             customDragEndAction={onDragEnd}
           >
+            {folderId && <DroppableNavBar parentId={folderId} />}
             {folderId && bookmarks ? (
               <SortableBookmarkContainer
                 parentId={folderId}
