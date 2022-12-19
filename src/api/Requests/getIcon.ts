@@ -1,20 +1,27 @@
-export const getIcon = async (url: string): Promise<string> => {
-  const urlObj = new URL(url);
-
-  let duckDuckGoIconUrl = `https://icons.duckduckgo.com/ip3/${urlObj.hostname}.ico`;
-
+const fetchImage = async (url: string): Promise<string | null> => {
   try {
-    const res = await fetch(duckDuckGoIconUrl);
+    const res = await fetch(url);
     if (res) {
       const imageBlob = await res.blob();
       const imageObjectUrl = URL.createObjectURL(imageBlob);
 
       return imageObjectUrl;
     } else {
-      console.log("Could not retrieve favicon from", duckDuckGoIconUrl);
+      console.log("Could not retrieve image from", url);
     }
   } catch (error) {
-    console.log("Could not retrieve favicon from", duckDuckGoIconUrl);
+    return null;
   }
-  return "";
+  return null;
+};
+
+export const getIcon = async (url: string): Promise<string | null> => {
+  const urlObj = new URL(url);
+
+  let duckDuckGoIconUrl = `https://icons.duckduckgo.com/ip3/${urlObj.hostname}.ico`;
+  const image = fetchImage(duckDuckGoIconUrl);
+  if (!image) {
+    console.log("Could not fetch from", duckDuckGoIconUrl);
+  }
+  return image;
 };
