@@ -98,7 +98,7 @@ export const move = async (bookmark: Bookmark, targetId: string) => {
   const rootId = await getRootId();
   const uncategorizedId = await getUncategorizedId();
 
-  if (targetId === rootId || bookmark.parentId == rootId) {
+  if (targetId === rootId || bookmark.parentId == rootId || targetId === "") {
     await browser.bookmarks.move(bookmark.id, { parentId: uncategorizedId });
   } else {
     await browser.bookmarks.move(bookmark.id, { parentId: targetId });

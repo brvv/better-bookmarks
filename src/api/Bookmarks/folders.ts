@@ -69,18 +69,20 @@ export const update = async (folder: Folder): Promise<Folder> => {
 export const getPath = async (
   parentId: string
 ): Promise<{ title: string; id: string }[]> => {
-  if (parentId === TOOLBAR_ID) {
-    return [{ title: "toolbar", id: TOOLBAR_ID }];
-  }
-
   const rootId = await getRootId();
 
-  if (parentId === rootId) {
-    return [{ title: "root", id: "" }];
+  let path: { title: string; id: string }[] = [];
+  path.push({ title: "root", id: "" });
+
+  if (parentId === rootId || parentId === "") {
+    return path;
+  } else if (parentId === TOOLBAR_ID) {
+    path.push({ title: "toolbar", id: TOOLBAR_ID });
+    return path;
   }
 
-  let path: { title: string; id: string }[] = [];
   let currentParentId: string | undefined = parentId;
+  let childFolders: { title: string; id: string }[] = [];
 
   while (
     currentParentId &&
@@ -91,11 +93,11 @@ export const getPath = async (
       await browser.bookmarks.get(currentParentId)
     )[0];
     const currentFolder = { title: newParent.title, id: newParent.id };
-    path.push(currentFolder);
+    childFolders.push(currentFolder);
     currentParentId = newParent.parentId;
   }
 
-  return path.reverse();
+  return [...path, ...childFolders.reverse()];
 };
 
 export const changeIndex = async (

@@ -12,6 +12,7 @@ import {
   SortableFolderContainer,
 } from "../../components/folders";
 import { SortableBookmarkContainer } from "../../components/bookmarks/bookmark-container";
+import { NavBar } from "../../components";
 
 export const Main: React.FC = () => {
   const params = useParams();
@@ -44,6 +45,8 @@ export const Main: React.FC = () => {
         <div>This is a wrong page, idk why u are here</div>
       ) : (
         <div>
+          {folderId && <NavBar parentId={folderId} />}
+
           <DragDropContext
             customDragStartAction={onDragStart}
             customDragOverAction={onDragOver}
