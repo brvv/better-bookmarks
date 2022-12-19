@@ -1,37 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
-  TOOLBAR_ID,
-  createNewFolder,
+  createFolder,
   isFolderEmpty,
   removeFolder,
   updateFolder,
-} from "../../../api";
+} from "../../api/Bookmarks";
 
 type Props = {
-  parentId: string;
   folders: Folder[];
   setFolders: React.Dispatch<React.SetStateAction<Folder[]>>;
 };
 
-export const useFolders = ({ parentId, folders, setFolders }: Props) => {
-  const [renderToolbar, setRenderToolbar] = useState(true);
-
-  useEffect(() => {
-    setRenderToolbar(() => {
-      if (parentId === TOOLBAR_ID) {
-        return false;
-      } else {
-        return true;
-      }
-    });
-  }, [parentId]);
-
-  const handleCreateNewFolder = async (title: string) => {
-    const newFolder = await createNewFolder(title, parentId);
+export const useFolderActions = ({ folders, setFolders }: Props) => {
+  const handleCreate = async (folder: NewFolder) => {
+    const newFolder = await createFolder(folder);
     setFolders([...folders, newFolder]);
   };
 
-  const handleDeleteFolder = async (target: Folder) => {
+  const handleDelete = async (target: Folder) => {
     const isEmpty = await isFolderEmpty(target);
     if (isEmpty) {
       await removeFolder(target);
@@ -44,7 +30,7 @@ export const useFolders = ({ parentId, folders, setFolders }: Props) => {
     }
   };
 
-  const handleEditFolder = async (newFolder: Folder) => {
+  const handleEdit = async (newFolder: Folder) => {
     const updatedFolder = await updateFolder(newFolder);
     const folderIndex = folders.findIndex(
       (folder) => folder.id === newFolder.id
@@ -55,9 +41,8 @@ export const useFolders = ({ parentId, folders, setFolders }: Props) => {
   };
 
   return {
-    renderToolbar,
-    handleCreateNewFolder,
-    handleDeleteFolder,
-    handleEditFolder,
+    handleCreate,
+    handleDelete,
+    handleEdit,
   };
 };

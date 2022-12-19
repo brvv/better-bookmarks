@@ -1,2 +1,2 @@
 export { BookmarkContainer } from "./BookmarkContainer";
-export { BookmarkSortableContainer } from "./BookmarkSortableContainer";
+export { SortableBookmarkContainer } from "./SortableBookmarkContainer";

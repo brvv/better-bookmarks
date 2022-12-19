@@ -14,3 +14,9 @@ export const INVALID_ROUTER_PAGES = [
   "unfiled_____",
   "mobile______",
 ];
+
+export enum BrowserNodeType {
+  Bookmark = "bookmark",
+  Folder = "folder",
+  Separator = "separator",
+}

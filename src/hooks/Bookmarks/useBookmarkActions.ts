@@ -1,29 +1,19 @@
-import React, { useState, useEffect } from "react";
-
+import React from "react";
 import {
   updateBookmark,
   removeBookmark,
-  moveUpBookmark,
-  getRootId,
-  createNewBookmark,
-} from "../../../api";
+  moveBookmarkUpOneLevel,
+  createBookmark,
+} from "../../api/Bookmarks";
+import { getRootId } from "../../api/Storage/storage";
 
 type Props = {
-  parentId: string;
   bookmarks: Bookmark[];
   setBookmarks: React.Dispatch<React.SetStateAction<Bookmark[]>>;
 };
 
-export const useBookmarks = ({ parentId, bookmarks, setBookmarks }: Props) => {
-  const [isInRootFolder, setIsInRootFolder] = useState(false);
-
-  useEffect(() => {
-    getRootId().then((id) => {
-      setIsInRootFolder(parentId === id);
-    });
-  }, [parentId]);
-
-  const handleEditBookmark = async (newBookmark: Bookmark): Promise<void> => {
+export const useBookmarkActions = ({ bookmarks, setBookmarks }: Props) => {
+  const handleEdit = async (newBookmark: Bookmark): Promise<void> => {
     const updatedBookmark = await updateBookmark(newBookmark);
     const bookmarkIndex = bookmarks.findIndex(
       (bookmark) => bookmark.id === newBookmark.id
@@ -33,7 +23,7 @@ export const useBookmarks = ({ parentId, bookmarks, setBookmarks }: Props) => {
     setBookmarks(newBookmarks);
   };
 
-  const handleDeleteBookmark = async (target: Bookmark) => {
+  const handleDelete = async (target: Bookmark) => {
     await removeBookmark(target);
     const newBookmarks = [...bookmarks];
     const bookmarkIndex = newBookmarks.findIndex(
@@ -43,7 +33,7 @@ export const useBookmarks = ({ parentId, bookmarks, setBookmarks }: Props) => {
     setBookmarks(newBookmarks);
   };
 
-  const handleMoveUpBookmark = async (target: Bookmark) => {
+  const handleMoveUp = async (target: Bookmark) => {
     const rootId = await getRootId();
     const newBookmarks = [...bookmarks];
     const bookmarkIndex = bookmarks.findIndex(
@@ -51,21 +41,20 @@ export const useBookmarks = ({ parentId, bookmarks, setBookmarks }: Props) => {
     );
     newBookmarks.splice(bookmarkIndex, 1);
     if (target.parentId && target.parentId != rootId) {
-      await moveUpBookmark(target);
+      await moveBookmarkUpOneLevel(target);
     }
     setBookmarks(newBookmarks);
   };
 
-  const handleCreateBookmark = async (newBookmark: NewBookmark) => {
-    const result = await createNewBookmark(newBookmark);
+  const handleCreate = async (newBookmark: NewBookmark) => {
+    const result = await createBookmark(newBookmark);
     setBookmarks([...bookmarks, result]);
   };
 
   return {
-    isInRootFolder,
-    handleEditBookmark,
-    handleDeleteBookmark,
-    handleMoveUpBookmark,
-    handleCreateBookmark,
+    handleEdit,
+    handleDelete,
+    handleMoveUp,
+    handleCreate,
   };
 };

@@ -11,7 +11,7 @@ export const Bookmark: React.FC<Props> = ({
   bookmark,
   enableFavicon = true,
 }) => {
-  const [favicon, setFavicon] = useState("");
+  const [favicon, setFavicon] = useState<string>("");
   const [isFaviconLoaded, setIsFaviconLoaded] = useState(false);
 
   useEffect(() => {
@@ -19,8 +19,10 @@ export const Bookmark: React.FC<Props> = ({
       return;
     }
     getIcon(bookmark.url).then((iconUrl) => {
-      setFavicon(iconUrl);
-      setIsFaviconLoaded(true);
+      if (iconUrl) {
+        setFavicon(iconUrl);
+        setIsFaviconLoaded(true);
+      }
     });
   }, [bookmark.url]);
 

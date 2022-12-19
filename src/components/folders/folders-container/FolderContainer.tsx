@@ -3,7 +3,7 @@ import "./FolderContainer.css";
 import { EditableFolder } from "../folder/EditableFolder";
 import { Folder } from "../folder/Folder";
 import { NewFolderButton } from "../new-folder-button/NewFolderButton";
-import { useFolders } from "./useFolders";
+import { useFolderActions } from "../../../hooks/Folders/useFolderActions";
 
 type Props = {
   parentId: string;
@@ -23,17 +23,13 @@ export const FolderContainer: React.FC<Props> = ({
   setFolders,
   options = { disableEditing: false, includeNewFolderButton: true },
 }) => {
-  const {
-    renderToolbar,
-    handleCreateNewFolder,
-    handleDeleteFolder,
-    handleEditFolder,
-  } = useFolders({ parentId, folders, setFolders });
+  const { handleCreate, handleDelete, handleEdit } = useFolderActions({
+    folders,
+    setFolders,
+  });
 
   return (
     <div>
-      <div className="toolbar-container">{renderToolbar}</div>
-
       <div className="card-container">
         {folders.map((folderInfo) => (
           <div key={folderInfo.id}>
@@ -42,14 +38,17 @@ export const FolderContainer: React.FC<Props> = ({
             ) : (
               <EditableFolder
                 folder={folderInfo}
-                handleEdit={handleEditFolder}
-                handleDelete={handleDeleteFolder}
+                handleEdit={handleEdit}
+                handleDelete={handleDelete}
               />
             )}
           </div>
         ))}
         {!options.disableNewFolderButton && (
-          <NewFolderButton handleCreateNewFolder={handleCreateNewFolder} />
+          <NewFolderButton
+            handleCreateNewFolder={handleCreate}
+            parentId={parentId}
+          />
         )}
       </div>
     </div>

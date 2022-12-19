@@ -1,105 +1,83 @@
-import React, { useEffect, useState } from "react";
-import {
-  BookmarkSortableContainer,
-  FolderSortableContainer,
-} from "../../components";
-import {
-  getRootId,
-  getBookmarksFromParent,
-  getFoldersFromParent,
-} from "../../api";
+import React from "react";
 import { useParams } from "react-router-dom";
-import { INVALID_ROUTER_PAGES } from "../../api/constants";
-import { NavBar } from "../../components/tools/NavigationBar/NavBar";
-import { DragDropProvider } from "../../contexts/dnd-context";
+import { DragDropContext } from "../../utils/SortableDND";
+import { useDragEvents } from "./useDragEvents";
+import { useRouterFolderId } from "../../hooks/useRouterFolderId";
+import { InteractableItem } from "../../api/enums";
+import { useBookmarks } from "../../hooks";
+import { useFolders } from "../../hooks";
+import { TOOLBAR_ID } from "../../api";
+import {
+  DroppableToolbarContainer,
+  SortableFolderContainer,
+} from "../../components/folders";
+import { SortableBookmarkContainer } from "../../components/bookmarks/bookmark-container";
+import { DroppableNavBar } from "../../components/tools/NavigationBar/DroppableNavBar";
 
 export const Main: React.FC = () => {
   const params = useParams();
-  const [rootId, setRootId] = useState("");
-  const [isRootIdLoaded, setIsRootIdLoaded] = useState(false);
+  const { folderId, isValid, isRoot } = useRouterFolderId(params.folderId);
+  const { bookmarks, setBookmarks } = useBookmarks({
+    folderId,
+  });
+  const { folders, setFolders } = useFolders({
+    folderId,
+  });
 
-  const [isInvalidPage, setIsInvalidPage] = useState(false);
-
-  useEffect(() => {
-    if (params.folderId) {
-      setRootId(params.folderId);
-      setIsRootIdLoaded(true);
-    } else {
-      getRootId().then((id) => {
-        setRootId(id);
-        setIsRootIdLoaded(true);
-      });
-    }
-  }, [params]);
-
-  //Bookmarks
-  const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
-  const [bookmarksFinishedLoading, setBookmarksFinishedLoading] =
-    useState(false);
-
-  useEffect(() => {
-    if (INVALID_ROUTER_PAGES.includes(rootId)) {
-      setIsInvalidPage(true);
-      return;
-    }
-    if (isRootIdLoaded) {
-      getBookmarksFromParent(rootId)
-        .then((newBookmarks) => {
-          setBookmarks(newBookmarks);
-          setBookmarksFinishedLoading(true);
-        })
-        .catch((error) => {
-          console.log(error);
-          setIsInvalidPage(true);
-        });
-    }
-  }, [rootId]);
-
-  //Folders
-  const [folders, setFolders] = useState<Folder[]>([]);
-  const [foldersFinishedLoading, setFoldersFinishedLoading] = useState(false);
-
-  useEffect(() => {
-    if (isRootIdLoaded) {
-      getFoldersFromParent(rootId).then((newFolders) => {
-        setFolders(newFolders);
-        setFoldersFinishedLoading(true);
-      });
-    }
-  }, [rootId]);
+  const { onDragStart, onDragOver, onDragEnd } = useDragEvents({
+    sortableContainers: [
+      {
+        type: InteractableItem.Bookmark,
+        items: bookmarks,
+        setItems: setBookmarks,
+      },
+      {
+        type: InteractableItem.Folder,
+        items: folders,
+        setItems: setFolders,
+      },
+    ],
+  });
 
   return (
     <div className="App">
-      {isInvalidPage ? (
+      {!isValid ? (
         <div>This is a wrong page, idk why u are here</div>
       ) : (
         <div>
-          {rootId && isRootIdLoaded && <NavBar parentId={rootId} />}
-          <DragDropProvider
-            bookmarks={bookmarks}
-            setBookmarks={setBookmarks}
-            folders={folders}
-            setFolders={setFolders}
+          <DragDropContext
+            customDragStartAction={onDragStart}
+            customDragOverAction={onDragOver}
+            customDragEndAction={onDragEnd}
           >
-            {rootId && bookmarksFinishedLoading ? (
-              <BookmarkSortableContainer
-                parentId={rootId}
+            {folderId && <DroppableNavBar parentId={folderId} />}
+            {folderId && bookmarks ? (
+              <SortableBookmarkContainer
+                parentId={folderId}
                 bookmarks={bookmarks}
                 setBookmarks={setBookmarks}
+                options={{ enableMoveUp: !isRoot }}
               />
             ) : (
               <p>Loading!</p>
             )}
-            {rootId && foldersFinishedLoading ? (
-              <FolderSortableContainer
-                parentId={rootId}
+            {folderId !== TOOLBAR_ID && (
+              <DroppableToolbarContainer
+                toolbarId={TOOLBAR_ID}
+                name="TOOLBAR"
+              />
+            )}
+
+            {folderId && folders ? (
+              <SortableFolderContainer
+                parentId={folderId}
                 folders={folders}
                 setFolders={setFolders}
               />
             ) : (
               <p>Loading!</p>
             )}
-          </DragDropProvider>
+          </DragDropContext>
         </div>
       )}
     </div>
