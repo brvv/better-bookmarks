@@ -1,13 +1,11 @@
 import React from "react";
 import "./FolderContainer.css";
-import { EditableFolder } from "../folder/EditableFolder";
-import { Folder } from "../folder/Folder";
 import { NewFolderButton } from "../new-folder-button/NewFolderButton";
 import { SortableContext, rectSortingStrategy } from "@dnd-kit/sortable";
-import { SortableItem } from "../../../utils/SortableDND";
 import { generateItemId } from "../../../utils/SortableDND";
 import { InteractableItem } from "../../../api/enums";
 import { useFolderActions } from "../../../hooks/Folders/useFolderActions";
+import { SortableFolder } from "../folder/SortableFolder";
 
 type Props = {
   parentId: string;
@@ -42,28 +40,13 @@ export const FolderSortableContainer: React.FC<Props> = ({
       >
         <div className="card-container">
           {folders.map((folderInfo) => (
-            <SortableItem
-              item={{
-                uniqueSortableId: generateItemId(
-                  folderInfo.id,
-                  InteractableItem.Folder
-                ),
-                backendId: folderInfo.id,
-                type: InteractableItem.Folder,
-                accepts: [InteractableItem.Folder, InteractableItem.Bookmark],
-              }}
+            <SortableFolder
+              editable={!!options.enableEditing}
+              folder={folderInfo}
+              handleEdit={handleEdit}
+              handleDelete={handleDelete}
               key={generateItemId(folderInfo.id, InteractableItem.Folder)}
-            >
-              {options.enableEditing ? (
-                <EditableFolder
-                  folder={folderInfo}
-                  handleEdit={handleEdit}
-                  handleDelete={handleDelete}
-                />
-              ) : (
-                <Folder folder={folderInfo} />
-              )}
-            </SortableItem>
+            />
           ))}
           {options.enableNewFolderButton && (
             <NewFolderButton

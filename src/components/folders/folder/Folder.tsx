@@ -1,5 +1,4 @@
 import React from "react";
-//import { Link } from "react-router-dom";
 import "./Folder.css";
 
 type Props = {
@@ -7,7 +6,7 @@ type Props = {
 };
 
 export const Folder: React.FC<Props> = ({ folder }) => {
-  // dnd-kit bugs when Link is used in place of a button, so I use a button for now
+  // dnd-kit bugs when Link is used in place of a button, so have to use a button for now
   return (
     <button
       className="group-card"
