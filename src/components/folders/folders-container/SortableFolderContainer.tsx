@@ -19,7 +19,7 @@ type ContainerOptions = {
   enableNewFolderButton?: boolean;
 };
 
-export const FolderSortableContainer: React.FC<Props> = ({
+export const SortableFolderContainer: React.FC<Props> = ({
   parentId,
   folders,
   setFolders,

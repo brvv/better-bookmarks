@@ -26,7 +26,7 @@ const defaultOptions = {
   enableNewBookmarkButton: true,
 };
 
-export const BookmarkSortableContainer: React.FC<Props> = ({
+export const SortableBookmarkContainer: React.FC<Props> = ({
   parentId,
   bookmarks,
   setBookmarks,

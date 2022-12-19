@@ -1,17 +1,17 @@
 import React from "react";
-import {
-  BookmarkSortableContainer,
-  FolderSortableContainer,
-} from "../../components";
 import { useParams } from "react-router-dom";
 import { DragDropContext } from "../../utils/SortableDND";
 import { useDragEvents } from "./useDragEvents";
 import { useRouterFolderId } from "../../hooks/useRouterFolderId";
 import { InteractableItem } from "../../api/enums";
-import { useBookmarks } from "../../hooks/Bookmarks/useBookmarks";
-import { useFolders } from "../../hooks/Folders/useFolders";
+import { useBookmarks } from "../../hooks";
+import { useFolders } from "../../hooks";
 import { TOOLBAR_ID } from "../../api";
-import { DroppableToolbarContainer } from "../../components/folders";
+import {
+  DroppableToolbarContainer,
+  SortableFolderContainer,
+} from "../../components/folders";
+import { SortableBookmarkContainer } from "../../components/bookmarks/bookmark-container";
 
 export const Main: React.FC = () => {
   const params = useParams();
@@ -50,7 +50,7 @@ export const Main: React.FC = () => {
             customDragEndAction={onDragEnd}
           >
             {folderId && bookmarks ? (
-              <BookmarkSortableContainer
+              <SortableBookmarkContainer
                 parentId={folderId}
                 bookmarks={bookmarks}
                 setBookmarks={setBookmarks}
@@ -59,9 +59,15 @@ export const Main: React.FC = () => {
             ) : (
               <p>Loading!</p>
             )}
-            <DroppableToolbarContainer toolbarId={TOOLBAR_ID} name="TOOLBAR" />
+            {folderId !== TOOLBAR_ID && (
+              <DroppableToolbarContainer
+                toolbarId={TOOLBAR_ID}
+                name="TOOLBAR"
+              />
+            )}
+
             {folderId && folders ? (
-              <FolderSortableContainer
+              <SortableFolderContainer
                 parentId={folderId}
                 folders={folders}
                 setFolders={setFolders}
