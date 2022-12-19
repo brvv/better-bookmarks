@@ -42,7 +42,7 @@ export const parseGeneratedItemId = (generatedId: GeneratedId) => {
     }
   }
 
-  if (sepIndex && typeIndex) {
+  if (sepIndex !== null && typeIndex !== null) {
     const originalId = generatedId.slice(0, sepIndex);
     const type = generatedId.slice(typeIndex);
     return { originalId: originalId, type: type };
@@ -51,7 +51,9 @@ export const parseGeneratedItemId = (generatedId: GeneratedId) => {
 };
 
 const isValidData = (item: any) => {
-  return !!item.backendId && !!item.type && !!item.accepts;
+  return (
+    !!(item.backendId || item.backendId === "") && !!item.type && !!item.accepts
+  );
 };
 
 const isValidId = (itemId: UniqueIdentifier) => {
