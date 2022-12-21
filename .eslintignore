@@ -1,3 +1,4 @@
 node_modules
-build
-*.html
+public
+dist
+webpack.config.js

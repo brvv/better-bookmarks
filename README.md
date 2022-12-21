@@ -16,6 +16,6 @@ this will create a `build` folder with `manifest.json` in it
 
 ## Run extension in Firefox
 
-go to `about:debugging`, then select *This Firefox* and finally *Load Temporary Add-on...*
+go to `about:debugging`, then select _This Firefox_ and finally _Load Temporary Add-on..._
 
 point the browser to `manifest.json` in the `build` folder
