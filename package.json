@@ -12,6 +12,9 @@
     "react-router-dom": "^6.4.1"
   },
   "scripts": {
+    "prestart": "npm run format & npm run lint",
+    "prebuild": "npm run format & npm run lint",
+    "prebuildWin": "npm run format & npm run lint",
     "lint": "eslint . --ext=.tsx,.ts",
     "format": "prettier --write .",
     "start": "webpack serve --port 3000",
