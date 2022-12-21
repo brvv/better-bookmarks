@@ -9,7 +9,7 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "target": "esnext",
-    "noEmit": true
+    "noEmit": false
   },
   "include": ["src/**/*", "tests/**/*"],
   "exclude": ["node_modules", "build", "dist"]

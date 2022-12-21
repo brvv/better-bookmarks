@@ -27,6 +27,11 @@ module.exports = {
         test: /\.css$/,
         use: ["style-loader", "css-loader"],
       },
+      {
+        test: /\.png/,
+
+        type: "asset/resource",
+      },
     ],
   },
   devtool: prod ? undefined : "source-map",
