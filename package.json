@@ -15,6 +15,7 @@
     "prestart": "npm run format & npm run lint",
     "prebuild": "npm run format & npm run lint",
     "prebuildWin": "npm run format & npm run lint",
+    "postbuild": "cp -r public/extension/. dist",
     "lint": "eslint . --ext=.tsx,.ts",
     "format": "prettier --write .",
     "start": "webpack serve --port 3000",
