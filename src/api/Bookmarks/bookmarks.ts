@@ -67,7 +67,7 @@ export const moveUpOneLevel = async (bookmark: Bookmark): Promise<void> => {
 };
 
 export const create = async (newBookmark: NewBookmark): Promise<Bookmark> => {
-  let targetBookmark = { ...newBookmark };
+  const targetBookmark = { ...newBookmark };
   const rootId = await getRootId();
   const originalTitle = targetBookmark.title
     ? targetBookmark.title

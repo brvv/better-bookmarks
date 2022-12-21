@@ -71,7 +71,7 @@ export const getPath = async (
 ): Promise<{ title: string; id: string }[]> => {
   const rootId = await getRootId();
 
-  let path: { title: string; id: string }[] = [];
+  const path: { title: string; id: string }[] = [];
   path.push({ title: "root", id: "" });
 
   if (parentId === rootId || parentId === "") {
@@ -82,7 +82,7 @@ export const getPath = async (
   }
 
   let currentParentId: string | undefined = parentId;
-  let childFolders: { title: string; id: string }[] = [];
+  const childFolders: { title: string; id: string }[] = [];
 
   while (
     currentParentId &&

@@ -18,7 +18,7 @@ const fetchImage = async (url: string): Promise<string | null> => {
 export const getIcon = async (url: string): Promise<string | null> => {
   const urlObj = new URL(url);
 
-  let duckDuckGoIconUrl = `https://icons.duckduckgo.com/ip3/${urlObj.hostname}.ico`;
+  const duckDuckGoIconUrl = `https://icons.duckduckgo.com/ip3/${urlObj.hostname}.ico`;
   const image = fetchImage(duckDuckGoIconUrl);
   if (!image) {
     console.log("Could not fetch from", duckDuckGoIconUrl);
