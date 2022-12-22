@@ -56,7 +56,7 @@ export const Main: React.FC = () => {
                 parentId={folderId}
                 bookmarks={bookmarks}
                 setBookmarks={setBookmarks}
-                options={{ enableMoveUp: !isRoot }}
+                options={{ enableMoveUp: false }}
               />
             ) : (
               <p>Loading!</p>
