@@ -50,7 +50,15 @@ export const useStyle = (
 
   const FolderMoveStyle = {
     transition,
-    transform: CSS.Transform.toString(transform),
+    transform:
+      isDragging && mouseOffset
+        ? CSS.Transform.toString({
+            x: mouseOffset.x,
+            y: mouseOffset.y,
+            scaleX: 1,
+            scaleY: 1,
+          })
+        : CSS.Transform.toString(transform),
     opacity: isDragging ? 0.5 : 1,
     backgroundColor:
       draggedOverItem && draggedOverItem.id === item.uniqueSortableId
@@ -60,14 +68,43 @@ export const useStyle = (
 
   const FolderScaleDownStyle = {};
 
+  const DefaultMoveStyle = {
+    transition,
+    transform: CSS.Transform.toString(transform),
+  };
+
+  const DefaultScaleDownStyle = {};
+
+  const MoveStyleSelector = (type: InteractableItem) => {
+    switch (type) {
+      case InteractableItem.Bookmark: {
+        return BookmarkMoveStyle;
+      }
+      case InteractableItem.Folder: {
+        return FolderMoveStyle;
+      }
+      default: {
+        return DefaultMoveStyle;
+      }
+    }
+  };
+
+  const ScaleDownStyleSelector = (type: InteractableItem) => {
+    switch (type) {
+      case InteractableItem.Bookmark: {
+        return BookmarkScaleDownStyle;
+      }
+      case InteractableItem.Folder: {
+        return FolderScaleDownStyle;
+      }
+      default: {
+        return DefaultScaleDownStyle;
+      }
+    }
+  };
+
   return {
-    mainStyle:
-      item.type === InteractableItem.Bookmark
-        ? BookmarkMoveStyle
-        : FolderMoveStyle,
-    scaleDownStyle:
-      item.type === InteractableItem.Bookmark
-        ? BookmarkScaleDownStyle
-        : FolderScaleDownStyle,
+    mainStyle: MoveStyleSelector(item.type),
+    scaleDownStyle: ScaleDownStyleSelector(item.type),
   };
 };
