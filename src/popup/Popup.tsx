@@ -23,7 +23,12 @@ export const Popup = () => {
   return (
     <>
       <div className="popup-body">
-        <Searchbar query={query} setQuery={setQuery} inputRef={inputRef} />
+        <Searchbar
+          query={query}
+          setQuery={setQuery}
+          inputRef={inputRef}
+          rest={{ placeholder: "type to search..." }}
+        />
         <PopupBookmarkContainer bookmarks={bookmarks} />
         <PopupFolderContainer folders={folders} />
       </div>
