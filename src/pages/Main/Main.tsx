@@ -16,7 +16,7 @@ import { DroppableNavBar } from "../../components/tools/NavigationBar/DroppableN
 
 export const Main: React.FC = () => {
   const params = useParams();
-  const { folderId, isValid, isRoot } = useRouterFolderId(params.folderId);
+  const { folderId, isValid } = useRouterFolderId(params.folderId);
   const { bookmarks, setBookmarks } = useBookmarks({
     folderId,
   });
