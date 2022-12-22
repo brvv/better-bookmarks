@@ -9,11 +9,7 @@ export const PopupBookmarkContainer: React.FC<Props> = ({ bookmarks }) => {
   return (
     <div className="popup-bookmark-container">
       {bookmarks.map((bookmarkInfo) => (
-        <Bookmark
-          key={bookmarkInfo.id}
-          bookmark={bookmarkInfo}
-          enableFavicon={false}
-        />
+        <Bookmark key={bookmarkInfo.id} bookmark={bookmarkInfo} />
       ))}
     </div>
   );
