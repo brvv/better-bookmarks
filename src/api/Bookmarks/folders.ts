@@ -111,3 +111,11 @@ export const changeIndex = async (
   }
   await browser.bookmarks.move(folder.id, { index: newIndex });
 };
+
+export const search = async (searchQuery: string): Promise<Bookmark[]> => {
+  const searchRes = await browser.bookmarks.search(searchQuery);
+  const folders = searchRes.filter(
+    (item) => item.type && item.type === BrowserNodeType.Folder
+  );
+  return folders.map((folder) => parseFolderNode(folder));
+};

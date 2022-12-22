@@ -105,3 +105,11 @@ export const move = async (bookmark: Bookmark, targetId: string) => {
   }
   return;
 };
+
+export const search = async (searchQuery: string): Promise<Bookmark[]> => {
+  const searchRes = await browser.bookmarks.search(searchQuery);
+  const bookmarks = searchRes.filter(
+    (item) => item.type && item.type === BrowserNodeType.Bookmark
+  );
+  return bookmarks.map((bookmark) => parseBookmarkNode(bookmark));
+};

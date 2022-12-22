@@ -6,7 +6,7 @@ module.exports = {
   mode: prod ? "production" : "development",
   entry: {
     dashboard: "./src/index.tsx",
-    popup: "./src/popup.tsx",
+    popup: "./src/popup/index.tsx",
   },
   output: {
     filename: "[name].bundle.js",
