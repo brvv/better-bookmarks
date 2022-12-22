@@ -122,7 +122,8 @@ export const search = async (searchQuery: string): Promise<Bookmark[]> => {
       item.type === BrowserNodeType.Folder &&
       !INVALID_ROUTER_PAGES.includes(item.id) &&
       !(item.id === rootId) &&
-      !(item.id === uncategorizedId)
+      !(item.id === uncategorizedId) &&
+      !(item.title === "Mozilla Firefox")
   );
   return folders.map((folder) => parseFolderNode(folder));
 };
