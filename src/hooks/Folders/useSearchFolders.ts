@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { searchFolders } from "../../api/Bookmarks";
-import { useDebounce } from "../useDebounce";
 
 type Props = {
   query: string;
@@ -8,12 +7,15 @@ type Props = {
 
 export const useSearchFolders = ({ query }: Props) => {
   const [folders, setFolders] = useState<Folder[]>([]);
-  const debouncedQuery = useDebounce(query, 500);
 
   useEffect(() => {
-    searchFolders(debouncedQuery).then((res) => {
-      setFolders(res);
-    });
+    searchFolders(query)
+      .then((res) => {
+        setFolders(res);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }, [query]);
 
   return { folders };

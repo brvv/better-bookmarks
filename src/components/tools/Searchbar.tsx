@@ -10,6 +10,7 @@ export const Searchbar = ({ query, setQuery, rest }: Props) => {
   return (
     <input
       {...rest}
+      style={{ width: "100%" }}
       type="text"
       value={query}
       onChange={(e) => setQuery(e.target.value)}

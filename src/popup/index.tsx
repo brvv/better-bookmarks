@@ -1,8 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { Popup } from "./Popup";
-import "../App.css";
-import "../index.css";
+import "../Resets.css";
 
 const popupRoot = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

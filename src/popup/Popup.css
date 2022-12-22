@@ -1,0 +1,14 @@
+.popup-body {
+  width: 22rem;
+  height: 35rem;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.popup-bookmark-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
