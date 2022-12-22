@@ -113,3 +113,17 @@ export const search = async (searchQuery: string): Promise<Bookmark[]> => {
   );
   return bookmarks.map((bookmark) => parseBookmarkNode(bookmark));
 };
+
+export const getMostRecent = async (
+  count: number
+): Promise<{ bookmarks: Bookmark[] }> => {
+  const recent = await browser.bookmarks.getRecent(count);
+  console.log(recent);
+  //the api does not make it clear if it returns folders or not.
+  //i could not return folders, but i filter the output just in case
+  const recentBookmarks = recent
+    .filter((item) => item.type && item.type === BrowserNodeType.Bookmark)
+    .map((bookmark) => parseBookmarkNode(bookmark));
+
+  return { bookmarks: recentBookmarks };
+};

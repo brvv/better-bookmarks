@@ -7,6 +7,7 @@ export {
   changeIndex as changeBookmarkIndex,
   move as moveBookmark,
   search as searchBookmarks,
+  getMostRecent,
 } from "./bookmarks";
 export {
   getChildFolderNodes,
