@@ -1,0 +1,65 @@
+* {
+  scrollbar-width: none;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  overflow-x: hidden;
+  width: 22rem;
+  height: 35rem;
+}
+
+.popup-body {
+  padding: 0.7rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.popup-body > input {
+  position: sticky;
+  top: 0.5rem;
+  padding: 0.4rem;
+}
+
+.popup-bookmark-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.popup-folder-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.dashboard-navigator {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  border-radius: 100%;
+  background-color: rgba(128, 128, 128, 0.4);
+  aspect-ratio: 1/1;
+  width: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.3s;
+  box-shadow: 0 0 4px 0px #fff;
+}
+
+.dashboard-navigator:hover {
+  background-color: rgb(176, 176, 176);
+}
+
+.dashboard-navigator:active {
+  background-color: rgb(140, 140, 140);
+}
+
+.dashboard-navigator-image {
+  width: 60%;
+  height: 60%;
+  opacity: 0.55;
+}

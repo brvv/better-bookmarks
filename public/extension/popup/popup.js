@@ -1,6 +1,6 @@
 const openExtensionPage = async () => {
   let createData = {
-    url: "../index.html",
+    url: "../dashboard.html",
   };
   await browser.tabs.create(createData);
   window.close();

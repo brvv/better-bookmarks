@@ -6,6 +6,8 @@ export {
   create as createBookmark,
   changeIndex as changeBookmarkIndex,
   move as moveBookmark,
+  search as searchBookmarks,
+  getMostRecent,
 } from "./bookmarks";
 export {
   getChildFolderNodes,
@@ -15,5 +17,6 @@ export {
   update as updateFolder,
   getPath as getFolderPath,
   changeIndex as changeFolderIndex,
+  search as searchFolders,
 } from "./folders";
 export { combineItems, moveItems } from "./utils";
