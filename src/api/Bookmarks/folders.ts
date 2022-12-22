@@ -114,8 +114,15 @@ export const changeIndex = async (
 
 export const search = async (searchQuery: string): Promise<Bookmark[]> => {
   const searchRes = await browser.bookmarks.search(searchQuery);
+  const rootId = await getRootId();
+  const uncategorizedId = await getUncategorizedId();
   const folders = searchRes.filter(
-    (item) => item.type && item.type === BrowserNodeType.Folder
+    (item) =>
+      item.type &&
+      item.type === BrowserNodeType.Folder &&
+      !INVALID_ROUTER_PAGES.includes(item.id) &&
+      !(item.id === rootId) &&
+      !(item.id === uncategorizedId)
   );
   return folders.map((folder) => parseFolderNode(folder));
 };
