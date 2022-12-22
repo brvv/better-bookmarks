@@ -8,6 +8,7 @@ import { useDebounce } from "../hooks/useDebounce";
 import "../index.css";
 import "./Popup.css";
 import { useAutoFocus } from "./useAutoFocus";
+import { DashboardNavigator } from "./DashboardNavigator";
 
 export const Popup = () => {
   const [query, setQuery] = useState<string>("");
@@ -26,6 +27,7 @@ export const Popup = () => {
         <PopupBookmarkContainer bookmarks={bookmarks} />
         <PopupFolderContainer folders={folders} />
       </div>
+      <DashboardNavigator />
     </>
   );
 };

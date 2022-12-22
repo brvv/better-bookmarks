@@ -11,10 +11,10 @@ body {
 }
 
 .popup-body {
-  padding: 0.5rem;
+  padding: 0.7rem;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.7rem;
 }
 
 .popup-body > input {
@@ -24,6 +24,12 @@ body {
 }
 
 .popup-bookmark-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.popup-folder-container {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
