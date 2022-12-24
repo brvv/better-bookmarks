@@ -83,6 +83,12 @@ export const useStyle = (
       case InteractableItem.Folder: {
         return FolderMoveStyle;
       }
+      case InteractableItem.NavigationBarItem: {
+        return FolderMoveStyle;
+      }
+      case InteractableItem.Toolbar: {
+        return FolderMoveStyle;
+      }
       default: {
         return DefaultMoveStyle;
       }

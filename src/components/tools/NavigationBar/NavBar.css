@@ -17,6 +17,7 @@
   border-radius: 5px;
 }
 
-.navigation-item:hover {
+.navigation-item:hover,
+.navigation-item:focus {
   background-color: rgb(214, 214, 214);
 }
